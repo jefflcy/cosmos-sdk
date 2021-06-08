@@ -72,6 +72,8 @@ type BaseApp struct { //nolint: maligned
 	idPeerFilter    sdk.PeerFilter             // filter peers by node ID
 	fauxMerkleMode  bool                       // if true, IAVL MountStores uses MountStoresDB for simulation speed.
 
+	customMiddlewares
+
 	// manages snapshots, i.e. dumps of app state at certain intervals
 	snapshotManager *snapshots.Manager
 
@@ -144,6 +146,11 @@ type BaseApp struct { //nolint: maligned
 	abciListeners []ABCIListener
 
 	chainID string
+}
+
+type customMiddlewares struct {
+	deliverTxer     sdk.DeliverTxer     // logic to run on any deliver tx
+	beforeCommitter sdk.BeforeCommitter // logic to run before committing state
 }
 
 // NewBaseApp returns a reference to an initialized BaseApp. It accepts a

@@ -412,13 +412,19 @@ func (app *BaseApp) DeliverTx(req abci.RequestDeliverTx) (res abci.ResponseDeliv
 		return sdkerrors.ResponseDeliverTxWithEvents(err, gInfo.GasWanted, gInfo.GasUsed, sdk.MarkEventsToIndex(anteEvents, app.indexEvents), app.trace)
 	}
 
-	return abci.ResponseDeliverTx{
+	txResult := abci.ResponseDeliverTx{
 		GasWanted: int64(gInfo.GasWanted), // TODO: Should type accept unsigned ints?
 		GasUsed:   int64(gInfo.GasUsed),   // TODO: Should type accept unsigned ints?
 		Log:       result.Log,
 		Data:      result.Data,
 		Events:    sdk.MarkEventsToIndex(result.Events, app.indexEvents),
 	}
+
+	if app.deliverTxer != nil {
+		app.deliverTxer(app.deliverState.ctx, req, txResult)
+	}
+
+	return txResult
 }
 
 // Commit implements the ABCI interface. It will commit all state that exists in
@@ -435,6 +441,9 @@ func (app *BaseApp) Commit() abci.ResponseCommit {
 	rms, ok := app.cms.(*rootmulti.Store)
 	if ok {
 		rms.SetCommitHeader(header)
+	}
+	if app.beforeCommitter != nil {
+		app.beforeCommitter(app.deliverState.ctx)
 	}
 
 	// Write the DeliverTx state into branched storage and commit the MultiStore.
