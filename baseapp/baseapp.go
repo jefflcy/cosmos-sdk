@@ -151,6 +151,7 @@ type BaseApp struct { //nolint: maligned
 type customMiddlewares struct {
 	deliverTxer     sdk.DeliverTxer     // logic to run on any deliver tx
 	beforeCommitter sdk.BeforeCommitter // logic to run before committing state
+	afterCommitter  sdk.AfterCommitter  // logic to run after committing state
 }
 
 // NewBaseApp returns a reference to an initialized BaseApp. It accepts a
