@@ -686,6 +686,7 @@ func (app *BaseApp) runTx(mode runTxMode, txBytes []byte) (gInfo sdk.GasInfo, re
 		return sdk.GasInfo{}, nil, nil, 0, err
 	}
 
+	var events sdk.Events
 	if app.anteHandler != nil {
 		var (
 			anteCtx sdk.Context
