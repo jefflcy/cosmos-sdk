@@ -392,6 +392,12 @@ func (app *BaseApp) DeliverTx(req abci.RequestDeliverTx) (res abci.ResponseDeliv
 	resultStr := "successful"
 
 	defer func() {
+		if app.deliverTxer != nil {
+			app.deliverTxer(app.deliverState.ctx, req, res)
+		}
+	}()
+
+	defer func() {
 		for _, streamingListener := range app.abciListeners {
 			if err := streamingListener.ListenDeliverTx(app.deliverState.ctx, req, res); err != nil {
 				panic(fmt.Errorf("DeliverTx listening hook failed: %w", err))
@@ -412,19 +418,13 @@ func (app *BaseApp) DeliverTx(req abci.RequestDeliverTx) (res abci.ResponseDeliv
 		return sdkerrors.ResponseDeliverTxWithEvents(err, gInfo.GasWanted, gInfo.GasUsed, sdk.MarkEventsToIndex(anteEvents, app.indexEvents), app.trace)
 	}
 
-	txResult := abci.ResponseDeliverTx{
+	return abci.ResponseDeliverTx{
 		GasWanted: int64(gInfo.GasWanted), // TODO: Should type accept unsigned ints?
 		GasUsed:   int64(gInfo.GasUsed),   // TODO: Should type accept unsigned ints?
 		Log:       result.Log,
 		Data:      result.Data,
 		Events:    sdk.MarkEventsToIndex(result.Events, app.indexEvents),
 	}
-
-	if app.deliverTxer != nil {
-		app.deliverTxer(app.deliverState.ctx, req, txResult)
-	}
-
-	return txResult
 }
 
 // Commit implements the ABCI interface. It will commit all state that exists in
