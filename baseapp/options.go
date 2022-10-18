@@ -206,6 +206,14 @@ func (app *BaseApp) SetPostHandler(ph sdk.PostHandler) {
 	app.postHandler = ph
 }
 
+func (app *BaseApp) SetMsgHandlerMiddleware(msgHandlerMiddleware sdk.MsgHandlerMiddleware) {
+	if app.sealed {
+		panic("SetMsgHandlerMiddleware() on sealed BaseApp")
+	}
+
+	app.msgHandlerMiddleware = msgHandlerMiddleware
+}
+
 func (app *BaseApp) SetAddrPeerFilter(pf sdk.PeerFilter) {
 	if app.sealed {
 		panic("SetAddrPeerFilter() on sealed BaseApp")

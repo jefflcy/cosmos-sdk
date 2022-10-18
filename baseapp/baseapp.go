@@ -21,6 +21,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/mempool"
+	"github.com/cosmos/cosmos-sdk/x/auth/migrations/legacytx"
 )
 
 type (
@@ -152,6 +153,8 @@ type customMiddlewares struct {
 	deliverTxer     sdk.DeliverTxer     // logic to run on any deliver tx
 	beforeCommitter sdk.BeforeCommitter // logic to run before committing state
 	afterCommitter  sdk.AfterCommitter  // logic to run after committing state
+
+	msgHandlerMiddleware sdk.MsgHandlerMiddleware // middleware that wraps msg handlers
 }
 
 // NewBaseApp returns a reference to an initialized BaseApp. It accepts a
@@ -794,14 +797,42 @@ func (app *BaseApp) runMsgs(ctx sdk.Context, msgs []sdk.Msg, mode runTxMode) (*s
 	events := sdk.EmptyEvents()
 	var msgResponses []*codectypes.Any
 
+	middleware := app.msgHandlerMiddleware
+	if middleware == nil {
+		middleware = noopMiddleware
+	}
+
 	// NOTE: GasWanted is determined by the AnteHandler and GasUsed by the GasMeter.
 	for i, msg := range msgs {
 		if mode != runTxModeDeliver && mode != runTxModeSimulate {
 			break
 		}
 
-		handler := app.msgServiceRouter.Handler(msg)
-		if handler == nil {
+		var (
+			msgResult    *sdk.Result
+			eventMsgName string // name to use as value in event `message.action`
+			err          error
+		)
+
+		if handler := app.msgServiceRouter.Handler(msg); handler != nil {
+			// ADR 031 request type routing
+			msgResult, err = middleware(ctx, msg, handler)
+			eventMsgName = sdk.MsgTypeURL(msg)
+		} else if legacyMsg, ok := msg.(legacytx.LegacyMsg); ok {
+			// legacy sdk.Msg routing
+			// Assuming that the app developer has migrated all their Msgs to
+			// proto messages and has registered all `Msg services`, then this
+			// path should never be called, because all those Msgs should be
+			// registered within the `msgServiceRouter` already.
+			msgRoute := legacyMsg.Route()
+			eventMsgName = legacyMsg.Type()
+			handler := app.router.Route(ctx, msgRoute)
+			if handler == nil {
+				return nil, sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unrecognized message route: %s; message index: %d", msgRoute, i)
+			}
+
+			msgResult, err = middleware(ctx, msg, handler)
+		} else {
 			return nil, sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "can't route message %+v", msg)
 		}
 
@@ -1082,4 +1113,8 @@ func NoOpProcessProposal() sdk.ProcessProposalHandler {
 // Close is called in start cmd to gracefully cleanup resources.
 func (app *BaseApp) Close() error {
 	return nil
+}
+
+var noopMiddleware sdk.MsgHandlerMiddleware = func(c sdk.Context, m sdk.Msg, h sdk.Handler) (*sdk.Result, error) {
+	return h(c, m)
 }
