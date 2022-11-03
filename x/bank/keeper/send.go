@@ -96,7 +96,7 @@ func (k BaseSendKeeper) GetAuthority() string {
 // SetHooks sets the hooks for bank
 func (keeper *BaseSendKeeper) SetHooks(sh types.SendHooks) *BaseSendKeeper {
 	if keeper.hooks != nil {
-		panic("cannot set bank hooks twice")
+		panic("cannot set send hooks twice")
 	}
 
 	keeper.hooks = sh
