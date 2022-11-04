@@ -206,9 +206,12 @@ func (k BaseSendKeeper) InputOutputCoins(ctx sdk.Context, inputs []types.Input, 
 // SendCoins transfers amt coins from a sending account to a receiving account.
 // An error is returned upon failure.
 func (k BaseSendKeeper) SendCoins(ctx sdk.Context, fromAddr sdk.AccAddress, toAddr sdk.AccAddress, amt sdk.Coins) error {
-	k.hooks.BeforeSend(ctx, fromAddr, toAddr, amt)
+	err := k.hooks.BeforeSend(ctx, fromAddr, toAddr, amt)
+	if err != nil {
+		return err
+	}
 
-	err := k.subUnlockedCoins(ctx, fromAddr, amt)
+	err = k.subUnlockedCoins(ctx, fromAddr, amt)
 	if err != nil {
 		return err
 	}
@@ -228,10 +231,13 @@ func (k BaseSendKeeper) SendCoins(ctx sdk.Context, fromAddr sdk.AccAddress, toAd
 		k.ak.SetAccount(ctx, k.ak.NewAccountWithAddress(ctx, toAddr))
 	}
 
+	err = k.hooks.AfterSend(ctx, fromAddr, toAddr, amt)
+	if err != nil {
+		return err
+	}
+
 	// bech32 encoding is expensive! Only do it once for fromAddr
 	fromAddrString := fromAddr.String()
-	k.hooks.AfterSend(ctx, fromAddr, toAddr, amt)
-
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeTransfer,
