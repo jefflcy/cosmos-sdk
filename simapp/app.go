@@ -309,9 +309,9 @@ func NewSimApp(
 		BlockedAddresses(),
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
-	bankKeeper.BaseSendKeeper = *bankKeeper.SetHooks(
-		banktypes.NewMutiSendHooks(),
-	)
+	//bankKeeper.BaseSendKeeper = *bankKeeper.SetHooks(
+	//	banktypes.NewMutiSendHooks(),
+	//)
 	app.BankKeeper = &bankKeeper
 
 	app.StakingKeeper = stakingkeeper.NewKeeper(
@@ -378,7 +378,7 @@ func NewSimApp(
 
 	app.GovKeeper = *govKeeper.SetHooks(
 		govtypes.NewMultiGovHooks(
-		// register the governance hooks
+			// register the governance hooks
 		),
 	)
 
