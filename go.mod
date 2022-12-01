@@ -179,6 +179,9 @@ require (
 )
 
 replace (
+	// vendor ics23
+	github.com/confio/ics23/go => ./ics23
+	github.com/cosmos-sdk/iavl => github.com/Switcheo/iavl v0.19.3-0.20221201195047-740092f0b865
 	// use cosmos fork of keyring
 	github.com/99designs/keyring => github.com/cosmos/keyring v1.2.0
 	// dgrijalva/jwt-go is deprecated and doesn't receive security updates.
