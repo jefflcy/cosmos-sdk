@@ -179,15 +179,13 @@ require (
 )
 
 replace (
+	github.com/99designs/keyring => github.com/cosmos/keyring v1.1.7-0.20210622111912-ef00f8ac3d76
+
 	// vendor ics23
 	github.com/confio/ics23/go => ./ics23
-	github.com/cosmos-sdk/iavl => github.com/Switcheo/iavl v0.19.3-0.20221201195047-740092f0b865
-	// use cosmos fork of keyring
-	github.com/99designs/keyring => github.com/cosmos/keyring v1.2.0
-	// dgrijalva/jwt-go is deprecated and doesn't receive security updates.
-	// TODO: remove it: https://github.com/cosmos/cosmos-sdk/issues/13134
-	github.com/dgrijalva/jwt-go => github.com/golang-jwt/jwt/v4 v4.4.2
-	// Fix upstream GHSA-h395-qcrw-5vmq and GHSA-3vp4-m3rf-835h vulnerabilities.
+	github.com/cosmos/iavl => github.com/Switcheo/iavl v0.19.4-0.20221201205217-595bd9406da2
+
+	// Fix upstream GHSA-h395-qcrw-5vmq vulnerability.
 	// TODO Remove it: https://github.com/cosmos/cosmos-sdk/issues/10409
 	github.com/gin-gonic/gin => github.com/gin-gonic/gin v1.9.0
 	// replace broken goleveldb
