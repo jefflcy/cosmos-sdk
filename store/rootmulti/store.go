@@ -1028,6 +1028,7 @@ func (rs *Store) RollbackToVersion(target int64) error {
 			} else {
 				_, err = store.(*iavl.Store).LoadVersionForOverwriting(target)
 			}
+			err = store.(*iavl.Store).RollbackToVersion(target)
 			if err != nil {
 				return err
 			}
