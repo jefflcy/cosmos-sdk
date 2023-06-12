@@ -157,6 +157,7 @@ func (k BaseSendKeeper) InputOutputCoins(ctx sdk.Context, inputs []types.Input, 
 
 	for _, in := range inputs {
 		inAddress, err := sdk.AccAddressFromBech32(in.Address)
+		inAddress = k.ak.GetMergedAccountAddressIfExists(ctx, inAddress)
 		if err != nil {
 			return err
 		}
@@ -169,13 +170,15 @@ func (k BaseSendKeeper) InputOutputCoins(ctx sdk.Context, inputs []types.Input, 
 		ctx.EventManager().EmitEvent(
 			sdk.NewEvent(
 				sdk.EventTypeMessage,
-				sdk.NewAttribute(types.AttributeKeySender, in.Address),
+				sdk.NewAttribute(types.AttributeKeySender, inAddress.String()),
 			),
 		)
 	}
 
 	for _, out := range outputs {
 		outAddress, err := sdk.AccAddressFromBech32(out.Address)
+		outAddress = k.ak.GetMergedAccountAddressIfExists(ctx, outAddress)
+
 		if err != nil {
 			return err
 		}
@@ -187,7 +190,7 @@ func (k BaseSendKeeper) InputOutputCoins(ctx sdk.Context, inputs []types.Input, 
 		ctx.EventManager().EmitEvent(
 			sdk.NewEvent(
 				types.EventTypeTransfer,
-				sdk.NewAttribute(types.AttributeKeyRecipient, out.Address),
+				sdk.NewAttribute(types.AttributeKeyRecipient, outAddress.String()),
 				sdk.NewAttribute(sdk.AttributeKeyAmount, out.Coins.String()),
 			),
 		)
@@ -215,6 +218,7 @@ func (k BaseSendKeeper) InputOutputCoins(ctx sdk.Context, inputs []types.Input, 
 // Sender and recipient address will be mapped to their corresponding cosmos addresses should they already be mapped
 // Creates new account only if there is no mapping available for the recipient address AND recipient address account absent
 func (k BaseSendKeeper) SendCoins(ctx sdk.Context, fromAddr sdk.AccAddress, toAddr sdk.AccAddress, amt sdk.Coins) error {
+	fromAddr, toAddr = k.ak.GetMergedAccountAddressIfExists(ctx, fromAddr), k.ak.GetMergedAccountAddressIfExists(ctx, toAddr)
 	err := k.BeforeSend(ctx, fromAddr, toAddr, amt)
 	if err != nil {
 		return err
@@ -373,9 +377,8 @@ func (k BaseSendKeeper) setBalance(ctx sdk.Context, addr sdk.AccAddress, balance
 	if !balance.IsValid() {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, balance.String())
 	}
-	addressIfExists := k.ak.GetMergedAccountAddressIfExists(ctx, addr)
 
-	accountStore := k.getAccountStore(ctx, addressIfExists)
+	accountStore := k.getAccountStore(ctx, addr)
 	denomPrefixStore := k.getDenomAddressPrefixStore(ctx, balance.Denom)
 
 	// x/bank invariants prohibit persistence of zero balances
