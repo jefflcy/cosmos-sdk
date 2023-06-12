@@ -31,7 +31,9 @@ package module
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/telemetry"
 	"sort"
+	"time"
 
 	"cosmossdk.io/core/appmodule"
 	abci "github.com/cometbft/cometbft/abci/types"
@@ -559,7 +561,9 @@ func (m *Manager) BeginBlock(ctx sdk.Context, req abci.RequestBeginBlock) abci.R
 	for _, moduleName := range m.OrderBeginBlockers {
 		module, ok := m.Modules[moduleName].(BeginBlockAppModule)
 		if ok {
+			startTime := time.Now()
 			module.BeginBlock(ctx, req)
+			telemetry.ModuleMeasureSince(moduleName, startTime, telemetry.MetricKeyBeginBlocker)
 		}
 	}
 
@@ -580,7 +584,9 @@ func (m *Manager) EndBlock(ctx sdk.Context, req abci.RequestEndBlock) abci.Respo
 		if !ok {
 			continue
 		}
+		startTime := time.Now()
 		moduleValUpdates := module.EndBlock(ctx, req)
+		telemetry.ModuleMeasureSince(moduleName, startTime, telemetry.MetricKeyEndBlocker)
 
 		// use these validator updates if provided, the module manager assumes
 		// only one module will update the validator set
