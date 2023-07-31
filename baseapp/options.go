@@ -206,6 +206,14 @@ func (app *BaseApp) SetPostHandler(ph sdk.PostHandler) {
 	app.postHandler = ph
 }
 
+func (app *BaseApp) SetRefundHandler(rh sdk.AnteHandler) {
+	if app.sealed {
+		panic("SetRefundHandler() on sealed BaseApp")
+	}
+
+	app.refundHandler = rh
+}
+
 func (app *BaseApp) SetMsgHandlerMiddleware(msgHandlerMiddleware sdk.MsgHandlerMiddleware) {
 	if app.sealed {
 		panic("SetMsgHandlerMiddleware() on sealed BaseApp")
