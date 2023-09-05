@@ -4,7 +4,12 @@ import (
 	"fmt"
 	"time"
 
+<<<<<<< HEAD
 	gogotypes "github.com/cosmos/gogoproto/types"
+=======
+	"cosmossdk.io/math"
+	gogotypes "github.com/gogo/protobuf/types"
+>>>>>>> v0.46.13-patch
 
 	"cosmossdk.io/math"
 	sdk "github.com/cosmos/cosmos-sdk/types"

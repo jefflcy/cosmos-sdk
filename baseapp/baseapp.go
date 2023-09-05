@@ -71,9 +71,15 @@ type BaseApp struct { //nolint: maligned
 	addrPeerFilter  sdk.PeerFilter             // filter peers by address and port
 	idPeerFilter    sdk.PeerFilter             // filter peers by node ID
 	fauxMerkleMode  bool                       // if true, IAVL MountStores uses MountStoresDB for simulation speed.
+	refundHandler   sdk.AnteHandler            // refund handler for failed tx
 
-	// manages snapshots, i.e. dumps of app state at certain intervals
-	snapshotManager *snapshots.Manager
+	appStore
+	baseappVersions
+	peerFilters
+	snapshotData
+	abciData
+	moduleRouter
+	customMiddlewares
 
 	// volatile states:
 	//
@@ -83,12 +89,6 @@ type BaseApp struct { //nolint: maligned
 	deliverState         *state // for DeliverTx
 	processProposalState *state // for ProcessProposal
 	prepareProposalState *state // for PrepareProposal
-
-	// an inter-block write-through cache provided to the context during deliverState
-	interBlockCache sdk.MultiStorePersistentCache
-
-	// absent validators from begin block
-	voteInfos []abci.VoteInfo
 
 	// paramStore is used to query for ABCI consensus parameters from an
 	// application parameter store.
@@ -122,13 +122,6 @@ type BaseApp struct { //nolint: maligned
 	// ResponseCommit.RetainHeight.
 	minRetainBlocks uint64
 
-	// application's version string
-	version string
-
-	// application's protocol version that increments on every upgrade
-	// if BaseApp is passed to the upgrade keeper's NewKeeper method.
-	appVersion uint64
-
 	// recovery handler for app.runTx method
 	runTxRecoveryMiddleware recoveryMiddleware
 
@@ -144,6 +137,58 @@ type BaseApp struct { //nolint: maligned
 	abciListeners []ABCIListener
 
 	chainID string
+}
+
+type appStore struct {
+	db          dbm.DB               // common DB backend
+	cms         sdk.CommitMultiStore // Main (uncached) state
+	qms         sdk.MultiStore       // Optional alternative state provider for query service
+	storeLoader StoreLoader          // function to handle store loading, may be overridden with SetStoreLoader()
+
+	// an inter-block write-through cache provided to the context during deliverState
+	interBlockCache sdk.MultiStorePersistentCache
+
+	fauxMerkleMode bool // if true, IAVL MountStores uses MountStoresDB for simulation speed.
+}
+
+type moduleRouter struct {
+	router           sdk.Router        // handle any kind of message
+	queryRouter      sdk.QueryRouter   // router for redirecting query calls
+	grpcQueryRouter  *GRPCQueryRouter  // router for redirecting gRPC query calls
+	msgServiceRouter *MsgServiceRouter // router for redirecting Msg service messages
+}
+
+type abciData struct {
+	initChainer  sdk.InitChainer  // initialize state with validators and state blob
+	beginBlocker sdk.BeginBlocker // logic to run before any txs
+	endBlocker   sdk.EndBlocker   // logic to run after all txs, and to determine valset changes
+
+	// absent validators from begin block
+	voteInfos []abci.VoteInfo
+}
+
+type customMiddlewares struct {
+	deliverTxer     sdk.DeliverTxer     // logic to run on any deliver tx
+	beforeCommitter sdk.BeforeCommitter // logic to run before committing state
+	afterCommitter  sdk.AfterCommitter  // logic to run after committing state
+
+	msgHandlerMiddleware sdk.MsgHandlerMiddleware // middleware that wraps msg handlers
+}
+
+type baseappVersions struct {
+	// application's version string
+	version string
+
+	// application's protocol version that increments on every upgrade
+	// if BaseApp is passed to the upgrade keeper's NewKeeper method.
+	appVersion uint64
+}
+
+// should really get handled in some db struct
+// which then has a sub-item, persistence fields
+type snapshotData struct {
+	// manages snapshots, i.e. dumps of app state at certain intervals
+	snapshotManager *snapshots.Manager
 }
 
 // NewBaseApp returns a reference to an initialized BaseApp. It accepts a
@@ -442,7 +487,7 @@ func (app *BaseApp) setState(mode runTxMode, header tmproto.Header) {
 
 // GetConsensusParams returns the current consensus parameters from the BaseApp's
 // ParamStore. If the BaseApp has no ParamStore defined, nil is returned.
-func (app *BaseApp) GetConsensusParams(ctx sdk.Context) *tmproto.ConsensusParams {
+func (app *BaseApp) GetConsensusParams(ctx sdk.Context) *abci.ConsensusParams {
 	if app.paramStore == nil {
 		return nil
 	}
@@ -456,7 +501,7 @@ func (app *BaseApp) GetConsensusParams(ctx sdk.Context) *tmproto.ConsensusParams
 }
 
 // StoreConsensusParams sets the consensus parameters to the baseapp's param store.
-func (app *BaseApp) StoreConsensusParams(ctx sdk.Context, cp *tmproto.ConsensusParams) {
+func (app *BaseApp) StoreConsensusParams(ctx sdk.Context, cp *abci.ConsensusParams) {
 	if app.paramStore == nil {
 		panic("cannot store consensus params with no params store set")
 	}
@@ -770,6 +815,23 @@ func (app *BaseApp) runTx(mode runTxMode, txBytes []byte) (gInfo sdk.GasInfo, re
 			// append the events in the order of occurrence
 			result.Events = append(anteEvents, result.Events...)
 		}
+	} else {
+		if app.refundHandler != nil {
+			refundCtx, msCache := app.cacheTxContext(ctx, txBytes)
+			refundCtx = refundCtx.WithEventManager(sdk.NewEventManager())
+			newCtx, err := app.refundHandler(refundCtx, tx, mode == runTxModeSimulate)
+			if err != nil {
+				return gInfo, result, anteEvents, priority, err
+			}
+
+			if mode == runTxModeDeliver {
+				msCache.Write()
+			}
+
+			if len(anteEvents) > 0 && (mode == runTxModeDeliver || mode == runTxModeSimulate) {
+				anteEvents = append(anteEvents, newCtx.EventManager().ABCIEvents()...)
+			}
+		}
 	}
 
 	return gInfo, result, anteEvents, priority, err
@@ -785,14 +847,42 @@ func (app *BaseApp) runMsgs(ctx sdk.Context, msgs []sdk.Msg, mode runTxMode) (*s
 	events := sdk.EmptyEvents()
 	var msgResponses []*codectypes.Any
 
+	middleware := app.msgHandlerMiddleware
+	if middleware == nil {
+		middleware = noopMiddleware
+	}
+
 	// NOTE: GasWanted is determined by the AnteHandler and GasUsed by the GasMeter.
 	for i, msg := range msgs {
 		if mode != runTxModeDeliver && mode != runTxModeSimulate {
 			break
 		}
 
-		handler := app.msgServiceRouter.Handler(msg)
-		if handler == nil {
+		var (
+			msgResult    *sdk.Result
+			eventMsgName string // name to use as value in event `message.action`
+			err          error
+		)
+
+		if handler := app.msgServiceRouter.Handler(msg); handler != nil {
+			// ADR 031 request type routing
+			msgResult, err = middleware(ctx, msg, handler)
+			eventMsgName = sdk.MsgTypeURL(msg)
+		} else if legacyMsg, ok := msg.(legacytx.LegacyMsg); ok {
+			// legacy sdk.Msg routing
+			// Assuming that the app developer has migrated all their Msgs to
+			// proto messages and has registered all `Msg services`, then this
+			// path should never be called, because all those Msgs should be
+			// registered within the `msgServiceRouter` already.
+			msgRoute := legacyMsg.Route()
+			eventMsgName = legacyMsg.Type()
+			handler := app.router.Route(ctx, msgRoute)
+			if handler == nil {
+				return nil, sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unrecognized message route: %s; message index: %d", msgRoute, i)
+			}
+
+			msgResult, err = middleware(ctx, msg, handler)
+		} else {
 			return nil, sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "can't route message %+v", msg)
 		}
 
@@ -1073,4 +1163,8 @@ func NoOpProcessProposal() sdk.ProcessProposalHandler {
 // Close is called in start cmd to gracefully cleanup resources.
 func (app *BaseApp) Close() error {
 	return nil
+}
+
+var noopMiddleware sdk.MsgHandlerMiddleware = func(c sdk.Context, m sdk.Msg, h sdk.Handler) (*sdk.Result, error) {
+	return h(c, m)
 }

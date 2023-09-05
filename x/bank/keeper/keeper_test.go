@@ -696,7 +696,7 @@ func (suite *KeeperTestSuite) TestMsgSendEvents() {
 	)
 	event1.Attributes = append(
 		event1.Attributes,
-		abci.EventAttribute{Key: sdk.AttributeKeyAmount, Value: newCoins.String()},
+		abci.EventAttribute{Key: []byte(sdk.AttributeKeyAmount), Value: []byte(newCoins.String())},
 	)
 
 	event2 := sdk.Event{

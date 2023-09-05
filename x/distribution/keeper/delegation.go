@@ -3,8 +3,11 @@ package keeper
 import (
 	"fmt"
 
+<<<<<<< HEAD
 	"cosmossdk.io/math"
 
+=======
+>>>>>>> v0.46.13-patch
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/distribution/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -190,6 +193,10 @@ func (k Keeper) withdrawDelegationRewards(ctx sdk.Context, val stakingtypes.Vali
 	// remove delegator starting info
 	k.DeleteDelegatorStartingInfo(ctx, del.GetValidatorAddr(), del.GetDelegatorAddr())
 
+<<<<<<< HEAD
+=======
+	emittedRewards := finalRewards
+>>>>>>> v0.46.13-patch
 	if finalRewards.IsZero() {
 		baseDenom, _ := sdk.GetBaseDenom()
 		if baseDenom == "" {
@@ -198,13 +205,21 @@ func (k Keeper) withdrawDelegationRewards(ctx sdk.Context, val stakingtypes.Vali
 
 		// Note, we do not call the NewCoins constructor as we do not want the zero
 		// coin removed.
+<<<<<<< HEAD
 		finalRewards = sdk.Coins{sdk.NewCoin(baseDenom, math.ZeroInt())}
+=======
+		emittedRewards = sdk.Coins{sdk.NewCoin(baseDenom, sdk.ZeroInt())}
+>>>>>>> v0.46.13-patch
 	}
 
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			types.EventTypeWithdrawRewards,
+<<<<<<< HEAD
 			sdk.NewAttribute(sdk.AttributeKeyAmount, finalRewards.String()),
+=======
+			sdk.NewAttribute(sdk.AttributeKeyAmount, emittedRewards.String()),
+>>>>>>> v0.46.13-patch
 			sdk.NewAttribute(types.AttributeKeyValidator, val.GetOperator().String()),
 			sdk.NewAttribute(types.AttributeKeyDelegator, del.GetDelegatorAddr().String()),
 		),

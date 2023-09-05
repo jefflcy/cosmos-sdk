@@ -12,9 +12,9 @@ This document presents an overview of all the endpoints a node exposes: gRPC, RE
 
 Each node exposes the following endpoints for users to interact with a node, each endpoint is served on a different port. Details on how to configure each endpoint is provided in the endpoint's own section.
 
-* the gRPC server (default port: `9090`),
-* the REST server (default port: `1317`),
-* the CometBFT RPC endpoint (default port: `26657`).
+- the gRPC server (default port: `9090`),
+- the REST server (default port: `1317`),
+- the CometBFT RPC endpoint (default port: `26657`).
 
 :::tip
 The node also exposes some other endpoints, such as the CometBFT P2P endpoint, or the [Prometheus endpoint](https://docs.cometbft.com/v0.37/core/metrics), which are not directly related to the Cosmos SDK. Please refer to the [CometBFT documentation](https://docs.cometbft.com/v0.37/core/configuration) for more information about these endpoints.
@@ -34,8 +34,8 @@ Note: It is not possible to expose any [Protobuf `Msg` service](../building-modu
 
 The `grpc.Server` is a concrete gRPC server, which spawns and serves all gRPC query requests and a broadcast transaction request. This server can be configured inside `~/.simapp/config/app.toml`:
 
-* `grpc.enable = true|false` field defines if the gRPC server should be enabled. Defaults to `true`.
-* `grpc.address = {string}` field defines the `ip:port` the server should bind to. Defaults to `localhost:9090`.
+- `grpc.enable = true|false` field defines if the gRPC server should be enabled. Defaults to `true`.
+- `grpc.address = {string}` field defines the `ip:port` the server should bind to. Defaults to `localhost:9090`.
 
 :::tip
 `~/.simapp` is the directory where the node's configuration and databases are stored. By default, it's set to `~/.{app_name}`.
@@ -51,9 +51,9 @@ Cosmos SDK supports REST routes via gRPC-gateway.
 
 All routes are configured under the following fields in `~/.simapp/config/app.toml`:
 
-* `api.enable = true|false` field defines if the REST server should be enabled. Defaults to `false`.
-* `api.address = {string}` field defines the `ip:port` the server should bind to. Defaults to `tcp://localhost:1317`.
-* some additional API configuration options are defined in `~/.simapp/config/app.toml`, along with comments, please refer to that file directly.
+- `api.enable = true|false` field defines if the REST server should be enabled. Defaults to `false`.
+- `api.address = {string}` field defines the `ip:port` the server should bind to. Defaults to `tcp://localhost:1317`.
+- some additional API configuration options are defined in `~/.simapp/config/app.toml`, along with comments, please refer to that file directly.
 
 ### gRPC-gateway REST Routes
 
@@ -82,19 +82,19 @@ Independently from the Cosmos SDK, CometBFT also exposes a RPC server. This RPC 
 
 Some CometBFT RPC endpoints are directly related to the Cosmos SDK:
 
-* `/abci_query`: this endpoint will query the application for state. As the `path` parameter, you can send the following strings:
-    * any Protobuf fully-qualified service method, such as `/cosmos.bank.v1beta1.Query/AllBalances`. The `data` field should then include the method's request parameter(s) encoded as bytes using Protobuf.
-    * `/app/simulate`: this will simulate a transaction, and return some information such as gas used.
-    * `/app/version`: this will return the application's version.
-    * `/store/{path}`: this will query the store directly.
-    * `/p2p/filter/addr/{port}`: this will return a filtered list of the node's P2P peers by address port.
-    * `/p2p/filter/id/{id}`: this will return a filtered list of the node's P2P peers by ID.
-* `/broadcast_tx_{aync,async,commit}`: these 3 endpoint will broadcast a transaction to other peers. CLI, gRPC and REST expose [a way to broadcast transations](./01-transactions.md#broadcasting-the-transaction), but they all use these 3 CometBFT RPCs under the hood.
+- `/abci_query`: this endpoint will query the application for state. As the `path` parameter, you can send the following strings:
+  - any Protobuf fully-qualified service method, such as `/cosmos.bank.v1beta1.Query/AllBalances`. The `data` field should then include the method's request parameter(s) encoded as bytes using Protobuf.
+  - `/app/simulate`: this will simulate a transaction, and return some information such as gas used.
+  - `/app/version`: this will return the application's version.
+  - `/store/{path}`: this will query the store directly.
+  - `/p2p/filter/addr/{port}`: this will return a filtered list of the node's P2P peers by address port.
+  - `/p2p/filter/id/{id}`: this will return a filtered list of the node's P2P peers by ID.
+- `/broadcast_tx_{aync,async,commit}`: these 3 endpoint will broadcast a transaction to other peers. CLI, gRPC and REST expose [a way to broadcast transations](./01-transactions.md#broadcasting-the-transaction), but they all use these 3 CometBFT RPCs under the hood.
 
 ## Comparison Table
 
-| Name           | Advantages                                                                                                                                                            | Disadvantages                                                                                                 |
-| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| gRPC           | - can use code-generated stubs in various languages <br /> - supports streaming and bidirectional communication (HTTP2) <br /> - small wire binary sizes, faster transmission | - based on HTTP2, not available in browsers <br /> - learning curve (mostly due to Protobuf)                      |
-| REST           | - ubiquitous <br/> - client libraries in all languages, faster implementation <br />                                                                                        | - only supports unary request-response communication (HTTP1.1) <br/> - bigger over-the-wire message sizes (JSON) |
-| CometBFT RPC | - easy to use                                                                                                                                                         | - bigger over-the-wire message sizes (JSON)                                                                   |
+| Name         | Advantages                                                                                                                                                                    | Disadvantages                                                                                                    |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| gRPC         | - can use code-generated stubs in various languages <br /> - supports streaming and bidirectional communication (HTTP2) <br /> - small wire binary sizes, faster transmission | - based on HTTP2, not available in browsers <br /> - learning curve (mostly due to Protobuf)                     |
+| REST         | - ubiquitous <br/> - client libraries in all languages, faster implementation <br />                                                                                          | - only supports unary request-response communication (HTTP1.1) <br/> - bigger over-the-wire message sizes (JSON) |
+| CometBFT RPC | - easy to use                                                                                                                                                                 | - bigger over-the-wire message sizes (JSON)                                                                      |

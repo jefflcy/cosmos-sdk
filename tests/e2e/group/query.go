@@ -162,7 +162,11 @@ func (s *E2ETestSuite) TestQueryGroupsByMembers() {
 	}
 }
 
+<<<<<<< HEAD:tests/e2e/group/query.go
 func (s *E2ETestSuite) TestQueryGroups() {
+=======
+func (s *IntegrationTestSuite) TestQueryGroups() {
+>>>>>>> v0.46.13-patch:x/group/client/testutil/query.go
 	val := s.network.Validators[0]
 	clientCtx := val.ClientCtx
 	require := s.Require()
@@ -177,7 +181,11 @@ func (s *E2ETestSuite) TestQueryGroups() {
 	}{
 		{
 			name:      "valid req",
+<<<<<<< HEAD:tests/e2e/group/query.go
 			args:      []string{fmt.Sprintf("--%s=json", flags.FlagOutput)},
+=======
+			args:      []string{fmt.Sprintf("--%s=json", tmcli.OutputFlag)},
+>>>>>>> v0.46.13-patch:x/group/client/testutil/query.go
 			expectErr: false,
 			numItems:  5,
 		},
@@ -185,7 +193,11 @@ func (s *E2ETestSuite) TestQueryGroups() {
 			name: "valid req with pagination",
 			args: []string{
 				"--limit=2",
+<<<<<<< HEAD:tests/e2e/group/query.go
 				fmt.Sprintf("--%s=json", flags.FlagOutput),
+=======
+				fmt.Sprintf("--%s=json", tmcli.OutputFlag),
+>>>>>>> v0.46.13-patch:x/group/client/testutil/query.go
 			},
 			expectErr: false,
 			numItems:  2,
@@ -196,7 +208,11 @@ func (s *E2ETestSuite) TestQueryGroups() {
 		tc := tc
 		s.Run(tc.name, func() {
 			cmd := client.QueryGroupsCmd()
+<<<<<<< HEAD:tests/e2e/group/query.go
 			out, err := clitestutil.ExecTestCLICmd(clientCtx, cmd, tc.args)
+=======
+			out, err := cli.ExecTestCLICmd(clientCtx, cmd, tc.args)
+>>>>>>> v0.46.13-patch:x/group/client/testutil/query.go
 			if tc.expectErr {
 				require.Contains(out.String(), tc.expectErrMsg)
 			} else {
@@ -211,7 +227,11 @@ func (s *E2ETestSuite) TestQueryGroups() {
 	}
 }
 
+<<<<<<< HEAD:tests/e2e/group/query.go
 func (s *E2ETestSuite) TestQueryGroupMembers() {
+=======
+func (s *IntegrationTestSuite) TestQueryGroupMembers() {
+>>>>>>> v0.46.13-patch:x/group/client/testutil/query.go
 	val := s.network.Validators[0]
 	clientCtx := val.ClientCtx
 

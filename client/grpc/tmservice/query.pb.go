@@ -35,7 +35,8 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// GetValidatorSetByHeightRequest is the request type for the Query/GetValidatorSetByHeight RPC method.
+// GetValidatorSetByHeightRequest is the request type for the
+// Query/GetValidatorSetByHeight RPC method.
 type GetValidatorSetByHeightRequest struct {
 	Height int64 `protobuf:"varint,1,opt,name=height,proto3" json:"height,omitempty"`
 	// pagination defines an pagination for the request.
@@ -89,7 +90,8 @@ func (m *GetValidatorSetByHeightRequest) GetPagination() *query.PageRequest {
 	return nil
 }
 
-// GetValidatorSetByHeightResponse is the response type for the Query/GetValidatorSetByHeight RPC method.
+// GetValidatorSetByHeightResponse is the response type for the
+// Query/GetValidatorSetByHeight RPC method.
 type GetValidatorSetByHeightResponse struct {
 	BlockHeight int64        `protobuf:"varint,1,opt,name=block_height,json=blockHeight,proto3" json:"block_height,omitempty"`
 	Validators  []*Validator `protobuf:"bytes,2,rep,name=validators,proto3" json:"validators,omitempty"`
@@ -151,7 +153,8 @@ func (m *GetValidatorSetByHeightResponse) GetPagination() *query.PageResponse {
 	return nil
 }
 
-// GetLatestValidatorSetRequest is the request type for the Query/GetValidatorSetByHeight RPC method.
+// GetLatestValidatorSetRequest is the request type for the
+// Query/GetValidatorSetByHeight RPC method.
 type GetLatestValidatorSetRequest struct {
 	// pagination defines an pagination for the request.
 	Pagination *query.PageRequest `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
@@ -197,7 +200,8 @@ func (m *GetLatestValidatorSetRequest) GetPagination() *query.PageRequest {
 	return nil
 }
 
-// GetLatestValidatorSetResponse is the response type for the Query/GetValidatorSetByHeight RPC method.
+// GetLatestValidatorSetResponse is the response type for the
+// Query/GetValidatorSetByHeight RPC method.
 type GetLatestValidatorSetResponse struct {
 	BlockHeight int64        `protobuf:"varint,1,opt,name=block_height,json=blockHeight,proto3" json:"block_height,omitempty"`
 	Validators  []*Validator `protobuf:"bytes,2,rep,name=validators,proto3" json:"validators,omitempty"`
@@ -328,7 +332,8 @@ func (m *Validator) GetProposerPriority() int64 {
 	return 0
 }
 
-// GetBlockByHeightRequest is the request type for the Query/GetBlockByHeight RPC method.
+// GetBlockByHeightRequest is the request type for the Query/GetBlockByHeight
+// RPC method.
 type GetBlockByHeightRequest struct {
 	Height int64 `protobuf:"varint,1,opt,name=height,proto3" json:"height,omitempty"`
 }
@@ -373,7 +378,8 @@ func (m *GetBlockByHeightRequest) GetHeight() int64 {
 	return 0
 }
 
-// GetBlockByHeightResponse is the response type for the Query/GetBlockByHeight RPC method.
+// GetBlockByHeightResponse is the response type for the Query/GetBlockByHeight
+// RPC method.
 type GetBlockByHeightResponse struct {
 	BlockId *types1.BlockID `protobuf:"bytes,1,opt,name=block_id,json=blockId,proto3" json:"block_id,omitempty"`
 	// Deprecated: please use `sdk_block` instead
@@ -473,7 +479,8 @@ func (m *GetLatestBlockRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetLatestBlockRequest proto.InternalMessageInfo
 
-// GetLatestBlockResponse is the response type for the Query/GetLatestBlock RPC method.
+// GetLatestBlockResponse is the response type for the Query/GetLatestBlock RPC
+// method.
 type GetLatestBlockResponse struct {
 	BlockId *types1.BlockID `protobuf:"bytes,1,opt,name=block_id,json=blockId,proto3" json:"block_id,omitempty"`
 	// Deprecated: please use `sdk_block` instead
@@ -655,7 +662,8 @@ func (m *GetNodeInfoRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetNodeInfoRequest proto.InternalMessageInfo
 
-// GetNodeInfoResponse is the response type for the Query/GetNodeInfo RPC method.
+// GetNodeInfoResponse is the response type for the Query/GetNodeInfo RPC
+// method.
 type GetNodeInfoResponse struct {
 	DefaultNodeInfo    *p2p.DefaultNodeInfo `protobuf:"bytes,1,opt,name=default_node_info,json=defaultNodeInfo,proto3" json:"default_node_info,omitempty"`
 	ApplicationVersion *VersionInfo         `protobuf:"bytes,2,opt,name=application_version,json=applicationVersion,proto3" json:"application_version,omitempty"`
@@ -943,7 +951,8 @@ func (m *ABCIQueryRequest) GetProve() bool {
 	return false
 }
 
-// ABCIQueryResponse defines the response structure for the ABCIQuery gRPC query.
+// ABCIQueryResponse defines the response structure for the ABCIQuery gRPC
+// query.
 //
 // Note: This type is a duplicate of the ResponseQuery proto type defined in
 // Tendermint.
@@ -1059,7 +1068,8 @@ func (m *ABCIQueryResponse) GetCodespace() string {
 // be arbitrary format, providing necessary data for example neighbouring node
 // hash.
 //
-// Note: This type is a duplicate of the ProofOp proto type defined in Tendermint.
+// Note: This type is a duplicate of the ProofOp proto type defined in
+// Tendermint.
 type ProofOp struct {
 	Type string `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
 	Key  []byte `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
@@ -1122,7 +1132,8 @@ func (m *ProofOp) GetData() []byte {
 
 // ProofOps is Merkle proof defined by the list of ProofOps.
 //
-// Note: This type is a duplicate of the ProofOps proto type defined in Tendermint.
+// Note: This type is a duplicate of the ProofOps proto type defined in
+// Tendermint.
 type ProofOps struct {
 	Ops []ProofOp `protobuf:"bytes,1,rep,name=ops,proto3" json:"ops"`
 }
@@ -1309,9 +1320,9 @@ type ServiceClient interface {
 	GetLatestValidatorSet(ctx context.Context, in *GetLatestValidatorSetRequest, opts ...grpc.CallOption) (*GetLatestValidatorSetResponse, error)
 	// GetValidatorSetByHeight queries validator-set at a given height.
 	GetValidatorSetByHeight(ctx context.Context, in *GetValidatorSetByHeightRequest, opts ...grpc.CallOption) (*GetValidatorSetByHeightResponse, error)
-	// ABCIQuery defines a query handler that supports ABCI queries directly to the
-	// application, bypassing Tendermint completely. The ABCI query must contain
-	// a valid and supported path, including app, custom, p2p, and store.
+	// ABCIQuery defines a query handler that supports ABCI queries directly to
+	// the application, bypassing Tendermint completely. The ABCI query must
+	// contain a valid and supported path, including app, custom, p2p, and store.
 	//
 	// Since: cosmos-sdk 0.46
 	ABCIQuery(ctx context.Context, in *ABCIQueryRequest, opts ...grpc.CallOption) (*ABCIQueryResponse, error)
@@ -1402,9 +1413,9 @@ type ServiceServer interface {
 	GetLatestValidatorSet(context.Context, *GetLatestValidatorSetRequest) (*GetLatestValidatorSetResponse, error)
 	// GetValidatorSetByHeight queries validator-set at a given height.
 	GetValidatorSetByHeight(context.Context, *GetValidatorSetByHeightRequest) (*GetValidatorSetByHeightResponse, error)
-	// ABCIQuery defines a query handler that supports ABCI queries directly to the
-	// application, bypassing Tendermint completely. The ABCI query must contain
-	// a valid and supported path, including app, custom, p2p, and store.
+	// ABCIQuery defines a query handler that supports ABCI queries directly to
+	// the application, bypassing Tendermint completely. The ABCI query must
+	// contain a valid and supported path, including app, custom, p2p, and store.
 	//
 	// Since: cosmos-sdk 0.46
 	ABCIQuery(context.Context, *ABCIQueryRequest) (*ABCIQueryResponse, error)

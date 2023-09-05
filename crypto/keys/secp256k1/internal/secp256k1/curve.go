@@ -29,7 +29,12 @@
 // THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<<<<<<< HEAD
 //nolint // this nolint lets us use this file in its original and unmodified form.
+=======
+
+// nolint
+>>>>>>> v0.46.13-patch
 package secp256k1
 
 import (
@@ -99,8 +104,13 @@ func (bitCurve *BitCurve) IsOnCurve(x, y *big.Int) bool {
 	x3 := new(big.Int).Mul(x, x) // x²
 	x3.Mul(x3, x)                // x³
 
+<<<<<<< HEAD
 	x3.Add(x3, bitCurve.B) // x³+B
 	x3.Mod(x3, bitCurve.P) // (x³+B)%P
+=======
+	x3.Add(x3, BitCurve.B) // x³+B
+	x3.Mod(x3, BitCurve.P) // (x³+B)%P
+>>>>>>> v0.46.13-patch
 
 	return x3.Cmp(y2) == 0
 }

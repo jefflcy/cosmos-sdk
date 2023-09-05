@@ -25,5 +25,17 @@ type AccountKeeper interface {
 	GetModuleAccountAndPermissions(ctx sdk.Context, moduleName string) (types.ModuleAccountI, []string)
 	GetModuleAccount(ctx sdk.Context, moduleName string) types.ModuleAccountI
 	SetModuleAccount(ctx sdk.Context, macc types.ModuleAccountI)
+<<<<<<< HEAD
 	GetModulePermissions() map[string]types.PermissionsForAddress
+=======
+
+	GetMergedAccountAddressIfExists(ctx sdk.Context, addr sdk.AccAddress) sdk.AccAddress
+	GetMappedAddress(ctx sdk.Context, addr sdk.AccAddress) sdk.AccAddress
+}
+type SendHooks interface {
+	BeforeSend(ctx sdk.Context, fromAddr sdk.AccAddress, toAddr sdk.AccAddress, amt sdk.Coins) error
+	AfterSend(ctx sdk.Context, fromAddr sdk.AccAddress, toAddr sdk.AccAddress, amt sdk.Coins) error
+	BeforeMultiSend(ctx sdk.Context, inputs []Input, outputs []Output) error
+	AfterMultiSend(ctx sdk.Context, inputs []Input, outputs []Output) error
+>>>>>>> v0.46.13-patch
 }

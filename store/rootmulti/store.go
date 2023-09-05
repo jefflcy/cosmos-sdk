@@ -538,7 +538,10 @@ func (rs *Store) CacheMultiStoreWithVersion(version int64) (types.CacheMultiStor
 					return nil, err
 				}
 			}
+<<<<<<< HEAD
 
+=======
+>>>>>>> v0.46.13-patch
 		default:
 			cacheStore = store
 		}
@@ -1028,6 +1031,7 @@ func (rs *Store) RollbackToVersion(target int64) error {
 			} else {
 				_, err = store.(*iavl.Store).LoadVersionForOverwriting(target)
 			}
+			err := store.(*iavl.Store).RollbackToVersion(target)
 			if err != nil {
 				return err
 			}

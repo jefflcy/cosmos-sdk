@@ -35,9 +35,9 @@ to add as much context and adequate dimensionality to metrics as possible, so th
 is advised. Regardless of the package or method used, the Cosmos SDK supports the following metrics
 types:
 
-* gauges
-* summaries
-* counters
+- gauges
+- summaries
+- counters
 
 ## Labels
 
@@ -66,21 +66,21 @@ exceed a cardinality of 10.
 
 Consider the following examples with enough granularity and adequate cardinality:
 
-* begin/end blocker time
-* tx gas used
-* block gas used
-* amount of tokens minted
-* amount of accounts created
+- begin/end blocker time
+- tx gas used
+- block gas used
+- amount of tokens minted
+- amount of accounts created
 
 The following examples expose too much cardinality and may not even prove to be useful:
 
-* transfers between accounts with amount
-* voting/deposit amount from unique addresses
+- transfers between accounts with amount
+- voting/deposit amount from unique addresses
 
 ## Supported Metrics
 
 | Metric                          | Description                                                                               | Unit            | Type    |
-|:--------------------------------|:------------------------------------------------------------------------------------------|:----------------|:--------|
+| :------------------------------ | :---------------------------------------------------------------------------------------- | :-------------- | :------ |
 | `tx_count`                      | Total number of txs processed via `DeliverTx`                                             | tx              | counter |
 | `tx_successful`                 | Total number of successful txs processed via `DeliverTx`                                  | tx              | counter |
 | `tx_failed`                     | Total number of failed txs processed via `DeliverTx`                                      | tx              | counter |

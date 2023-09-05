@@ -155,7 +155,11 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 }
 
 // ConsensusVersion implements AppModule/ConsensusVersion.
+<<<<<<< HEAD
 func (AppModule) ConsensusVersion() uint64 { return ConsensusVersion }
+=======
+func (AppModule) ConsensusVersion() uint64 { return 1 }
+>>>>>>> v0.46.13-patch
 
 // EndBlock implements the group module's EndBlock.
 func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {

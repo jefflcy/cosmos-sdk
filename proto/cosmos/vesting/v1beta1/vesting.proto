@@ -16,6 +16,7 @@ message BaseVestingAccount {
   option (gogoproto.goproto_stringer) = false;
 
   cosmos.auth.v1beta1.BaseAccount base_account       = 1 [(gogoproto.embed) = true];
+<<<<<<< HEAD
   repeated cosmos.base.v1beta1.Coin original_vesting = 2 [
     (gogoproto.nullable)     = false,
     (amino.dont_omitempty)   = true,
@@ -31,6 +32,14 @@ message BaseVestingAccount {
     (amino.dont_omitempty)   = true,
     (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
   ];
+=======
+  repeated cosmos.base.v1beta1.Coin original_vesting = 2
+      [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated cosmos.base.v1beta1.Coin delegated_free = 3
+      [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated cosmos.base.v1beta1.Coin delegated_vesting = 4
+      [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+>>>>>>> v0.46.13-patch
   // Vesting end time, as unix timestamp (in seconds).
   int64 end_time = 5;
 }

@@ -18,10 +18,15 @@ import (
 
 // Simulation operation weights constants
 const (
+<<<<<<< HEAD
 	OpWeightMsgSend           = "op_weight_msg_send"      //nolint:gosec
 	OpWeightMsgMultiSend      = "op_weight_msg_multisend" //nolint:gosec
 	DefaultWeightMsgSend      = 100                       // from simappparams.DefaultWeightMsgSend
 	DefaultWeightMsgMultiSend = 10                        // from simappparams.DefaultWeightMsgMultiSend
+=======
+	OpWeightMsgSend      = "op_weight_msg_send"      //nolint:gosec
+	OpWeightMsgMultiSend = "op_weight_msg_multisend" //nolint:gosec
+>>>>>>> v0.46.13-patch
 )
 
 // WeightedOperations returns all the operations from the module with their respective weights
@@ -146,8 +151,13 @@ func sendMsgSend(
 			return err
 		}
 	}
+<<<<<<< HEAD
 	txGen := moduletestutil.MakeTestEncodingConfig().TxConfig
 	tx, err := simtestutil.GenSignedMockTx(
+=======
+	txGen := simappparams.MakeTestEncodingConfig().TxConfig
+	tx, err := helpers.GenSignedMockTx(
+>>>>>>> v0.46.13-patch
 		r,
 		txGen,
 		[]sdk.Msg{msg},
@@ -335,7 +345,13 @@ func sendMsgMultiSend(
 		fees sdk.Coins
 		err  error
 	)
+<<<<<<< HEAD
 	addr := sdk.MustAccAddressFromBech32(msg.Inputs[0].Address)
+=======
+
+	addr := sdk.MustAccAddressFromBech32(msg.Inputs[0].Address)
+
+>>>>>>> v0.46.13-patch
 	// feePayer is the first signer, i.e. first input address
 	feePayer := ak.GetAccount(ctx, addr)
 	spendable := bk.SpendableCoins(ctx, feePayer.GetAddress())
@@ -346,8 +362,14 @@ func sendMsgMultiSend(
 			return err
 		}
 	}
+<<<<<<< HEAD
 	txGen := moduletestutil.MakeTestEncodingConfig().TxConfig
 	tx, err := simtestutil.GenSignedMockTx(
+=======
+
+	txGen := simappparams.MakeTestEncodingConfig().TxConfig
+	tx, err := helpers.GenSignedMockTx(
+>>>>>>> v0.46.13-patch
 		r,
 		txGen,
 		[]sdk.Msg{msg},

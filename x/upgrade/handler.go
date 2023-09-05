@@ -16,10 +16,10 @@ import (
 func NewSoftwareUpgradeProposalHandler(k *keeper.Keeper) govtypes.Handler {
 	return func(ctx sdk.Context, content govtypes.Content) error {
 		switch c := content.(type) {
-		case *types.SoftwareUpgradeProposal:
+		case *types.SoftwareUpgradeProposal: //nolint:staticcheck
 			return handleSoftwareUpgradeProposal(ctx, k, c)
 
-		case *types.CancelSoftwareUpgradeProposal:
+		case *types.CancelSoftwareUpgradeProposal: //nolint:staticcheck
 			return handleCancelSoftwareUpgradeProposal(ctx, k, c)
 
 		default:

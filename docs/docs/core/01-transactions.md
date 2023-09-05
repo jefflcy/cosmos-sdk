@@ -10,7 +10,7 @@ sidebar_position: 1
 
 :::note Pre-requisite Readings
 
-* [Anatomy of a Cosmos SDK Application](../basics/00-app-anatomy.md)
+- [Anatomy of a Cosmos SDK Application](../basics/00-app-anatomy.md)
 
 :::
 
@@ -30,8 +30,8 @@ https://github.com/cosmos/cosmos-sdk/blob/v0.47.0-rc1/types/tx_msg.go#L42-L50
 
 It contains the following methods:
 
-* **GetMsgs:** unwraps the transaction and returns a list of contained `sdk.Msg`s - one transaction may have one or multiple messages, which are defined by module developers.
-* **ValidateBasic:** lightweight, [_stateless_](../basics/01-tx-lifecycle.md#types-of-checks) checks used by ABCI messages [`CheckTx`](./00-baseapp.md#checktx) and [`DeliverTx`](./00-baseapp.md#delivertx) to make sure transactions are not invalid. For example, the [`auth`](https://github.com/cosmos/cosmos-sdk/tree/main/x/auth) module's `ValidateBasic` function checks that its transactions are signed by the correct number of signers and that the fees do not exceed what the user's maximum. Note that this function is to be distinct from `sdk.Msg` [`ValidateBasic`](../basics/01-tx-lifecycle.md#ValidateBasic) methods, which perform basic validity checks on messages only. When [`runTx`](./00-baseapp.md#runtx) is checking a transaction created from the [`auth`](https://github.com/cosmos/cosmos-sdk/tree/main/x/auth/spec) module, it first runs `ValidateBasic` on each message, then runs the `auth` module AnteHandler which calls `ValidateBasic` for the transaction itself.
+- **GetMsgs:** unwraps the transaction and returns a list of contained `sdk.Msg`s - one transaction may have one or multiple messages, which are defined by module developers.
+- **ValidateBasic:** lightweight, [_stateless_](../basics/01-tx-lifecycle.md#types-of-checks) checks used by ABCI messages [`CheckTx`](./00-baseapp.md#checktx) and [`DeliverTx`](./00-baseapp.md#delivertx) to make sure transactions are not invalid. For example, the [`auth`](https://github.com/cosmos/cosmos-sdk/tree/main/x/auth) module's `ValidateBasic` function checks that its transactions are signed by the correct number of signers and that the fees do not exceed what the user's maximum. Note that this function is to be distinct from `sdk.Msg` [`ValidateBasic`](../basics/01-tx-lifecycle.md#ValidateBasic) methods, which perform basic validity checks on messages only. When [`runTx`](./00-baseapp.md#runtx) is checking a transaction created from the [`auth`](https://github.com/cosmos/cosmos-sdk/tree/main/x/auth/spec) module, it first runs `ValidateBasic` on each message, then runs the `auth` module AnteHandler which calls `ValidateBasic` for the transaction itself.
 
 As a developer, you should rarely manipulate `Tx` directly, as `Tx` is really an intermediate type used for transaction generation. Instead, developers should prefer the `TxBuilder` interface, which you can learn more about [below](#transaction-generation).
 
@@ -95,15 +95,15 @@ A concrete use case is implemented in [transaction tips](./14-tips.md): the tipp
 
 #### Custom Sign modes
 
-There is the the opportunity to add your own custom sign mode to the Cosmos-SDK.  While we can not accept the implementation of the sign mode to the repository, we can accept a pull request to add the custom signmode to the SignMode enum located [here](https://github.com/cosmos/cosmos-sdk/blob/v0.47.0-rc1/proto/cosmos/tx/signing/v1beta1/signing.proto#L17)
+There is the the opportunity to add your own custom sign mode to the Cosmos-SDK. While we can not accept the implementation of the sign mode to the repository, we can accept a pull request to add the custom signmode to the SignMode enum located [here](https://github.com/cosmos/cosmos-sdk/blob/v0.47.0-rc1/proto/cosmos/tx/signing/v1beta1/signing.proto#L17)
 
 ## Transaction Process
 
 The process of an end-user sending a transaction is:
 
-* decide on the messages to put into the transaction,
-* generate the transaction using the Cosmos SDK's `TxBuilder`,
-* broadcast the transaction using one of the available interfaces.
+- decide on the messages to put into the transaction,
+- generate the transaction using the Cosmos SDK's `TxBuilder`,
+- broadcast the transaction using one of the available interfaces.
 
 The next paragraphs will describe each of these components, in this order.
 
@@ -130,17 +130,17 @@ The `TxBuilder` interface contains data closely related with the generation of t
 https://github.com/cosmos/cosmos-sdk/blob/v0.47.0-rc1/client/tx_config.go#L33-L50
 ```
 
-* `Msg`s, the array of [messages](#messages) included in the transaction.
-* `GasLimit`, option chosen by the users for how to calculate how much gas they will need to pay.
-* `Memo`, a note or comment to send with the transaction.
-* `FeeAmount`, the maximum amount the user is willing to pay in fees.
-* `TimeoutHeight`, block height until which the transaction is valid.
-* `Signatures`, the array of signatures from all signers of the transaction.
+- `Msg`s, the array of [messages](#messages) included in the transaction.
+- `GasLimit`, option chosen by the users for how to calculate how much gas they will need to pay.
+- `Memo`, a note or comment to send with the transaction.
+- `FeeAmount`, the maximum amount the user is willing to pay in fees.
+- `TimeoutHeight`, block height until which the transaction is valid.
+- `Signatures`, the array of signatures from all signers of the transaction.
 
 As there are currently two sign modes for signing transactions, there are also two implementations of `TxBuilder`:
 
-* [wrapper](https://github.com/cosmos/cosmos-sdk/blob/v0.47.0-rc1/x/auth/tx/builder.go#L18-L34) for creating transactions for `SIGN_MODE_DIRECT`,
-* [StdTxBuilder](https://github.com/cosmos/cosmos-sdk/blob/v0.47.0-rc1/x/auth/migrations/legacytx/stdtx_builder.go#L15-L21) for `SIGN_MODE_LEGACY_AMINO_JSON`.
+- [wrapper](https://github.com/cosmos/cosmos-sdk/blob/v0.47.0-rc1/x/auth/tx/builder.go#L18-L34) for creating transactions for `SIGN_MODE_DIRECT`,
+- [StdTxBuilder](https://github.com/cosmos/cosmos-sdk/blob/v0.47.0-rc1/x/auth/migrations/legacytx/stdtx_builder.go#L15-L21) for `SIGN_MODE_LEGACY_AMINO_JSON`.
 
 However, the two implementation of `TxBuilder` should be hidden away from end-users, as they should prefer using the overarching `TxConfig` interface:
 

@@ -29,10 +29,10 @@ Each custom module error must provide the codespace, which is typically the modu
 provide a globally unique Cosmos SDK error. Typically, the code is monotonically increasing but does not
 necessarily have to be. The only restrictions on error codes are the following:
 
-* Must be greater than one, as a code value of one is reserved for internal errors.
-* Must be unique within the module.
+- Must be greater than one, as a code value of one is reserved for internal errors.
+- Must be unique within the module.
 
-Note, the Cosmos SDK provides a core set of *common* errors. These errors are defined in [`types/errors/errors.go`](https://github.com/cosmos/cosmos-sdk/blob/main/types/errors/errors.go).
+Note, the Cosmos SDK provides a core set of _common_ errors. These errors are defined in [`types/errors/errors.go`](https://github.com/cosmos/cosmos-sdk/blob/main/types/errors/errors.go).
 
 ## Wrapping
 

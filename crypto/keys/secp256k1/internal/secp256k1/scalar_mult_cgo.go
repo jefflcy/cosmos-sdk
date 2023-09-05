@@ -5,7 +5,11 @@
 //go:build !gofuzz && cgo
 // +build !gofuzz,cgo
 
+<<<<<<< HEAD
 //nolint // this nolint lets us use this file in its original and unmodified form.
+=======
+// nolint
+>>>>>>> v0.46.13-patch
 package secp256k1
 
 import (

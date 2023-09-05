@@ -1,6 +1,7 @@
 ---
 sidebar_position: 1
 ---
+
 # Events
 
 :::note Synopsis
@@ -9,12 +10,12 @@ sidebar_position: 1
 
 :::note Pre-requisite Readings
 
-* [Anatomy of a Cosmos SDK application](../basics/00-app-anatomy.md)
-* [CometBFT Documentation on Events](https://docs.cometbft.com/v0.37/spec/abci/abci++_basic_concepts#events)
+- [Anatomy of a Cosmos SDK application](../basics/00-app-anatomy.md)
+- [CometBFT Documentation on Events](https://docs.cometbft.com/v0.37/spec/abci/abci++_basic_concepts#events)
 
 :::
 
-## Events
+## Typed Events
 
 Events are implemented in the Cosmos SDK as an alias of the ABCI `Event` type and
 take the form of: `{eventType}.{attributeKey}={attributeValue}`.
@@ -25,8 +26,8 @@ https://github.com/cometbft/cometbft/blob/v0.37.0/proto/tendermint/abci/types.pr
 
 An Event contains:
 
-* A `type` to categorize the Event at a high-level; for example, the Cosmos SDK uses the `"message"` type to filter Events by `Msg`s.
-* A list of `attributes` are key-value pairs that give more information about the categorized Event. For example, for the `"message"` type, we can filter Events by key-value pairs using `message.action={some_action}`, `message.module={some_module}` or `message.sender={some_sender}`.
+- A `type` to categorize the Event at a high-level; for example, the Cosmos SDK uses the `"message"` type to filter Events by `Msg`s.
+- A list of `attributes` are key-value pairs that give more information about the categorized Event. For example, for the `"message"` type, we can filter Events by key-value pairs using `message.action={some_action}`, `message.module={some_module}` or `message.sender={some_sender}`.
 
 :::tip
 To parse the attribute values as strings, make sure to add `'` (single quotes) around each attribute value.
@@ -42,22 +43,22 @@ In addition, each module documents its events under in the `Events` sections of 
 
 Lastly, Events are returned to the underlying consensus engine in the response of the following ABCI messages:
 
-* [`BeginBlock`](./00-baseapp.md#beginblock)
-* [`EndBlock`](./00-baseapp.md#endblock)
-* [`CheckTx`](./00-baseapp.md#checktx)
-* [`DeliverTx`](./00-baseapp.md#delivertx)
+- [`BeginBlock`](./00-baseapp.md#beginblock)
+- [`EndBlock`](./00-baseapp.md#endblock)
+- [`CheckTx`](./00-baseapp.md#checktx)
+- [`DeliverTx`](./00-baseapp.md#delivertx)
 
 ### Examples
 
 The following examples show how to query Events using the Cosmos SDK.
 
-| Event                                            | Description                                                                                                                                              |
-| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tx.height=23`                                   | Query all transactions at height 23                                                                                                                      |
+| Event                                            | Description                                                                                                                                                 |
+| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tx.height=23`                                   | Query all transactions at height 23                                                                                                                         |
 | `message.action='/cosmos.bank.v1beta1.Msg/Send'` | Query all transactions containing a x/bank `Send` [Service `Msg`](../building-modules/03-msg-services.md). Note the `'`s around the value.                  |
 | `message.action='send'`                          | Query all transactions containing a x/bank `Send` [legacy `Msg`](../building-modules/03-msg-services.md#legacy-amino-msgs). Note the `'`s around the value. |
-| `message.module='bank'`                          | Query all transactions containing messages from the x/bank module. Note the `'`s around the value.                                                       |
-| `create_validator.validator='cosmosval1...'`     | x/staking-specific Event, see [x/staking SPEC](../modules/staking/README.md).                                                         |
+| `message.module='bank'`                          | Query all transactions containing messages from the x/bank module. Note the `'`s around the value.                                                          |
+| `create_validator.validator='cosmosval1...'`     | x/staking-specific Event, see [x/staking SPEC](../modules/staking/README.md).                                                                               |
 
 ## EventManager
 
@@ -81,7 +82,6 @@ Module developers should handle Event emission via the `EventManager#EmitTypedEv
 `Handler` and in each `BeginBlock`/`EndBlock` handler. The `EventManager` is accessed via
 the [`Context`](./02-context.md), where Event should be already registered, and emitted like this:
 
-
 **Typed events:**
 
 ```go reference
@@ -90,11 +90,7 @@ https://github.com/cosmos/cosmos-sdk/blob/v0.47.0-rc1/x/group/keeper/msg_server.
 
 **Legacy events:**
 
-```go
-ctx.EventManager().EmitEvent(
-    sdk.NewEvent(eventType, sdk.NewAttribute(attributeKey, attributeValue)),
-)
-```
++++ https://github.com/cosmos/cosmos-sdk/blob/v0.46.0-rc1/x/group/keeper/msg_server.go#L89-L92
 
 Module's `handler` function should also set a new `EventManager` to the `context` to isolate emitted Events per `message`:
 
@@ -125,9 +121,9 @@ You can use CometBFT's [Websocket](https://docs.cometbft.com/v0.37/core/subscrip
 
 The main `eventCategory` you can subscribe to are:
 
-* `NewBlock`: Contains Events triggered during `BeginBlock` and `EndBlock`.
-* `Tx`: Contains Events triggered during `DeliverTx` (i.e. transaction processing).
-* `ValidatorSetUpdates`: Contains validator set updates for the block.
+- `NewBlock`: Contains Events triggered during `BeginBlock` and `EndBlock`.
+- `Tx`: Contains Events triggered during `DeliverTx` (i.e. transaction processing).
+- `ValidatorSetUpdates`: Contains validator set updates for the block.
 
 These Events are triggered from the `state` package after a block is committed. You can get the
 full list of Event categories [on the CometBFT Go documentation](https://pkg.go.dev/github.com/cometbft/cometbft/types#pkg-constants).
@@ -155,6 +151,6 @@ The same way can be used to subscribe to [legacy events](https://github.com/cosm
 
 There are a few events that are automatically emitted for all messages, directly from `baseapp`.
 
-* `message.action`: The name of the message type.
-* `message.sender`: The address of the message signer.
-* `message.module`: The name of the module that emitted the message.
+- `message.action`: The name of the message type.
+- `message.sender`: The address of the message signer.
+- `message.module`: The name of the module that emitted the message.

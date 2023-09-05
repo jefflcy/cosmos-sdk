@@ -4,7 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+<<<<<<< HEAD
 	"reflect" // #nosec
+=======
+	"reflect"
+>>>>>>> v0.46.13-patch
 	"sort"
 	"strconv"
 	"strings"
@@ -27,6 +31,7 @@ const (
 	draftMetadataFileName = "draft_metadata.json"
 )
 
+<<<<<<< HEAD
 var suggestedProposalTypes = []proposalType{
 	{
 		Name:    proposalText,
@@ -53,6 +58,11 @@ var suggestedProposalTypes = []proposalType{
 // Prompt prompts the user for all values of the given type.
 // data is the struct to be filled
 // namePrefix is the name to be displayed as "Enter <namePrefix> <field>"
+=======
+// Prompt prompts the user for all values of the given type.
+// data is the struct to be filled
+// namePrefix is the name to be display as "Enter <namePrefix> <field>"
+>>>>>>> v0.46.13-patch
 func Prompt[T any](data T, namePrefix string) (T, error) {
 	v := reflect.ValueOf(&data).Elem()
 	if v.Kind() == reflect.Interface {
@@ -63,6 +73,7 @@ func Prompt[T any](data T, namePrefix string) (T, error) {
 	}
 
 	for i := 0; i < v.NumField(); i++ {
+<<<<<<< HEAD
 		// if the field is a struct skip or not slice of string or int then skip
 		switch v.Field(i).Kind() {
 		case reflect.Struct:
@@ -72,6 +83,12 @@ func Prompt[T any](data T, namePrefix string) (T, error) {
 			if v.Field(i).Type().Elem().Kind() != reflect.String && v.Field(i).Type().Elem().Kind() != reflect.Int {
 				continue
 			}
+=======
+		if v.Field(i).Kind() == reflect.Struct || v.Field(i).Kind() == reflect.Slice {
+			// if the field is a struct skip
+			// in a future we can add a recursive call to Prompt
+			continue
+>>>>>>> v0.46.13-patch
 		}
 
 		// create prompts
@@ -81,6 +98,13 @@ func Prompt[T any](data T, namePrefix string) (T, error) {
 		}
 
 		fieldName := strings.ToLower(v.Type().Field(i).Name)
+<<<<<<< HEAD
+=======
+		// validation per field name
+		if strings.Contains(fieldName, "url") {
+			prompt.Validate = client.ValidatePromptURL
+		}
+>>>>>>> v0.46.13-patch
 
 		if strings.EqualFold(fieldName, "authority") {
 			// pre-fill with gov address
@@ -88,7 +112,10 @@ func Prompt[T any](data T, namePrefix string) (T, error) {
 			prompt.Validate = client.ValidatePromptAddress
 		}
 
+<<<<<<< HEAD
 		// TODO(@julienrbrt) use scalar annotation instead of dumb string name matching
+=======
+>>>>>>> v0.46.13-patch
 		if strings.Contains(fieldName, "addr") ||
 			strings.Contains(fieldName, "sender") ||
 			strings.Contains(fieldName, "voter") ||
@@ -119,6 +146,7 @@ func Prompt[T any](data T, namePrefix string) (T, error) {
 			// of which on 64-bit machines, which are most common,
 			// int==int64
 			v.Field(i).SetInt(resultInt)
+<<<<<<< HEAD
 		case reflect.Slice:
 			switch v.Field(i).Type().Elem().Kind() {
 			case reflect.String:
@@ -133,6 +161,11 @@ func Prompt[T any](data T, namePrefix string) (T, error) {
 			}
 		default:
 			// skip any other types
+=======
+		default:
+			// skip other types
+			// possibly in the future we can add more types (like slices)
+>>>>>>> v0.46.13-patch
 			continue
 		}
 	}
@@ -147,6 +180,7 @@ type proposalType struct {
 }
 
 // Prompt the proposal type values and return the proposal and its metadata
+<<<<<<< HEAD
 func (p *proposalType) Prompt(cdc codec.Codec, skipMetadata bool) (*proposal, types.ProposalMetadata, error) {
 	metadata, err := PromptMetadata(skipMetadata)
 	if err != nil {
@@ -158,6 +192,18 @@ func (p *proposalType) Prompt(cdc codec.Codec, skipMetadata bool) (*proposal, ty
 		Title:    metadata.Title,
 		Summary:  metadata.Summary,
 	}
+=======
+func (p *proposalType) Prompt(cdc codec.Codec) (*proposal, types.ProposalMetadata, error) {
+	proposal := &proposal{}
+
+	// set metadata
+	metadata, err := Prompt(types.ProposalMetadata{}, "proposal")
+	if err != nil {
+		return nil, metadata, fmt.Errorf("failed to set proposal metadata: %w", err)
+	}
+	// the metadata must be saved on IPFS, set placeholder
+	proposal.Metadata = "ipfs://CID"
+>>>>>>> v0.46.13-patch
 
 	// set deposit
 	depositPrompt := promptui.Prompt{
@@ -184,11 +230,36 @@ func (p *proposalType) Prompt(cdc codec.Codec, skipMetadata bool) (*proposal, ty
 		return nil, metadata, fmt.Errorf("failed to marshal proposal message: %w", err)
 	}
 	proposal.Messages = append(proposal.Messages, message)
+<<<<<<< HEAD
 
 	return proposal, metadata, nil
 }
 
 // getProposalSuggestions suggests a list of proposal types
+=======
+	return proposal, metadata, nil
+}
+
+var suggestedProposalTypes = []proposalType{
+	{
+		Name:    proposalText,
+		MsgType: "", // no message for text proposal
+	},
+	{
+		Name:    "software-upgrade",
+		MsgType: "/cosmos.upgrade.v1beta1.MsgSoftwareUpgrade",
+	},
+	{
+		Name:    "cancel-software-upgrade",
+		MsgType: "/cosmos.upgrade.v1beta1.MsgCancelUpgrade",
+	},
+	{
+		Name:    proposalOther,
+		MsgType: "", // user will input the message type
+	},
+}
+
+>>>>>>> v0.46.13-patch
 func getProposalSuggestions() []string {
 	types := make([]string, len(suggestedProposalTypes))
 	for i, p := range suggestedProposalTypes {
@@ -197,6 +268,7 @@ func getProposalSuggestions() []string {
 	return types
 }
 
+<<<<<<< HEAD
 // PromptMetadata prompts for proposal metadata or only title and summary if skip is true
 func PromptMetadata(skip bool) (types.ProposalMetadata, error) {
 	var (
@@ -239,6 +311,10 @@ func PromptMetadata(skip bool) (types.ProposalMetadata, error) {
 func NewCmdDraftProposal() *cobra.Command {
 	flagSkipMetadata := "skip-metadata"
 
+=======
+// NewCmdDraftProposal let a user generate a draft proposal.
+func NewCmdDraftProposal() *cobra.Command {
+>>>>>>> v0.46.13-patch
 	cmd := &cobra.Command{
 		Use:          "draft-proposal",
 		Short:        "Generate a draft proposal json file. The generated proposal json contains only one message (skeleton).",
@@ -296,9 +372,13 @@ func NewCmdDraftProposal() *cobra.Command {
 				}
 			}
 
+<<<<<<< HEAD
 			skipMetadataPrompt, _ := cmd.Flags().GetBool(flagSkipMetadata)
 
 			result, metadata, err := proposal.Prompt(clientCtx.Codec, skipMetadataPrompt)
+=======
+			result, metadata, err := proposal.Prompt(clientCtx.Codec)
+>>>>>>> v0.46.13-patch
 			if err != nil {
 				return err
 			}
@@ -307,6 +387,7 @@ func NewCmdDraftProposal() *cobra.Command {
 				return err
 			}
 
+<<<<<<< HEAD
 			if !skipMetadataPrompt {
 				if err := writeFile(draftMetadataFileName, metadata); err != nil {
 					return err
@@ -314,18 +395,31 @@ func NewCmdDraftProposal() *cobra.Command {
 			}
 
 			cmd.Println("The draft proposal has successfully been generated.\nProposals should contain off-chain metadata, please upload the metadata JSON to IPFS.\nThen, replace the generated metadata field with the IPFS CID.")
+=======
+			if err := writeFile(draftMetadataFileName, metadata); err != nil {
+				return err
+			}
+
+			fmt.Printf("Your draft proposal has successfully been generated.\nProposals should contain off-chain metadata, please upload the metadata JSON to IPFS.\nThen, replace the generated metadata field with the IPFS CID.\n")
+>>>>>>> v0.46.13-patch
 
 			return nil
 		},
 	}
 
 	flags.AddTxFlagsToCmd(cmd)
+<<<<<<< HEAD
 	cmd.Flags().Bool(flagSkipMetadata, false, "skip metadata prompt")
+=======
+>>>>>>> v0.46.13-patch
 
 	return cmd
 }
 
+<<<<<<< HEAD
 // writeFile writes the input to the file
+=======
+>>>>>>> v0.46.13-patch
 func writeFile(fileName string, input any) error {
 	raw, err := json.MarshalIndent(input, "", " ")
 	if err != nil {

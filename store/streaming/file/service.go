@@ -29,7 +29,10 @@ type StreamingService struct {
 	filePrefix     string                  // optional prefix for each of the generated files
 	writeDir       string                  // directory to write files into
 	codec          codec.BinaryCodec       // marshaller used for re-marshalling the ABCI messages to write them out to the destination files
+<<<<<<< HEAD
 	logger         log.Logger
+=======
+>>>>>>> v0.46.13-patch
 
 	currentBlockNumber int64
 	blockMetadata      types.BlockMetadata
@@ -51,7 +54,10 @@ func NewStreamingService(
 	writeDir, filePrefix string,
 	storeKeys []types.StoreKey,
 	cdc codec.BinaryCodec,
+<<<<<<< HEAD
 	logger log.Logger,
+=======
+>>>>>>> v0.46.13-patch
 	outputMetadata, stopNodeOnErr, fsync bool,
 ) (*StreamingService, error) {
 	// sort storeKeys for deterministic output
@@ -77,7 +83,10 @@ func NewStreamingService(
 		filePrefix:     filePrefix,
 		writeDir:       writeDir,
 		codec:          cdc,
+<<<<<<< HEAD
 		logger:         logger,
+=======
+>>>>>>> v0.46.13-patch
 		outputMetadata: outputMetadata,
 		stopNodeOnErr:  stopNodeOnErr,
 		fsync:          fsync,
@@ -135,7 +144,10 @@ func (fss *StreamingService) ListenEndBlock(ctx context.Context, req abci.Reques
 // It will only return a non-nil error when stopNodeOnErr is set.
 func (fss *StreamingService) ListenCommit(ctx context.Context, res abci.ResponseCommit) error {
 	if err := fss.doListenCommit(ctx, res); err != nil {
+<<<<<<< HEAD
 		fss.logger.Error("Listen commit failed", "height", fss.currentBlockNumber, "err", err)
+=======
+>>>>>>> v0.46.13-patch
 		if fss.stopNodeOnErr {
 			return err
 		}

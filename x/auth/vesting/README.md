@@ -95,6 +95,7 @@ type VestingAccount interface {
 
 ### BaseVestingAccount
 
+<<<<<<< HEAD:x/auth/vesting/README.md
 ```protobuf reference
 https://github.com/cosmos/cosmos-sdk/blob/v0.47.0-rc1/proto/cosmos/vesting/v1beta1/vesting.proto#L11-L35
 ```
@@ -116,6 +117,21 @@ https://github.com/cosmos/cosmos-sdk/blob/v0.47.0-rc1/proto/cosmos/vesting/v1bet
 ```protobuf reference
 https://github.com/cosmos/cosmos-sdk/blob/v0.47.0-rc1/proto/cosmos/vesting/v1beta1/vesting.proto#L59-L69
 ```
+=======
++++ https://github.com/cosmos/cosmos-sdk/blob/v0.46.0-rc1/proto/cosmos/vesting/v1beta1/vesting.proto#L10-L24
+
+### ContinuousVestingAccount
+
++++ https://github.com/cosmos/cosmos-sdk/blob/v0.46.0-rc1/proto/cosmos/vesting/v1beta1/vesting.proto#L26-L34
+
+### DelayedVestingAccount
+
++++ https://github.com/cosmos/cosmos-sdk/blob/v0.46.0-rc1/proto/cosmos/vesting/v1beta1/vesting.proto#L36-L44
+
+### Period
+
++++ https://github.com/cosmos/cosmos-sdk/blob/v0.46.0-rc1/proto/cosmos/vesting/v1beta1/vesting.proto#L46-L53
+>>>>>>> v0.46.13-patch:x/auth/spec/05_vesting.md
 
 ```go
 // Stores all vesting periods passed as part of a PeriodicVestingAccount
@@ -125,9 +141,13 @@ type Periods []Period
 
 ### PeriodicVestingAccount
 
+<<<<<<< HEAD:x/auth/vesting/README.md
 ```protobuf reference
 https://github.com/cosmos/cosmos-sdk/blob/v0.47.0-rc1/proto/cosmos/vesting/v1beta1/vesting.proto#L71-L81
 ```
+=======
++++ https://github.com/cosmos/cosmos-sdk/blob/v0.46.0-rc1/proto/cosmos/vesting/v1beta1/vesting.proto#L55-L64
+>>>>>>> v0.46.13-patch:x/auth/spec/05_vesting.md
 
 In order to facilitate less ad-hoc type checking and assertions and to support
 flexibility in account balance usage, the existing `x/bank` `ViewKeeper` interface
@@ -147,9 +167,13 @@ type ViewKeeper interface {
 
 ### PermanentLockedAccount
 
+<<<<<<< HEAD:x/auth/vesting/README.md
 ```protobuf reference
 https://github.com/cosmos/cosmos-sdk/blob/v0.47.0-rc1/proto/cosmos/vesting/v1beta1/vesting.proto#L83-L94
 ```
+=======
++++ https://github.com/cosmos/cosmos-sdk/blob/v0.46.0-rc1/proto/cosmos/vesting/v1beta1/vesting.proto#L55-L64
+>>>>>>> v0.46.13-patch:x/auth/spec/05_vesting.md
 
 ## Vesting Account Specification
 

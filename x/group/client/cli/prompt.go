@@ -6,15 +6,23 @@ import (
 	"os"
 	"sort"
 
+<<<<<<< HEAD
 	"github.com/manifoldco/promptui"
 	"github.com/spf13/cobra"
 
+=======
+>>>>>>> v0.46.13-patch
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	govcli "github.com/cosmos/cosmos-sdk/x/gov/client/cli"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+<<<<<<< HEAD
+=======
+	"github.com/manifoldco/promptui"
+	"github.com/spf13/cobra"
+>>>>>>> v0.46.13-patch
 )
 
 const (
@@ -29,6 +37,7 @@ type proposalType struct {
 	Msg  sdk.Msg
 }
 
+<<<<<<< HEAD
 // Prompt the proposal type values and return the proposal and its metadata.
 func (p *proposalType) Prompt(cdc codec.Codec, skipMetadata bool) (*Proposal, govtypes.ProposalMetadata, error) {
 	// set metadata
@@ -42,6 +51,19 @@ func (p *proposalType) Prompt(cdc codec.Codec, skipMetadata bool) (*Proposal, go
 		Title:    metadata.Title,
 		Summary:  metadata.Summary,
 	}
+=======
+// Prompt the proposal type values and return the proposal and its metadata
+func (p *proposalType) Prompt(cdc codec.Codec) (*Proposal, govtypes.ProposalMetadata, error) {
+	proposal := &Proposal{}
+
+	// set metadata
+	metadata, err := govcli.Prompt(govtypes.ProposalMetadata{}, "proposal")
+	if err != nil {
+		return nil, metadata, fmt.Errorf("failed to set proposal metadata: %w", err)
+	}
+	// the metadata must be saved on IPFS, set placeholder
+	proposal.Metadata = "ipfs://CID"
+>>>>>>> v0.46.13-patch
 
 	// set group policy address
 	policyAddressPrompt := promptui.Prompt{
@@ -54,6 +76,7 @@ func (p *proposalType) Prompt(cdc codec.Codec, skipMetadata bool) (*Proposal, go
 	}
 	proposal.GroupPolicyAddress = groupPolicyAddress
 
+<<<<<<< HEAD
 	// set proposer address
 	proposerPrompt := promptui.Prompt{
 		Label:    "Enter proposer address",
@@ -65,6 +88,8 @@ func (p *proposalType) Prompt(cdc codec.Codec, skipMetadata bool) (*Proposal, go
 	}
 	proposal.Proposers = []string{proposerAddress}
 
+=======
+>>>>>>> v0.46.13-patch
 	if p.Msg == nil {
 		return proposal, metadata, nil
 	}
@@ -80,14 +105,20 @@ func (p *proposalType) Prompt(cdc codec.Codec, skipMetadata bool) (*Proposal, go
 		return nil, metadata, fmt.Errorf("failed to marshal proposal message: %w", err)
 	}
 	proposal.Messages = append(proposal.Messages, message)
+<<<<<<< HEAD
 
+=======
+>>>>>>> v0.46.13-patch
 	return proposal, metadata, nil
 }
 
 // NewCmdDraftProposal let a user generate a draft proposal.
 func NewCmdDraftProposal() *cobra.Command {
+<<<<<<< HEAD
 	flagSkipMetadata := "skip-metadata"
 
+=======
+>>>>>>> v0.46.13-patch
 	cmd := &cobra.Command{
 		Use:          "draft-proposal",
 		Short:        "Generate a draft proposal json file. The generated proposal json contains only one message (skeleton).",
@@ -139,9 +170,13 @@ func NewCmdDraftProposal() *cobra.Command {
 				panic("unexpected proposal type")
 			}
 
+<<<<<<< HEAD
 			skipMetadataPrompt, _ := cmd.Flags().GetBool(flagSkipMetadata)
 
 			result, metadata, err := proposal.Prompt(clientCtx.Codec, skipMetadataPrompt)
+=======
+			result, metadata, err := proposal.Prompt(clientCtx.Codec)
+>>>>>>> v0.46.13-patch
 			if err != nil {
 				return err
 			}
@@ -150,6 +185,7 @@ func NewCmdDraftProposal() *cobra.Command {
 				return err
 			}
 
+<<<<<<< HEAD
 			if !skipMetadataPrompt {
 				if err := writeFile(draftMetadataFileName, metadata); err != nil {
 					return err
@@ -157,18 +193,31 @@ func NewCmdDraftProposal() *cobra.Command {
 			}
 
 			cmd.Println("The draft proposal has successfully been generated.\nProposals should contain off-chain metadata, please upload the metadata JSON to IPFS.\nThen, replace the generated metadata field with the IPFS CID.")
+=======
+			if err := writeFile(draftMetadataFileName, metadata); err != nil {
+				return err
+			}
+
+			fmt.Printf("Your draft proposal has successfully been generated.\nProposals should contain off-chain metadata, please upload the metadata JSON to IPFS.\nThen, replace the generated metadata field with the IPFS CID.\n")
+>>>>>>> v0.46.13-patch
 
 			return nil
 		},
 	}
 
 	flags.AddTxFlagsToCmd(cmd)
+<<<<<<< HEAD
 	cmd.Flags().Bool(flagSkipMetadata, false, "skip metadata prompt")
+=======
+>>>>>>> v0.46.13-patch
 
 	return cmd
 }
 
+<<<<<<< HEAD
 // writeFile writes the input to the file.
+=======
+>>>>>>> v0.46.13-patch
 func writeFile(fileName string, input any) error {
 	raw, err := json.MarshalIndent(input, "", " ")
 	if err != nil {

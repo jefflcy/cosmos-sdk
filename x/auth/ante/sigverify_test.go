@@ -176,7 +176,11 @@ func TestSigVerification(t *testing.T) {
 		suite.txBuilder.SetGasLimit(gasLimit)
 
 		tx, err := suite.CreateTestTx(tc.privs, tc.accNums, tc.accSeqs, suite.ctx.ChainID())
+<<<<<<< HEAD
 		require.NoError(t, err)
+=======
+		suite.Require().NoError(err)
+>>>>>>> v0.46.13-patch
 		if tc.invalidSigs {
 			txSigs, _ := tx.GetSignaturesV2()
 			badSig, _ := tc.privs[0].Sign([]byte("unrelated message"))

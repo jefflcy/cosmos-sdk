@@ -223,11 +223,14 @@ func (k Keeper) GetGroupSequence(ctx sdk.Context) uint64 {
 	return k.groupTable.Sequence().CurVal(ctx.KVStore(k.key))
 }
 
+<<<<<<< HEAD
 // GetGroupPolicySeq returns the current value of the group policy table sequence
 func (k Keeper) GetGroupPolicySeq(ctx sdk.Context) uint64 {
 	return k.groupPolicySeq.CurVal(ctx.KVStore(k.key))
 }
 
+=======
+>>>>>>> v0.46.13-patch
 // proposalsByVPEnd returns all proposals whose voting_period_end is after the `endTime` time argument.
 func (k Keeper) proposalsByVPEnd(ctx sdk.Context, endTime time.Time) (proposals []group.Proposal, err error) {
 	timeBytes := sdk.FormatTimeBytes(endTime)
@@ -282,13 +285,16 @@ func (k Keeper) abortProposals(ctx sdk.Context, groupPolicyAddr sdk.AccAddress) 
 		return err
 	}
 
+<<<<<<< HEAD
 	//nolint:gosec // "implicit memory aliasing in the for loop (because of the pointer on &proposalInfo)"
+=======
+>>>>>>> v0.46.13-patch
 	for _, proposalInfo := range proposals {
 		// Mark all proposals still in the voting phase as aborted.
 		if proposalInfo.Status == group.PROPOSAL_STATUS_SUBMITTED {
 			proposalInfo.Status = group.PROPOSAL_STATUS_ABORTED
 
-			if err := k.proposalTable.Update(ctx.KVStore(k.key), proposalInfo.Id, &proposalInfo); err != nil {
+			if err := k.proposalTable.Update(ctx.KVStore(k.key), proposalInfo.Id, &proposalInfo); err != nil { //nolint:gosec // implicit memory aliasing in for loop
 				return err
 			}
 		}
@@ -327,9 +333,14 @@ func (k Keeper) pruneVotes(ctx sdk.Context, proposalID uint64) error {
 		return err
 	}
 
+<<<<<<< HEAD
 	//nolint:gosec // "implicit memory aliasing in the for loop (because of the pointer on &v)"
 	for _, v := range votes {
 		err = k.voteTable.Delete(ctx.KVStore(k.key), &v)
+=======
+	for _, v := range votes {
+		err = k.voteTable.Delete(ctx.KVStore(k.key), &v) //nolint:gosec // implicit memory aliasing in for loop
+>>>>>>> v0.46.13-patch
 		if err != nil {
 			return err
 		}
@@ -373,6 +384,7 @@ func (k Keeper) PruneProposals(ctx sdk.Context) error {
 		err := k.pruneProposal(ctx, proposal.Id)
 		if err != nil {
 			return err
+<<<<<<< HEAD
 		}
 		// Emit event for proposal finalized with its result
 		if err := ctx.EventManager().EmitTypedEvent(
@@ -382,6 +394,8 @@ func (k Keeper) PruneProposals(ctx sdk.Context) error {
 				TallyResult: &proposal.FinalTallyResult,
 			}); err != nil {
 			return err
+=======
+>>>>>>> v0.46.13-patch
 		}
 	}
 
@@ -396,7 +410,12 @@ func (k Keeper) TallyProposalsAtVPEnd(ctx sdk.Context) error {
 	if err != nil {
 		return nil
 	}
+<<<<<<< HEAD
 	//nolint:gosec // "implicit memory aliasing in the for loop (because of the pointers in the loop)"
+=======
+
+	//nolint:gosec // implicit memory aliasing in for loop
+>>>>>>> v0.46.13-patch
 	for _, proposal := range proposals {
 		policyInfo, err := k.getGroupPolicyInfo(ctx, proposal.GroupPolicyAddress)
 		if err != nil {
@@ -408,14 +427,20 @@ func (k Keeper) TallyProposalsAtVPEnd(ctx sdk.Context) error {
 			return sdkerrors.Wrap(err, "group")
 		}
 
+<<<<<<< HEAD
 		proposalID := proposal.Id
 		if proposal.Status == group.PROPOSAL_STATUS_ABORTED || proposal.Status == group.PROPOSAL_STATUS_WITHDRAWN {
+=======
+		if proposal.Status == group.PROPOSAL_STATUS_ABORTED || proposal.Status == group.PROPOSAL_STATUS_WITHDRAWN {
+			proposalID := proposal.Id
+>>>>>>> v0.46.13-patch
 			if err := k.pruneProposal(ctx, proposalID); err != nil {
 				return err
 			}
 			if err := k.pruneVotes(ctx, proposalID); err != nil {
 				return err
 			}
+<<<<<<< HEAD
 			// Emit event for proposal finalized with its result
 			if err := ctx.EventManager().EmitTypedEvent(
 				&group.EventProposalPruned{
@@ -424,12 +449,18 @@ func (k Keeper) TallyProposalsAtVPEnd(ctx sdk.Context) error {
 				}); err != nil {
 				return err
 			}
+=======
+>>>>>>> v0.46.13-patch
 		} else if proposal.Status == group.PROPOSAL_STATUS_SUBMITTED {
 			if err := k.doTallyAndUpdate(ctx, &proposal, electorate, policyInfo); err != nil {
 				return sdkerrors.Wrap(err, "doTallyAndUpdate")
 			}
 
+<<<<<<< HEAD
 			if err := k.proposalTable.Update(ctx.KVStore(k.key), proposal.Id, &proposal); err != nil {
+=======
+			if err := k.proposalTable.Update(ctx.KVStore(k.key), proposal.Id, &proposal); err != nil { //nolint:gosec // implicit memory aliasing in for loop
+>>>>>>> v0.46.13-patch
 				return sdkerrors.Wrap(err, "proposal update")
 			}
 		}

@@ -183,17 +183,26 @@ func (suite *KeeperTestSuite) TestGRPCQueryAccountAddressByID() {
 			func(res *types.QueryAccountAddressByIDResponse) {},
 		},
 		{
+<<<<<<< HEAD
 			"valid account-id",
 			func() {
 				account := suite.accountKeeper.NewAccountWithAddress(suite.ctx, addr)
 				suite.accountKeeper.SetAccount(suite.ctx, account)
 				req = &types.QueryAccountAddressByIDRequest{AccountId: account.GetAccountNumber()}
+=======
+			"valid request",
+			func() {
+				account := suite.app.AccountKeeper.NewAccountWithAddress(suite.ctx, addr)
+				suite.app.AccountKeeper.SetAccount(suite.ctx, account)
+				req = &types.QueryAccountAddressByIDRequest{Id: int64(account.GetAccountNumber())}
+>>>>>>> v0.46.13-patch
 			},
 			true,
 			func(res *types.QueryAccountAddressByIDResponse) {
 				suite.Require().NotNil(res.AccountAddress)
 			},
 		},
+<<<<<<< HEAD
 		{
 			"invalid request",
 			func() {
@@ -204,6 +213,8 @@ func (suite *KeeperTestSuite) TestGRPCQueryAccountAddressByID() {
 			false,
 			func(res *types.QueryAccountAddressByIDResponse) {},
 		},
+=======
+>>>>>>> v0.46.13-patch
 	}
 
 	for _, tc := range testCases {
@@ -377,7 +388,11 @@ func (suite *KeeperTestSuite) TestGRPCQueryModuleAccountByName() {
 			true,
 			func(res *types.QueryModuleAccountByNameResponse) {
 				var account types.AccountI
+<<<<<<< HEAD
 				err := suite.encCfg.InterfaceRegistry.UnpackAny(res.Account, &account)
+=======
+				err := suite.app.InterfaceRegistry().UnpackAny(res.Account, &account)
+>>>>>>> v0.46.13-patch
 				suite.Require().NoError(err)
 
 				moduleAccount, ok := account.(types.ModuleAccountI)

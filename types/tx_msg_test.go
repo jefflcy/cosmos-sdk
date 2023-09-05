@@ -43,3 +43,12 @@ func (s *testMsgSuite) TestGetMsgFromTypeURL() {
 	s.Require().NoError(err)
 	s.Require().Equal(msg, result)
 }
+
+func (s *testMsgSuite) TestGetMsgFromTypeURL() {
+	msg := new(testdata.TestMsg)
+	cdc := codec.NewProtoCodec(testdata.NewTestInterfaceRegistry())
+
+	result, err := sdk.GetMsgFromTypeURL(cdc, "/testdata.TestMsg")
+	s.Require().NoError(err)
+	s.Require().Equal(msg, result)
+}

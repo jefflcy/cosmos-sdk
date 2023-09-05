@@ -166,6 +166,30 @@ func (app *BaseApp) SetEndBlocker(endBlocker sdk.EndBlocker) {
 	app.endBlocker = endBlocker
 }
 
+func (app *BaseApp) SetDeliverTxer(deliverTxer sdk.DeliverTxer) {
+	if app.sealed {
+		panic("SetDeliverTxer() on sealed BaseApp")
+	}
+
+	app.deliverTxer = deliverTxer
+}
+
+func (app *BaseApp) SetBeforeCommitter(beforeCommitter sdk.BeforeCommitter) {
+	if app.sealed {
+		panic("SetBeforeCommitter() on sealed BaseApp")
+	}
+
+	app.beforeCommitter = beforeCommitter
+}
+
+func (app *BaseApp) SetAfterCommitter(afterCommitter sdk.AfterCommitter) {
+	if app.sealed {
+		panic("SetBeforeCommitter() on sealed BaseApp")
+	}
+
+	app.afterCommitter = afterCommitter
+}
+
 func (app *BaseApp) SetAnteHandler(ah sdk.AnteHandler) {
 	if app.sealed {
 		panic("SetAnteHandler() on sealed BaseApp")
@@ -174,12 +198,28 @@ func (app *BaseApp) SetAnteHandler(ah sdk.AnteHandler) {
 	app.anteHandler = ah
 }
 
-func (app *BaseApp) SetPostHandler(ph sdk.PostHandler) {
+func (app *BaseApp) SetMsgHandlerMiddleware(msgHandlerMiddleware sdk.MsgHandlerMiddleware) {
+	if app.sealed {
+		panic("SetMsgHandlerMiddleware() on sealed BaseApp")
+	}
+
+	app.msgHandlerMiddleware = msgHandlerMiddleware
+}
+
+func (app *BaseApp) SetPostHandler(ph sdk.AnteHandler) {
 	if app.sealed {
 		panic("SetPostHandler() on sealed BaseApp")
 	}
 
 	app.postHandler = ph
+}
+
+func (app *BaseApp) SetRefundHandler(rh sdk.AnteHandler) {
+	if app.sealed {
+		panic("SetRefundHandler() on sealed BaseApp")
+	}
+
+	app.refundHandler = rh
 }
 
 func (app *BaseApp) SetAddrPeerFilter(pf sdk.PeerFilter) {
@@ -252,6 +292,7 @@ func (app *BaseApp) SetStreamingService(s StreamingService) {
 	app.abciListeners = append(app.abciListeners, s)
 }
 
+<<<<<<< HEAD
 // SetTxDecoder sets the TxDecoder if it wasn't provided in the BaseApp constructor.
 func (app *BaseApp) SetTxDecoder(txDecoder sdk.TxDecoder) {
 	app.txDecoder = txDecoder
@@ -262,10 +303,13 @@ func (app *BaseApp) SetTxEncoder(txEncoder sdk.TxEncoder) {
 	app.txEncoder = txEncoder
 }
 
+=======
+>>>>>>> v0.46.13-patch
 // SetQueryMultiStore set a alternative MultiStore implementation to support grpc query service.
 //
 // Ref: https://github.com/cosmos/cosmos-sdk/issues/13317
 func (app *BaseApp) SetQueryMultiStore(ms sdk.MultiStore) {
+<<<<<<< HEAD
 	app.qms = ms
 }
 
@@ -293,3 +337,10 @@ func (app *BaseApp) SetPrepareProposal(handler sdk.PrepareProposalHandler) {
 
 	app.prepareProposal = handler
 }
+=======
+	if app.sealed {
+		panic("SetQueryMultiStore() on sealed BaseApp")
+	}
+	app.qms = ms
+}
+>>>>>>> v0.46.13-patch

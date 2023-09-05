@@ -192,6 +192,7 @@ func (s *E2ETestSuite) TestNewCmdSubmitLegacyProposal() {
 	}{
 		{
 			"invalid proposal (file)",
+			//nolint:staticcheck
 			[]string{
 				fmt.Sprintf("--%s=%s", cli.FlagProposal, invalidPropFile.Name()), //nolint:staticcheck // we are intentionally using a deprecated flag here.
 				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
@@ -202,6 +203,7 @@ func (s *E2ETestSuite) TestNewCmdSubmitLegacyProposal() {
 		},
 		{
 			"invalid proposal",
+			//nolint:staticcheck
 			[]string{
 				fmt.Sprintf("--%s='Where is the title!?'", cli.FlagDescription),        //nolint:staticcheck // we are intentionally using a deprecated flag here.
 				fmt.Sprintf("--%s=%s", cli.FlagProposalType, v1beta1.ProposalTypeText), //nolint:staticcheck // we are intentionally using a deprecated flag here.
@@ -216,7 +218,7 @@ func (s *E2ETestSuite) TestNewCmdSubmitLegacyProposal() {
 			"valid transaction (file)",
 			//nolint:staticcheck // we are intentionally using a deprecated flag here.
 			[]string{
-				fmt.Sprintf("--%s=%s", cli.FlagProposal, validPropFile.Name()),
+				fmt.Sprintf("--%s=%s", cli.FlagProposal, validPropFile.Name()), //nolint:staticcheck
 				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastSync),
@@ -226,6 +228,7 @@ func (s *E2ETestSuite) TestNewCmdSubmitLegacyProposal() {
 		},
 		{
 			"valid transaction",
+			//nolint:staticcheck
 			[]string{
 				fmt.Sprintf("--%s='Text Proposal'", cli.FlagTitle),                     //nolint:staticcheck // we are intentionally using a deprecated flag here.
 				fmt.Sprintf("--%s='Where is the title!?'", cli.FlagDescription),        //nolint:staticcheck // we are intentionally using a deprecated flag here.

@@ -4,7 +4,10 @@ import (
 	"time"
 
 	"cosmossdk.io/math"
+<<<<<<< HEAD
 
+=======
+>>>>>>> v0.46.13-patch
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/staking/types"
 )

@@ -160,3 +160,7 @@ func noopDecoder(_ interface{}) error { return nil }
 func noopInterceptor(_ context.Context, _ interface{}, _ *grpc.UnaryServerInfo, _ grpc.UnaryHandler) (interface{}, error) {
 	return nil, nil
 }
+
+type getter1 interface {
+	GetAmount() sdk.Coin
+}

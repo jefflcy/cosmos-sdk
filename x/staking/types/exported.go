@@ -2,7 +2,11 @@ package types
 
 import (
 	"cosmossdk.io/math"
+<<<<<<< HEAD
 	tmprotocrypto "github.com/cometbft/cometbft/proto/tendermint/crypto"
+=======
+	tmprotocrypto "github.com/tendermint/tendermint/proto/tendermint/crypto"
+>>>>>>> v0.46.13-patch
 
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -30,12 +34,21 @@ type ValidatorI interface {
 	GetTokens() math.Int                                     // validation tokens
 	GetBondedTokens() math.Int                               // validator bonded tokens
 	GetConsensusPower(math.Int) int64                        // validation power in tendermint
+<<<<<<< HEAD
 	GetCommission() math.LegacyDec                           // validator commission rate
 	GetMinSelfDelegation() math.Int                          // validator minimum self delegation
 	GetDelegatorShares() math.LegacyDec                      // total outstanding delegator shares
 	TokensFromShares(sdk.Dec) math.LegacyDec                 // token worth of provided delegator shares
 	TokensFromSharesTruncated(sdk.Dec) math.LegacyDec        // token worth of provided delegator shares, truncated
 	TokensFromSharesRoundUp(sdk.Dec) math.LegacyDec          // token worth of provided delegator shares, rounded up
+=======
+	GetCommission() sdk.Dec                                  // validator commission rate
+	GetMinSelfDelegation() math.Int                          // validator minimum self delegation
+	GetDelegatorShares() sdk.Dec                             // total outstanding delegator shares
+	TokensFromShares(sdk.Dec) sdk.Dec                        // token worth of provided delegator shares
+	TokensFromSharesTruncated(sdk.Dec) sdk.Dec               // token worth of provided delegator shares, truncated
+	TokensFromSharesRoundUp(sdk.Dec) sdk.Dec                 // token worth of provided delegator shares, rounded up
+>>>>>>> v0.46.13-patch
 	SharesFromTokens(amt math.Int) (sdk.Dec, error)          // shares worth of delegator's bond
 	SharesFromTokensTruncated(amt math.Int) (sdk.Dec, error) // truncated shares worth of delegator's bond
 }

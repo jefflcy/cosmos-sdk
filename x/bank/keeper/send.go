@@ -41,6 +41,10 @@ type SendKeeper interface {
 	GetBlockedAddresses() map[string]bool
 
 	GetAuthority() string
+
+	types.SendHooks
+
+	SetHooks(sh types.SendHooks) *BaseSendKeeper
 }
 
 var _ SendKeeper = (*BaseSendKeeper)(nil)
@@ -60,6 +64,7 @@ type BaseSendKeeper struct {
 	// the address capable of executing a MsgUpdateParams message. Typically, this
 	// should be the x/gov module account.
 	authority string
+	hooks        types.SendHooks
 }
 
 func NewBaseSendKeeper(
@@ -86,6 +91,15 @@ func NewBaseSendKeeper(
 // GetAuthority returns the x/bank module's authority.
 func (k BaseSendKeeper) GetAuthority() string {
 	return k.authority
+// SetHooks sets the hooks for bank
+func (keeper *BaseSendKeeper) SetHooks(sh types.SendHooks) *BaseSendKeeper {
+	if keeper.hooks != nil {
+		panic("cannot set send hooks twice")
+	}
+
+	keeper.hooks = sh
+
+	return keeper
 }
 
 // GetParams returns the total set of bank parameters.
@@ -135,9 +149,13 @@ func (k BaseSendKeeper) InputOutputCoins(ctx sdk.Context, inputs []types.Input, 
 	if err := types.ValidateInputsOutputs(inputs, outputs); err != nil {
 		return err
 	}
+	if err := k.BeforeMultiSend(ctx, inputs, outputs); err != nil {
+		return err
+	}
 
 	for _, in := range inputs {
 		inAddress, err := sdk.AccAddressFromBech32(in.Address)
+		inAddress = k.ak.GetMergedAccountAddressIfExists(ctx, inAddress)
 		if err != nil {
 			return err
 		}
@@ -150,13 +168,15 @@ func (k BaseSendKeeper) InputOutputCoins(ctx sdk.Context, inputs []types.Input, 
 		ctx.EventManager().EmitEvent(
 			sdk.NewEvent(
 				sdk.EventTypeMessage,
-				sdk.NewAttribute(types.AttributeKeySender, in.Address),
+				sdk.NewAttribute(types.AttributeKeySender, inAddress.String()),
 			),
 		)
 	}
 
 	for _, out := range outputs {
 		outAddress, err := sdk.AccAddressFromBech32(out.Address)
+		outAddress = k.ak.GetMergedAccountAddressIfExists(ctx, outAddress)
+
 		if err != nil {
 			return err
 		}
@@ -168,7 +188,7 @@ func (k BaseSendKeeper) InputOutputCoins(ctx sdk.Context, inputs []types.Input, 
 		ctx.EventManager().EmitEvent(
 			sdk.NewEvent(
 				types.EventTypeTransfer,
-				sdk.NewAttribute(types.AttributeKeyRecipient, out.Address),
+				sdk.NewAttribute(types.AttributeKeyRecipient, outAddress.String()),
 				sdk.NewAttribute(sdk.AttributeKeyAmount, out.Coins.String()),
 			),
 		)
@@ -184,13 +204,25 @@ func (k BaseSendKeeper) InputOutputCoins(ctx sdk.Context, inputs []types.Input, 
 		}
 	}
 
+	if err := k.AfterMultiSend(ctx, inputs, outputs); err != nil {
+		return err
+	}
+
 	return nil
 }
 
 // SendCoins transfers amt coins from a sending account to a receiving account.
 // An error is returned upon failure.
+// Sender and recipient address will be mapped to their corresponding cosmos addresses should they already be mapped
+// Creates new account only if there is no mapping available for the recipient address AND recipient address account absent
 func (k BaseSendKeeper) SendCoins(ctx sdk.Context, fromAddr sdk.AccAddress, toAddr sdk.AccAddress, amt sdk.Coins) error {
-	err := k.subUnlockedCoins(ctx, fromAddr, amt)
+	fromAddr, toAddr = k.ak.GetMergedAccountAddressIfExists(ctx, fromAddr), k.ak.GetMergedAccountAddressIfExists(ctx, toAddr)
+	err := k.BeforeSend(ctx, fromAddr, toAddr, amt)
+	if err != nil {
+		return err
+	}
+
+	err = k.subUnlockedCoins(ctx, fromAddr, amt)
 	if err != nil {
 		return err
 	}
@@ -208,6 +240,11 @@ func (k BaseSendKeeper) SendCoins(ctx sdk.Context, fromAddr sdk.AccAddress, toAd
 	if !accExists {
 		defer telemetry.IncrCounter(1, "new", "account")
 		k.ak.SetAccount(ctx, k.ak.NewAccountWithAddress(ctx, toAddr))
+	}
+
+	err = k.AfterSend(ctx, fromAddr, toAddr, amt)
+	if err != nil {
+		return err
 	}
 
 	// bech32 encoding is expensive! Only do it once for fromAddr

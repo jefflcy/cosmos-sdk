@@ -6,22 +6,22 @@ sidebar_position: 1
 
 :::note Pre-requisite Readings
 
-* [Cosmos Blockchain Simulator](../core/12-simulation.md)
-:::
+- [Cosmos Blockchain Simulator](../core/12-simulation.md)
+  :::
 
 ## Synopsis
 
 This document details how to define each module simulation functions to be
 integrated with the application `SimulationManager`.
-  
-* [Simulation package](#simulation-package)
-    * [Store decoders](#store-decoders)
-    * [Randomized genesis](#randomized-genesis)
-    * [Randomized parameter changes](#randomized-parameter-changes)
-    * [Random weighted operations](#random-weighted-operations)
-    * [Random proposal contents](#random-proposal-contents)
-* [Registering simulation functions](#registering-simulation-functions)
-* [App Simulator manager](#app-simulator-manager)
+
+- [Simulation package](#simulation-package)
+  - [Store decoders](#store-decoders)
+  - [Randomized genesis](#randomized-genesis)
+  - [Randomized parameter changes](#randomized-parameter-changes)
+  - [Random weighted operations](#random-weighted-operations)
+  - [Random proposal contents](#random-proposal-contents)
+- [Registering simulation functions](#registering-simulation-functions)
+- [App Simulator manager](#app-simulator-manager)
 
 ## Simulation package
 
@@ -79,7 +79,7 @@ Here is how one can override the above package `simappparams`.
 https://github.com/cosmos/cosmos-sdk/blob/v0.47.0-rc1/Makefile#L293-L299
 ```
 
-For the last test a tool called [runsim](https://github.com/cosmos/tools/tree/master/cmd/runsim) is used, this is used to parallelize go test instances, provide info to Github and slack integrations to provide information to your team on how the simulations are running.  
+For the last test a tool called [runsim](https://github.com/cosmos/tools/tree/master/cmd/runsim) is used, this is used to parallelize go test instances, provide info to Github and slack integrations to provide information to your team on how the simulations are running.
 
 ### Random proposal contents
 

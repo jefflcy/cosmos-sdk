@@ -169,7 +169,11 @@ func DelegatorSharesInvariant(k *Keeper) sdk.Invariant {
 
 		// initialize a map: validator -> its delegation shares
 		for _, validator := range validators {
+<<<<<<< HEAD
 			validatorsDelegationShares[validator.GetOperator().String()] = math.LegacyZeroDec()
+=======
+			validatorsDelegationShares[validator.GetOperator().String()] = sdk.ZeroDec()
+>>>>>>> v0.46.13-patch
 		}
 
 		// iterate through all the delegations to calculate the total delegation shares for each validator

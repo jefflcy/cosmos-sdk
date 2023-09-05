@@ -23,7 +23,7 @@ var (
 var lenTime = len(sdk.FormatTimeBytes(time.Now()))
 
 // StoreKey is the store key string for authz
-const StoreKey = authz.ModuleName
+var StoreKey = authz.ModuleName
 
 // grantStoreKey - return authorization store key
 // Items are stored with the following key: values
@@ -78,7 +78,11 @@ func parseGrantQueueKey(key []byte) (time.Time, sdk.AccAddress, sdk.AccAddress, 
 // expiration, then it should not be used in the pruning queue.
 // Key format is:
 //
+<<<<<<< HEAD
 //	0x02<expiration><granterAddressLen (1 Byte)><granterAddressBytes><granteeAddressLen (1 Byte)><granteeAddressBytes>: GrantQueueItem
+=======
+//	0x02<grant_expiration_Bytes>: GrantQueueItem
+>>>>>>> v0.46.13-patch
 func GrantQueueKey(expiration time.Time, granter sdk.AccAddress, grantee sdk.AccAddress) []byte {
 	exp := sdk.FormatTimeBytes(expiration)
 	granter = address.MustLengthPrefix(granter)

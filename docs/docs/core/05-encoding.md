@@ -10,7 +10,7 @@ While encoding in the Cosmos SDK used to be mainly handled by `go-amino` codec, 
 
 :::note Pre-requisite Readings
 
-* [Anatomy of a Cosmos SDK application](../basics/00-app-anatomy.md)
+- [Anatomy of a Cosmos SDK application](../basics/00-app-anatomy.md)
 
 :::
 
@@ -92,8 +92,8 @@ init() {
 }
 ```
 
-This will allow the `x/authz` module to properly serialize and de-serializes `MsgExec` instances using Amino, 
-which is required when signing this kind of messages using a Ledger. 
+This will allow the `x/authz` module to properly serialize and de-serializes `MsgExec` instances using Amino,
+which is required when signing this kind of messages using a Ledger.
 
 ### Gogoproto
 
@@ -103,12 +103,12 @@ Modules are encouraged to utilize Protobuf encoding for their respective types. 
 
 In addition to [following official Protocol Buffer guidelines](https://developers.google.com/protocol-buffers/docs/proto3#simple), we recommend using these annotations in .proto files when dealing with interfaces:
 
-* use `cosmos_proto.accepts_interface` to annote `Any` fields that accept interfaces
-    * pass the same fully qualified name as `protoName` to `InterfaceRegistry.RegisterInterface`
-    * example: `(cosmos_proto.accepts_interface) = "cosmos.gov.v1beta1.Content"` (and not just `Content`)
-* annotate interface implementations with `cosmos_proto.implements_interface`
-    * pass the same fully qualified name as `protoName` to `InterfaceRegistry.RegisterInterface`
-    * example: `(cosmos_proto.implements_interface) = "cosmos.authz.v1beta1.Authorization"` (and not just `Authorization`)
+- use `cosmos_proto.accepts_interface` to annote `Any` fields that accept interfaces
+  - pass the same fully qualified name as `protoName` to `InterfaceRegistry.RegisterInterface`
+  - example: `(cosmos_proto.accepts_interface) = "cosmos.gov.v1beta1.Content"` (and not just `Content`)
+- annotate interface implementations with `cosmos_proto.implements_interface`
+  - pass the same fully qualified name as `protoName` to `InterfaceRegistry.RegisterInterface`
+  - example: `(cosmos_proto.implements_interface) = "cosmos.authz.v1beta1.Authorization"` (and not just `Authorization`)
 
 Code generators can then match the `accepts_interface` and `implements_interface` annotations to know whether some Protobuf messages are allowed to be packed in a given `Any` field or not.
 
@@ -120,8 +120,8 @@ the Cosmos SDK but are then passed to the underlying consensus engine to be rela
 other peers. Since the underlying consensus engine is agnostic to the application,
 the consensus engine accepts only transactions in the form of raw bytes.
 
-* The `TxEncoder` object performs the encoding.
-* The `TxDecoder` object performs the decoding.
+- The `TxEncoder` object performs the encoding.
+- The `TxDecoder` object performs the decoding.
 
 ```go reference
 https://github.com/cosmos/cosmos-sdk/blob/v0.47.0-rc1/types/tx_msg.go#L76-L80
@@ -233,12 +233,12 @@ For more information about interface encoding, and especially on `UnpackInterfac
 
 The above `Profile` example is a fictive example used for educational purposes. In the Cosmos SDK, we use `Any` encoding in several places (non-exhaustive list):
 
-* the `cryptotypes.PubKey` interface for encoding different types of public keys,
-* the `sdk.Msg` interface for encoding different `Msg`s in a transaction,
-* the `AccountI` interface for encodinig different types of accounts (similar to the above example) in the x/auth query responses,
-* the `Evidencei` interface for encoding different types of evidences in the x/evidence module,
-* the `AuthorizationI` interface for encoding different types of x/authz authorizations,
-* the [`Validator`](https://github.com/cosmos/cosmos-sdk/blob/v0.47.0-rc1/x/staking/types/staking.pb.go#L340-L377) struct that contains information about a validator.
+- the `cryptotypes.PubKey` interface for encoding different types of public keys,
+- the `sdk.Msg` interface for encoding different `Msg`s in a transaction,
+- the `AccountI` interface for encodinig different types of accounts (similar to the above example) in the x/auth query responses,
+- the `Evidencei` interface for encoding different types of evidences in the x/evidence module,
+- the `AuthorizationI` interface for encoding different types of x/authz authorizations,
+- the [`Validator`](https://github.com/cosmos/cosmos-sdk/blob/v0.47.0-rc1/x/staking/types/staking.pb.go#L340-L377) struct that contains information about a validator.
 
 A real-life example of encoding the pubkey as `Any` inside the Validator struct in x/staking is shown in the following example:
 
@@ -254,10 +254,10 @@ https://github.com/cosmos/cosmos-sdk/blob/v0.47.0-rc1/x/staking/types/validator.
 
 Protobuf types can be defined to encode:
 
-* state
-* [`Msg`s](../building-modules/02-messages-and-queries.md#messages)
-* [Query services](../building-modules/04-query-services.md)
-* [genesis](../building-modules/08-genesis.md)
+- state
+- [`Msg`s](../building-modules/02-messages-and-queries.md#messages)
+- [Query services](../building-modules/04-query-services.md)
+- [genesis](../building-modules/08-genesis.md)
 
 #### Naming and conventions
 

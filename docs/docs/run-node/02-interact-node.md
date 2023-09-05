@@ -10,8 +10,8 @@ There are multiple ways to interact with a node: using the CLI, using gRPC or us
 
 :::note Pre-requisite Readings
 
-* [gRPC, REST and CometBFT Endpoints](../core/06-grpc_rest.md)
-* [Running a Node](./01-run-node.md)
+- [gRPC, REST and CometBFT Endpoints](../core/06-grpc_rest.md)
+- [Running a Node](./01-run-node.md)
 
 :::
 
@@ -58,9 +58,9 @@ The Protobuf ecosystem developed tools for different use cases, including code-g
 
 Since the code generation library largely depends on your own tech stack, we will only present three alternatives:
 
-* `grpcurl` for generic debugging and testing,
-* programmatically via Go,
-* CosmJS for JavaScript/TypeScript developers.
+- `grpcurl` for generic debugging and testing,
+- programmatically via Go,
+- CosmJS for JavaScript/TypeScript developers.
 
 ### grpcurl
 
@@ -115,7 +115,6 @@ The following snippet shows how to query the state using gRPC inside a Go progra
 
 #### Install Cosmos SDK
 
-
 ```bash
 go get github.com/cosmos/cosmos-sdk@main
 ```
@@ -143,7 +142,7 @@ func queryState() error {
     // Create a connection to the gRPC server.
     grpcConn, err := grpc.Dial(
         "127.0.0.1:9090", // your gRPC server address.
-        grpc.WithInsecure(), // The Cosmos SDK doesn't support any transport security mechanism. 
+        grpc.WithInsecure(), // The Cosmos SDK doesn't support any transport security mechanism.
         // This instantiates a general gRPC codec which handles proto bytes. We pass in a nil interface registry
         // if the request/response types contain interface instead of 'nil' you should pass the application specific codec.
 		grpc.WithDefaultCallOptions(grpc.ForceCodec(codec.NewProtoCodec(nil).GRPCCodec())),
@@ -250,7 +249,7 @@ CosmJS documentation can be found at [https://cosmos.github.io/cosmjs](https://c
 
 As described in the [gRPC guide](../core/06-grpc_rest.md), all gRPC services on the Cosmos SDK are made available for more convenient REST-based queries through gRPC-gateway. The format of the URL path is based on the Protobuf service method's full-qualified name, but may contain small customizations so that final URLs look more idiomatic. For example, the REST endpoint for the `cosmos.bank.v1beta1.Query/AllBalances` method is `GET /cosmos/bank/v1beta1/balances/{address}`. Request arguments are passed as query parameters.
 
-Note that the REST endpoints are not enabled by default. To enable them, edit the `api` section of your  `~/.simapp/config/app.toml` file:
+Note that the REST endpoints are not enabled by default. To enable them, edit the `api` section of your `~/.simapp/config/app.toml` file:
 
 ```toml
 # Enable defines if the API server should be enabled.

@@ -900,6 +900,10 @@ func (ks keystore) MigrateAll() ([]*Record, error) {
 	}
 
 	sort.Strings(keys)
+<<<<<<< HEAD
+=======
+
+>>>>>>> v0.46.13-patch
 	var recs []*Record
 	for _, key := range keys {
 		// The keyring items only with `.info` consists the key info.

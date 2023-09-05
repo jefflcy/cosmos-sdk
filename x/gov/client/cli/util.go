@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+<<<<<<< HEAD
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
@@ -13,6 +14,13 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	govutils "github.com/cosmos/cosmos-sdk/x/gov/client/utils"
 	govv1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
+=======
+	"github.com/spf13/pflag"
+
+	"github.com/cosmos/cosmos-sdk/codec"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	govutils "github.com/cosmos/cosmos-sdk/x/gov/client/utils"
+>>>>>>> v0.46.13-patch
 )
 
 type legacyProposal struct {
@@ -22,7 +30,10 @@ type legacyProposal struct {
 	Deposit     string
 }
 
+<<<<<<< HEAD
 // validate the legacyProposal
+=======
+>>>>>>> v0.46.13-patch
 func (p legacyProposal) validate() error {
 	if p.Type == "" {
 		return fmt.Errorf("proposal type is required")
@@ -38,8 +49,12 @@ func (p legacyProposal) validate() error {
 	return nil
 }
 
+<<<<<<< HEAD
 // parseSubmitLegacyProposal reads and parses the legacy proposal.
 func parseSubmitLegacyProposal(fs *pflag.FlagSet) (*legacyProposal, error) {
+=======
+func parseSubmitLegacyProposalFlags(fs *pflag.FlagSet) (*legacyProposal, error) {
+>>>>>>> v0.46.13-patch
 	proposal := &legacyProposal{}
 	proposalFile, _ := fs.GetString(FlagProposal)
 
@@ -85,22 +100,36 @@ type proposal struct {
 	Messages []json.RawMessage `json:"messages,omitempty"`
 	Metadata string            `json:"metadata"`
 	Deposit  string            `json:"deposit"`
+<<<<<<< HEAD
 	Title    string            `json:"title"`
 	Summary  string            `json:"summary"`
 }
 
 // parseSubmitProposal reads and parses the proposal.
 func parseSubmitProposal(cdc codec.Codec, path string) ([]sdk.Msg, string, string, string, sdk.Coins, error) {
+=======
+}
+
+func parseSubmitProposal(cdc codec.Codec, path string) ([]sdk.Msg, string, sdk.Coins, error) {
+>>>>>>> v0.46.13-patch
 	var proposal proposal
 
 	contents, err := os.ReadFile(path)
 	if err != nil {
+<<<<<<< HEAD
 		return nil, "", "", "", nil, err
+=======
+		return nil, "", nil, err
+>>>>>>> v0.46.13-patch
 	}
 
 	err = json.Unmarshal(contents, &proposal)
 	if err != nil {
+<<<<<<< HEAD
 		return nil, "", "", "", nil, err
+=======
+		return nil, "", nil, err
+>>>>>>> v0.46.13-patch
 	}
 
 	msgs := make([]sdk.Msg, len(proposal.Messages))
@@ -108,7 +137,11 @@ func parseSubmitProposal(cdc codec.Codec, path string) ([]sdk.Msg, string, strin
 		var msg sdk.Msg
 		err := cdc.UnmarshalInterfaceJSON(anyJSON, &msg)
 		if err != nil {
+<<<<<<< HEAD
 			return nil, "", "", "", nil, err
+=======
+			return nil, "", nil, err
+>>>>>>> v0.46.13-patch
 		}
 
 		msgs[i] = msg
@@ -116,6 +149,7 @@ func parseSubmitProposal(cdc codec.Codec, path string) ([]sdk.Msg, string, strin
 
 	deposit, err := sdk.ParseCoinsNormalized(proposal.Deposit)
 	if err != nil {
+<<<<<<< HEAD
 		return nil, "", "", "", nil, err
 	}
 
@@ -168,4 +202,10 @@ func ReadGovPropFlags(clientCtx client.Context, flagSet *pflag.FlagSet) (*govv1.
 	rv.Proposer = clientCtx.GetFromAddress().String()
 
 	return rv, nil
+=======
+		return nil, "", nil, err
+	}
+
+	return msgs, proposal.Metadata, deposit, nil
+>>>>>>> v0.46.13-patch
 }

@@ -40,6 +40,9 @@ issues:
     - text: "ST1016:"
       linters:
         - stylecheck
+    - text: "should be written without leading space as"
+      linters:
+        - nolintlint
     - path: "migrations"
       text: "SA1019:"
       linters:
@@ -56,6 +59,5 @@ linters-settings:
     suggest-new: true
   nolintlint:
     allow-unused: false
-    allow-leading-space: true
     require-explanation: false
     require-specific: false

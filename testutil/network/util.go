@@ -60,6 +60,8 @@ func startInProcess(cfg Config, val *Validator) error {
 	}
 	val.tmNode = tmNode
 
+	val.tmNode = tmNode
+
 	if val.RPCAddress != "" {
 		val.RPCClient = local.New(tmNode)
 	}

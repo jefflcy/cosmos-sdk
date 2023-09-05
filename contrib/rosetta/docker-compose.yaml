@@ -12,15 +12,21 @@ services:
 
   rosetta:
     image: rosetta-ci:latest
-    command: [
-      "simd",
-      "rosetta",
-      "--blockchain", "app",
-      "--network", "network",
-      "--tendermint", "cosmos:26657",
-      "--grpc", "cosmos:9090",
-      "--addr", ":8080",
-    ]
+    command:
+      [
+        "simd",
+        "rosetta",
+        "--blockchain",
+        "app",
+        "--network",
+        "network",
+        "--tendermint",
+        "cosmos:26657",
+        "--grpc",
+        "cosmos:9090",
+        "--addr",
+        ":8080"
+      ]
     ports:
       - 8080:8080
 

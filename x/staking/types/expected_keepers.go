@@ -2,7 +2,10 @@ package types
 
 import (
 	"cosmossdk.io/math"
+<<<<<<< HEAD
 
+=======
+>>>>>>> v0.46.13-patch
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )
@@ -62,7 +65,10 @@ type ValidatorSet interface {
 
 	// slash the validator and delegators of the validator, specifying offence height, offence power, and slash fraction
 	Slash(sdk.Context, sdk.ConsAddress, int64, int64, sdk.Dec) math.Int
+<<<<<<< HEAD
 	SlashWithInfractionReason(sdk.Context, sdk.ConsAddress, int64, int64, sdk.Dec, Infraction) math.Int
+=======
+>>>>>>> v0.46.13-patch
 	Jail(sdk.Context, sdk.ConsAddress)   // jail a validator
 	Unjail(sdk.Context, sdk.ConsAddress) // unjail a validator
 

@@ -568,11 +568,15 @@ Parameters:
 		"amount":[{"denom": "stake","amount": "10"}]
 	}
 	],
+<<<<<<< HEAD
 	// metadata can be any of base64 encoded, raw text, stringified json, IPFS link to json
 	// see below for example metadata
 	"metadata": "4pIMOgIGx1vZGU=", // base64-encoded metadata
 	"title": "My proposal",
 	"summary": "This is a proposal to send 10 stake to cosmos1...",
+=======
+	"metadata": "4pIMOgIGx1vZGU=", // base64-encoded metadata
+>>>>>>> v0.46.13-patch
 	"proposers": ["cosmos1...", "cosmos1..."],
 }
 

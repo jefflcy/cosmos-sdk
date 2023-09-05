@@ -25,10 +25,15 @@ var (
 // - <0x01><exp_bytes><len(grantee_address_bytes)><grantee_address_bytes><len(granter_address_bytes)><granter_address_bytes>
 func FeeAllowancePrefixQueue(exp *time.Time, granterAddrBz []byte) []byte {
 	// no need of appending len(exp_bytes) here, `FormatTimeBytes` gives const length everytime.
+<<<<<<< HEAD:x/feegrant/migrations/v2/keys.go
 	var key []byte
 	key = append(key, FeeAllowanceQueueKeyPrefix...)
 	key = append(key, sdk.FormatTimeBytes(*exp)...)
 	return append(key, granterAddrBz...)
+=======
+	allowanceByExpTimeKey := append(FeeAllowanceQueueKeyPrefix, sdk.FormatTimeBytes(*exp)...) //nolint:gocritic
+	return append(allowanceByExpTimeKey, key...)
+>>>>>>> v0.46.13-patch:x/feegrant/migrations/v046/keys.go
 }
 
 // FeeAllowanceKey is the canonical key to store a grant from granter to grantee

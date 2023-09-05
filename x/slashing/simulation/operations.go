@@ -20,8 +20,11 @@ import (
 // Simulation operation weights constants
 const (
 	OpWeightMsgUnjail = "op_weight_msg_unjail" //nolint:gosec
+<<<<<<< HEAD
 
 	DefaultWeightMsgUnjail = 100
+=======
+>>>>>>> v0.46.13-patch
 )
 
 // WeightedOperations returns all the operations from the module with their respective weights
@@ -41,7 +44,11 @@ func WeightedOperations(
 	return simulation.WeightedOperations{
 		simulation.NewWeightedOperation(
 			weightMsgUnjail,
+<<<<<<< HEAD
 			SimulateMsgUnjail(codec.NewProtoCodec(interfaceRegistry), ak, bk, k, sk),
+=======
+			SimulateMsgUnjail(ak, bk, k, sk.(stakingkeeper.Keeper)),
+>>>>>>> v0.46.13-patch
 		),
 	}
 }
@@ -91,10 +98,17 @@ func SimulateMsgUnjail(cdc *codec.ProtoCodec, ak types.AccountKeeper, bk types.B
 
 		msg := types.NewMsgUnjail(validator.GetOperator())
 
+<<<<<<< HEAD
 		txGen := tx.NewTxConfig(cdc, tx.DefaultSignModes)
 		tx, err := simtestutil.GenSignedMockTx(
 			r,
 			txGen,
+=======
+		txCfg := simappparams.MakeTestEncodingConfig().TxConfig
+		tx, err := helpers.GenSignedMockTx(
+			r,
+			txCfg,
+>>>>>>> v0.46.13-patch
 			[]sdk.Msg{msg},
 			fees,
 			simtestutil.DefaultGenTxGas,
@@ -107,7 +121,7 @@ func SimulateMsgUnjail(cdc *codec.ProtoCodec, ak types.AccountKeeper, bk types.B
 			return simtypes.NoOpMsg(types.ModuleName, msg.Type(), "unable to generate mock tx"), nil, err
 		}
 
-		_, res, err := app.SimDeliver(txGen.TxEncoder(), tx)
+		_, res, err := app.SimDeliver(txCfg.TxEncoder(), tx)
 
 		// result should fail if:
 		// - validator cannot be unjailed due to tombstone

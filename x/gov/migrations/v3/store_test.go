@@ -50,6 +50,15 @@ func TestMigrateStore(t *testing.T) {
 	vote1Bz := cdc.MustMarshal(&vote1)
 	store.Set(v1gov.VoteKey(1, voter), vote1Bz)
 
+	// Vote on prop 1
+	options := []v1beta1.WeightedVoteOption{
+		{Option: v1beta1.OptionNo, Weight: sdk.MustNewDecFromStr("0.3")},
+		{Option: v1beta1.OptionYes, Weight: sdk.MustNewDecFromStr("0.7")},
+	}
+	vote1 := v1beta1.NewVote(1, voter, options)
+	vote1Bz := cdc.MustMarshal(&vote1)
+	store.Set(v042gov.VoteKey(1, voter), vote1Bz)
+
 	// Run migrations.
 	err = v3gov.MigrateStore(ctx, govKey, cdc)
 	require.NoError(t, err)
@@ -65,7 +74,11 @@ func TestMigrateStore(t *testing.T) {
 	compareProps(t, prop2, newProp2)
 
 	var newVote1 v1.Vote
+<<<<<<< HEAD:x/gov/migrations/v3/store_test.go
 	err = cdc.Unmarshal(store.Get(v1gov.VoteKey(prop1.ProposalId, voter)), &newVote1)
+=======
+	err = cdc.Unmarshal(store.Get(v042gov.VoteKey(prop1.ProposalId, voter)), &newVote1)
+>>>>>>> v0.46.13-patch:x/gov/migrations/v046/store_test.go
 	require.NoError(t, err)
 	// Without the votes migration, we would have 300000000000000000 in state,
 	// because of how sdk.Dec stores itself in state.

@@ -10,10 +10,10 @@ The Cosmos SDK has migrated to CometBFT, as its default consensus engine.
 CometBFT is an implementation of the Tendermint consensus algorithm, and the successor of Tendermint Core.
 Due to the import changes, this is a breaking change. Chains need to remove **entirely** their imports of Tendermint Core in their codebase, from direct and indirects imports in their `go.mod`.
 
-* Replace `github.com/tendermint/tendermint` by `github.com/cometbft/cometbft`
-* Replace `github.com/tendermint/tm-db` by `github.com/cometbft/cometbft-db`
-* Verify `github.com/tendermint/tendermint` is not an indirect or direct dependency
-* Run `make proto-gen`
+- Replace `github.com/tendermint/tendermint` by `github.com/cometbft/cometbft`
+- Replace `github.com/tendermint/tm-db` by `github.com/cometbft/cometbft-db`
+- Verify `github.com/tendermint/tendermint` is not an indirect or direct dependency
+- Run `make proto-gen`
 
 Other than that, the migration should be seamless.
 On the SDK side, clean-up of variables, functions to reflect the new name will only happen from v0.48 (part 2).
@@ -72,8 +72,8 @@ reflectionv1.RegisterReflectionServiceServer(app.GRPCQueryRouter(), reflectionSv
 
 The constructor, `NewSimApp` has been simplified:
 
-* `NewSimApp` does not take encoding parameters (`encodingConfig`) as input, instead the encoding parameters are injected (when using app wiring), or directly created in the constructor. Instead, we can instantiate `SimApp` for getting the encoding configuration.
-* `NewSimApp` now uses `AppOptions` for getting the home path (`homePath`) and the invariant checks period (`invCheckPeriod`). These were unnecessary given as arguments as they were already present in the `AppOptions`.
+- `NewSimApp` does not take encoding parameters (`encodingConfig`) as input, instead the encoding parameters are injected (when using app wiring), or directly created in the constructor. Instead, we can instantiate `SimApp` for getting the encoding configuration.
+- `NewSimApp` now uses `AppOptions` for getting the home path (`homePath`) and the invariant checks period (`invCheckPeriod`). These were unnecessary given as arguments as they were already present in the `AppOptions`.
 
 #### Encoding
 
@@ -90,8 +90,8 @@ That argument should be passed to the module maanager `ExportGenesisFromModules`
 The `GoLevelDB` version must pinned to `v1.0.1-0.20210819022825-2ae1ddf74ef7` in the application, following versions might cause unexpected behavior.
 This can be done adding `replace github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7` to the `go.mod` file.
 
-* [issue #14949 on cosmos-sdk](https://github.com/cosmos/cosmos-sdk/issues/14949)
-* [issue #25413 on go-ethereum](https://github.com/ethereum/go-ethereum/pull/25413)
+- [issue #14949 on cosmos-sdk](https://github.com/cosmos/cosmos-sdk/issues/14949)
+- [issue #25413 on go-ethereum](https://github.com/ethereum/go-ethereum/pull/25413)
 
 ### Protobuf
 
@@ -199,8 +199,8 @@ The `gov` module has been updated to support a minimum proposal deposit at submi
 parameter called `MinInitialDepositRatio`. When multiplied by the existing `MinDeposit` parameter, it produces
 the necessary proportion of coins needed at the proposal submission time. The motivation for this change is to prevent proposal spamming.
 
-By default, the new `MinInitialDepositRatio` parameter is set to zero during migration. The value of zero signifies that this 
-feature is disabled. If chains wish to utilize the minimum proposal deposits at time of submission, the migration logic needs to be 
+By default, the new `MinInitialDepositRatio` parameter is set to zero during migration. The value of zero signifies that this
+feature is disabled. If chains wish to utilize the minimum proposal deposits at time of submission, the migration logic needs to be
 modified to set the new parameter to the desired value.
 
 ##### New `Proposal.Proposer` field

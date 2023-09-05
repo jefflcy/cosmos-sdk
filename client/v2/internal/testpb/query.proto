@@ -35,6 +35,7 @@ message EchoRequest {
   repeated Enum                         enums      = 24;
   repeated google.protobuf.Duration durations      = 25;
   repeated AMessage                 some_messages  = 26;
+<<<<<<< HEAD
 
   int32    positional1                                  = 27;
   string   positional2                                  = 28;
@@ -43,6 +44,8 @@ message EchoRequest {
   string deprecated_field           = 30;
   string shorthand_deprecated_field = 31;
   bool   hidden_bool                = 32;
+=======
+>>>>>>> v0.46.13-patch
 }
 
 enum Enum {

@@ -31,6 +31,7 @@ var (
 //
 //nolint:gosec // these are not hard-coded credentials.
 const (
+<<<<<<< HEAD
 	OpWeightMsgDeposit      = "op_weight_msg_deposit"
 	OpWeightMsgVote         = "op_weight_msg_vote"
 	OpWeightMsgVoteWeighted = "op_weight_msg_weighted_vote"
@@ -39,6 +40,11 @@ const (
 	DefaultWeightMsgVote         = 67
 	DefaultWeightMsgVoteWeighted = 33
 	DefaultWeightTextProposal    = 5
+=======
+	OpWeightMsgDeposit      = "op_weight_msg_deposit"       //nolint:gosec
+	OpWeightMsgVote         = "op_weight_msg_vote"          //nolint:gosec
+	OpWeightMsgVoteWeighted = "op_weight_msg_weighted_vote" //nolint:gosec
+>>>>>>> v0.46.13-patch
 )
 
 // WeightedOperations returns all the operations from the module with their respective weights
@@ -210,8 +216,24 @@ func simulateMsgSubmitProposal(ak types.AccountKeeper, bk types.BankKeeper, k *k
 		}
 
 		account := ak.GetAccount(ctx, simAccount.Address)
+<<<<<<< HEAD
 		txGen := moduletestutil.MakeTestEncodingConfig().TxConfig
 		tx, err := simtestutil.GenSignedMockTx(
+=======
+		spendable := bk.SpendableCoins(ctx, account.GetAddress())
+
+		var fees sdk.Coins
+		coins, hasNeg := spendable.SafeSub(deposit...)
+		if !hasNeg {
+			fees, err = simtypes.RandomFees(r, ctx, coins)
+			if err != nil {
+				return simtypes.NoOpMsg(types.ModuleName, msg.Type(), "unable to generate fees"), nil, err
+			}
+		}
+
+		txGen := simappparams.MakeTestEncodingConfig().TxConfig
+		tx, err := helpers.GenSignedMockTx(
+>>>>>>> v0.46.13-patch
 			r,
 			txGen,
 			[]sdk.Msg{msg},

@@ -49,7 +49,11 @@ func ConvertToLegacyProposal(proposal v1.Proposal) (v1beta1.Proposal, error) {
 		return v1beta1.Proposal{}, err
 	}
 	if len(msgs) != 1 {
+<<<<<<< HEAD:x/gov/migrations/v3/convert.go
 		return v1beta1.Proposal{}, sdkerrors.ErrInvalidType.Wrap("can't convert a gov/v1 Proposal to gov/v1beta1 Proposal when amount of proposal messages not exactly one")
+=======
+		return v1beta1.Proposal{}, sdkerrors.ErrInvalidType.Wrap("can't convert a gov/v1 Proposal to gov/v1beta1 Proposal when amount of proposal messages is more than one")
+>>>>>>> v0.46.13-patch:x/gov/migrations/v046/convert.go
 	}
 	if legacyMsg, ok := msgs[0].(*v1.MsgExecLegacyContent); ok {
 		// check that the content struct can be unmarshalled
@@ -152,8 +156,12 @@ func convertToNewVotes(oldVotes v1beta1.Votes) (v1.Votes, error) {
 		// - if only Options is set, or both Option & Options are set, we read from Options,
 		// - if Options is not set, and Option is set, we read from Option,
 		// - if none are set, we throw error.
+<<<<<<< HEAD:x/gov/migrations/v3/convert.go
 		switch {
 		case oldVote.Options != nil:
+=======
+		if oldVote.Options != nil { //nolint:gocritic // should be rewritten to a switch statement
+>>>>>>> v0.46.13-patch:x/gov/migrations/v046/convert.go
 			newWVOs = make([]*v1.WeightedVoteOption, len(oldVote.Options))
 			for j, oldWVO := range oldVote.Options {
 				newWVOs[j] = v1.NewWeightedVoteOption(v1.VoteOption(oldWVO.Option), oldWVO.Weight)

@@ -29,8 +29,13 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
 	authclient "github.com/cosmos/cosmos-sdk/x/auth/client"
 	authtest "github.com/cosmos/cosmos-sdk/x/auth/client/testutil"
+<<<<<<< HEAD:tests/e2e/tx/service_test.go
 	"github.com/cosmos/cosmos-sdk/x/auth/migrations/legacytx"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
+=======
+	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
+	bankcli "github.com/cosmos/cosmos-sdk/x/bank/client/testutil"
+>>>>>>> v0.46.13-patch:x/auth/tx/service_test.go
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 )
 
@@ -116,7 +121,11 @@ func (s *E2ETestSuite) TearDownSuite() {
 	s.network.Cleanup()
 }
 
+<<<<<<< HEAD:tests/e2e/tx/service_test.go
 func (s *E2ETestSuite) TestQueryBySig() {
+=======
+func (s *IntegrationTestSuite) TestQueryBySig() {
+>>>>>>> v0.46.13-patch:x/auth/tx/service_test.go
 	// broadcast tx
 	txb := s.mkTxBuilder()
 	txbz, err := s.cfg.TxConfig.TxEncoder()(txb.GetTx())
@@ -186,6 +195,7 @@ func TestEventRegex(t *testing.T) {
 			event: "tx.signature='foobar/baz123=='",
 			match: true,
 		},
+<<<<<<< HEAD:tests/e2e/tx/service_test.go
 		{
 			name:  "valid: with >= operator",
 			event: "tx.height>=10'",
@@ -196,6 +206,8 @@ func TestEventRegex(t *testing.T) {
 			event: "tx.height<=10'",
 			match: true,
 		},
+=======
+>>>>>>> v0.46.13-patch:x/auth/tx/service_test.go
 	}
 
 	for _, tc := range testCases {
@@ -206,7 +218,11 @@ func TestEventRegex(t *testing.T) {
 	}
 }
 
+<<<<<<< HEAD:tests/e2e/tx/service_test.go
 func (s E2ETestSuite) TestSimulateTx_GRPC() {
+=======
+func (s IntegrationTestSuite) TestSimulateTx_GRPC() {
+>>>>>>> v0.46.13-patch:x/auth/tx/service_test.go
 	val := s.network.Validators[0]
 	txBuilder := s.mkTxBuilder()
 	// Convert the txBuilder to a tx.Tx.
@@ -401,13 +417,13 @@ func (s E2ETestSuite) TestGetTxEvents_GRPCGateway() {
 		},
 		{
 			"valid request: order by asc",
-			fmt.Sprintf("%s/cosmos/tx/v1beta1/txs?events=%s&events=%s&order_by=ORDER_BY_ASC", val.APIAddress, bankMsgSendEventAction, "message.module='bank'"),
+			fmt.Sprintf("%s/cosmos/tx/v1beta1/txs?events=%s&events=%s&order_by=1", val.APIAddress, bankMsgSendEventAction, "message.module='bank'"),
 			false,
 			"", 3,
 		},
 		{
 			"valid request: order by desc",
-			fmt.Sprintf("%s/cosmos/tx/v1beta1/txs?events=%s&events=%s&order_by=ORDER_BY_DESC", val.APIAddress, bankMsgSendEventAction, "message.module='bank'"),
+			fmt.Sprintf("%s/cosmos/tx/v1beta1/txs?events=%s&events=%s&order_by=2", val.APIAddress, bankMsgSendEventAction, "message.module='bank'"),
 			false,
 			"", 3,
 		},
@@ -415,7 +431,11 @@ func (s E2ETestSuite) TestGetTxEvents_GRPCGateway() {
 			"invalid request: invalid order by",
 			fmt.Sprintf("%s/cosmos/tx/v1beta1/txs?events=%s&events=%s&order_by=invalid_order", val.APIAddress, bankMsgSendEventAction, "message.module='bank'"),
 			true,
+<<<<<<< HEAD:tests/e2e/tx/service_test.go
 			"is not a valid tx.OrderBy", 0,
+=======
+			"invalid syntax", 0,
+>>>>>>> v0.46.13-patch:x/auth/tx/service_test.go
 		},
 		{
 			"expect pass with multiple-events",

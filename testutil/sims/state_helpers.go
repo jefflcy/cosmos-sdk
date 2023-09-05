@@ -177,6 +177,11 @@ func AppStateFnWithExtendedCbs(
 			rawStateCb(rawState)
 		}
 
+		// extend state from callback function
+		if cb != nil {
+			cb(rawState)
+		}
+
 		// replace appstate
 		appState, err = json.Marshal(rawState)
 		if err != nil {

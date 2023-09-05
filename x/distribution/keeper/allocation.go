@@ -37,7 +37,12 @@ func (k Keeper) AllocateTokens(ctx sdk.Context, totalPreviousPower int64, bonded
 	// calculate fraction allocated to validators
 	remaining := feesCollected
 	communityTax := k.GetCommunityTax(ctx)
+<<<<<<< HEAD
 	voteMultiplier := math.LegacyOneDec().Sub(communityTax)
+=======
+	liquidityProviderReward := k.GetLiquidityProviderReward(ctx)
+	voteMultiplier := sdk.OneDec().Sub(proposerMultiplier).Sub(communityTax).Sub(liquidityProviderReward)
+>>>>>>> v0.46.13-patch
 	feeMultiplier := feesCollected.MulDecTruncate(voteMultiplier)
 
 	// allocate tokens proportionally to voting power
@@ -51,12 +56,21 @@ func (k Keeper) AllocateTokens(ctx sdk.Context, totalPreviousPower int64, bonded
 		// TODO: Consider micro-slashing for missing votes.
 		//
 		// Ref: https://github.com/cosmos/cosmos-sdk/issues/2525#issuecomment-430838701
+<<<<<<< HEAD
 		powerFraction := math.LegacyNewDec(vote.Validator.Power).QuoTruncate(math.LegacyNewDec(totalPreviousPower))
+=======
+		powerFraction := sdk.NewDec(vote.Validator.Power).QuoTruncate(sdk.NewDec(totalPreviousPower))
+>>>>>>> v0.46.13-patch
 		reward := feeMultiplier.MulDecTruncate(powerFraction)
 
 		k.AllocateTokensToValidator(ctx, validator, reward)
 		remaining = remaining.Sub(reward)
 	}
+
+	// allocate lp rewards
+	reward := feesCollected.MulDec(liquidityProviderReward)
+	feePool.LiquidityProviderPool = feePool.LiquidityProviderPool.Add(reward...)
+	remaining = remaining.Sub(reward)
 
 	// allocate community funding
 	feePool.CommunityPool = feePool.CommunityPool.Add(remaining...)

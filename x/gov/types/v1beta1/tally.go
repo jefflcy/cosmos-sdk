@@ -11,8 +11,13 @@ import (
 type ValidatorGovInfo struct {
 	Address             sdk.ValAddress      // address of the validator operator
 	BondedTokens        math.Int            // Power of a Validator
+<<<<<<< HEAD
 	DelegatorShares     math.LegacyDec      // Total outstanding delegator shares
 	DelegatorDeductions math.LegacyDec      // Delegator deductions from validator's delegators voting independently
+=======
+	DelegatorShares     sdk.Dec             // Total outstanding delegator shares
+	DelegatorDeductions sdk.Dec             // Delegator deductions from validator's delegators voting independently
+>>>>>>> v0.46.13-patch
 	Vote                WeightedVoteOptions // Vote of the validator
 }
 

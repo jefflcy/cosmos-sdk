@@ -8,6 +8,11 @@ import (
 	tmtime "github.com/cometbft/cometbft/types/time"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/suite"
+<<<<<<< HEAD
+=======
+	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+	tmtime "github.com/tendermint/tendermint/types/time"
+>>>>>>> v0.46.13-patch
 
 	"github.com/cometbft/cometbft/libs/log"
 	"github.com/cosmos/cosmos-sdk/baseapp"
@@ -74,7 +79,14 @@ func (s *TestSuite) SetupTest() {
 	queryClient := authz.NewQueryClient(queryHelper)
 	s.queryClient = queryClient
 
+<<<<<<< HEAD
 	s.msgSrvr = s.authzKeeper
+=======
+	s.app = app
+	s.ctx = ctx
+	s.queryClient = queryClient
+	s.addrs = simapp.AddTestAddrsIncremental(app, ctx, 7, sdk.NewInt(30000000))
+>>>>>>> v0.46.13-patch
 }
 
 func (s *TestSuite) TestKeeper() {
@@ -331,7 +343,11 @@ func (s *TestSuite) TestDispatchedEvents() {
 	events := s.ctx.EventManager().Events()
 
 	// get last 5 events (events that occur *after* the grant)
+<<<<<<< HEAD
 	events = events[len(events)-2:]
+=======
+	events = events[len(events)-5:]
+>>>>>>> v0.46.13-patch
 
 	requiredEvents := map[string]bool{
 		"cosmos.authz.v1beta1.EventGrant":  true,
@@ -399,15 +415,25 @@ func (s *TestSuite) TestGetAuthorization() {
 
 	genAuthMulti := authz.NewGenericAuthorization(sdk.MsgTypeURL(&banktypes.MsgMultiSend{}))
 	genAuthSend := authz.NewGenericAuthorization(sdk.MsgTypeURL(&banktypes.MsgSend{}))
+<<<<<<< HEAD
 	sendAuth := banktypes.NewSendAuthorization(coins10, nil)
+=======
+	sendAuth := banktypes.NewSendAuthorization(coins10)
+>>>>>>> v0.46.13-patch
 
 	start := s.ctx.BlockHeader().Time
 	expired := start.Add(time.Duration(1) * time.Second)
 	notExpired := start.Add(time.Duration(5) * time.Hour)
 
+<<<<<<< HEAD
 	s.Require().NoError(s.authzKeeper.SaveGrant(s.ctx, addr1, addr2, genAuthMulti, nil), "creating grant 1->2")
 	s.Require().NoError(s.authzKeeper.SaveGrant(s.ctx, addr1, addr3, genAuthSend, &expired), "creating grant 1->3")
 	s.Require().NoError(s.authzKeeper.SaveGrant(s.ctx, addr1, addr4, sendAuth, &notExpired), "creating grant 1->4")
+=======
+	s.Require().NoError(s.app.AuthzKeeper.SaveGrant(s.ctx, addr1, addr2, genAuthMulti, nil), "creating grant 1->2")
+	s.Require().NoError(s.app.AuthzKeeper.SaveGrant(s.ctx, addr1, addr3, genAuthSend, &expired), "creating grant 1->3")
+	s.Require().NoError(s.app.AuthzKeeper.SaveGrant(s.ctx, addr1, addr4, sendAuth, &notExpired), "creating grant 1->4")
+>>>>>>> v0.46.13-patch
 	// Without access to private keeper methods, I don't know how to save a grant with an invalid authorization.
 	newCtx := s.ctx.WithBlockTime(start.Add(time.Duration(1) * time.Minute))
 
@@ -463,7 +489,11 @@ func (s *TestSuite) TestGetAuthorization() {
 
 	for _, tc := range tests {
 		s.Run(tc.name, func() {
+<<<<<<< HEAD
 			actAuth, actExp := s.authzKeeper.GetAuthorization(newCtx, tc.grantee, tc.granter, tc.msgType)
+=======
+			actAuth, actExp := s.app.AuthzKeeper.GetAuthorization(newCtx, tc.grantee, tc.granter, tc.msgType)
+>>>>>>> v0.46.13-patch
 			s.Assert().Equal(tc.expAuth, actAuth, "authorization")
 			s.Assert().Equal(tc.expExp, actExp, "expiration")
 		})

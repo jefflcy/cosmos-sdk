@@ -2,6 +2,7 @@ package baseapp
 
 import (
 	"crypto/sha256"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
@@ -119,6 +120,12 @@ func (app *BaseApp) InitChain(req abci.RequestInitChain) (res abci.ResponseInitC
 	}
 }
 
+// SetOption implements the ABCI interface.
+func (app *BaseApp) SetOption(req abci.RequestSetOption) (res abci.ResponseSetOption) {
+	// TODO: Implement!
+	return
+}
+
 // Info implements the ABCI interface.
 func (app *BaseApp) Info(req abci.RequestInfo) abci.ResponseInfo {
 	lastCommitID := app.cms.LastCommitID()
@@ -130,24 +137,6 @@ func (app *BaseApp) Info(req abci.RequestInfo) abci.ResponseInfo {
 		LastBlockHeight:  lastCommitID.Version,
 		LastBlockAppHash: lastCommitID.Hash,
 	}
-}
-
-// FilterPeerByAddrPort filters peers by address/port.
-func (app *BaseApp) FilterPeerByAddrPort(info string) abci.ResponseQuery {
-	if app.addrPeerFilter != nil {
-		return app.addrPeerFilter(info)
-	}
-
-	return abci.ResponseQuery{}
-}
-
-// FilterPeerByID filters peers by node ID.
-func (app *BaseApp) FilterPeerByID(info string) abci.ResponseQuery {
-	if app.idPeerFilter != nil {
-		return app.idPeerFilter(info)
-	}
-
-	return abci.ResponseQuery{}
 }
 
 // BeginBlock implements the ABCI application interface.
@@ -392,6 +381,12 @@ func (app *BaseApp) DeliverTx(req abci.RequestDeliverTx) (res abci.ResponseDeliv
 	resultStr := "successful"
 
 	defer func() {
+		if app.deliverTxer != nil {
+			app.deliverTxer(app.deliverState.ctx, req, res)
+		}
+	}()
+
+	defer func() {
 		for _, streamingListener := range app.abciListeners {
 			if err := streamingListener.ListenDeliverTx(app.deliverState.ctx, req, res); err != nil {
 				panic(fmt.Errorf("DeliverTx listening hook failed: %w", err))
@@ -436,6 +431,9 @@ func (app *BaseApp) Commit() abci.ResponseCommit {
 	if ok {
 		rms.SetCommitHeader(header)
 	}
+	if app.beforeCommitter != nil {
+		app.beforeCommitter(app.deliverState.ctx)
+	}
 
 	// Write the DeliverTx state into branched storage and commit the MultiStore.
 	// The write to the DeliverTx state writes all state transitions to the root
@@ -462,6 +460,10 @@ func (app *BaseApp) Commit() abci.ResponseCommit {
 	// NOTE: This is safe because Tendermint holds a lock on the mempool for
 	// Commit. Use the header from this latest block.
 	app.setState(runTxModeCheck, header)
+
+	if app.afterCommitter != nil {
+		app.afterCommitter(app.deliverState.ctx)
+	}
 
 	// empty/reset the deliver state
 	app.deliverState = nil
@@ -686,6 +688,7 @@ func (app *BaseApp) ApplySnapshotChunk(req abci.RequestApplySnapshotChunk) abci.
 }
 
 func (app *BaseApp) handleQueryGRPC(handler GRPCQueryHandler, req abci.RequestQuery) abci.ResponseQuery {
+	defer telemetry.ModuleMeasureSince(req.Path, time.Now(), "GRPC_query")
 	ctx, err := app.CreateQueryContext(req.Height, req.Prove)
 	if err != nil {
 		return sdkerrors.QueryResult(err, app.trace)
@@ -903,6 +906,22 @@ func handleQueryApp(app *BaseApp, path []string, req abci.RequestQuery) abci.Res
 				Codespace: sdkerrors.RootCodespace,
 				Height:    req.Height,
 				Value:     []byte(app.version),
+			}
+
+		case "snapshots":
+			var responseValue []byte
+
+			response := app.ListSnapshots(abci.RequestListSnapshots{})
+
+			responseValue, err := json.Marshal(response)
+			if err != nil {
+				return sdkerrors.QueryResult(sdkerrors.Wrap(err, fmt.Sprintf("failed to marshal list snapshots response %v", response)), app.trace)
+			}
+
+			return abci.ResponseQuery{
+				Codespace: sdkerrors.RootCodespace,
+				Height:    req.Height,
+				Value:     responseValue,
 			}
 
 		default:

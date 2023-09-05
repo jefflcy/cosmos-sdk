@@ -105,8 +105,7 @@ message MsgDelegate {
   option (cosmos.msg.v1.signer) = "delegator_address";
   option (amino.name)           = "cosmos-sdk/MsgDelegate";
 
-  option (gogoproto.equal)           = false;
-  option (gogoproto.goproto_getters) = false;
+  option (gogoproto.equal) = false;
 
   string                   delegator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string                   validator_address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
@@ -122,8 +121,7 @@ message MsgBeginRedelegate {
   option (cosmos.msg.v1.signer) = "delegator_address";
   option (amino.name)           = "cosmos-sdk/MsgBeginRedelegate";
 
-  option (gogoproto.equal)           = false;
-  option (gogoproto.goproto_getters) = false;
+  option (gogoproto.equal) = false;
 
   string                   delegator_address     = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string                   validator_src_address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
@@ -143,8 +141,7 @@ message MsgUndelegate {
   option (cosmos.msg.v1.signer) = "delegator_address";
   option (amino.name)           = "cosmos-sdk/MsgUndelegate";
 
-  option (gogoproto.equal)           = false;
-  option (gogoproto.goproto_getters) = false;
+  option (gogoproto.equal) = false;
 
   string                   delegator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string                   validator_address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
@@ -161,15 +158,24 @@ message MsgUndelegateResponse {
 //
 // Since: cosmos-sdk 0.46
 message MsgCancelUnbondingDelegation {
+<<<<<<< HEAD
   option (cosmos.msg.v1.signer)      = "delegator_address";
   option (amino.name)                = "cosmos-sdk/MsgCancelUnbondingDelegation";
   option (gogoproto.equal)           = false;
   option (gogoproto.goproto_getters) = false;
+=======
+  option (cosmos.msg.v1.signer) = "delegator_address";
+  option (gogoproto.equal)      = false;
+>>>>>>> v0.46.13-patch
 
   string delegator_address = 1 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   string validator_address = 2 [(cosmos_proto.scalar) = "cosmos.AddressString"];
   // amount is always less than or equal to unbonding delegation entry balance
+<<<<<<< HEAD
   cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
+=======
+  cosmos.base.v1beta1.Coin amount = 3 [(gogoproto.nullable) = false];
+>>>>>>> v0.46.13-patch
   // creation_height is the height which the unbonding took place.
   int64 creation_height = 4;
 }
@@ -178,6 +184,7 @@ message MsgCancelUnbondingDelegation {
 //
 // Since: cosmos-sdk 0.46
 message MsgCancelUnbondingDelegationResponse {}
+<<<<<<< HEAD
 
 // MsgUpdateParams is the Msg/UpdateParams request type.
 //
@@ -199,3 +206,5 @@ message MsgUpdateParams {
 //
 // Since: cosmos-sdk 0.47
 message MsgUpdateParamsResponse {};
+=======
+>>>>>>> v0.46.13-patch

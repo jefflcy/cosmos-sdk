@@ -31,7 +31,9 @@ package module
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/telemetry"
 	"sort"
+	"time"
 
 	"cosmossdk.io/core/appmodule"
 	abci "github.com/cometbft/cometbft/abci/types"
@@ -246,12 +248,14 @@ func (GenesisOnlyAppModule) EndBlock(_ sdk.Context, _ abci.RequestEndBlock) []ab
 // Manager defines a module manager that provides the high level utility for managing and executing
 // operations for a group of modules
 type Manager struct {
-	Modules            map[string]interface{} // interface{} is used now to support the legacy AppModule as well as new core appmodule.AppModule.
-	OrderInitGenesis   []string
-	OrderExportGenesis []string
-	OrderBeginBlockers []string
-	OrderEndBlockers   []string
-	OrderMigrations    []string
+	Modules              map[string]AppModule
+	OrderInitGenesis     []string
+	OrderExportGenesis   []string
+	OrderBeginBlockers   []string
+	OrderEndBlockers     []string
+	OrderMigrations      []string
+	beforeModuleEndBlock func(moduleName string)
+	afterModuleEndBlock  func(moduleName string)
 }
 
 // NewManager creates a new Manager object.
@@ -329,6 +333,16 @@ func (m *Manager) RegisterInvariants(ir sdk.InvariantRegistry) {
 			module.RegisterInvariants(ir)
 		}
 	}
+}
+
+// RegisterBeforeModuleEndBlock registers beforeModuleEndBlock
+func (m *Manager) RegisterBeforeModuleEndBlock(cb func(moduleName string)) {
+	m.beforeModuleEndBlock = cb
+}
+
+// RegisterAfterModuleEndBlock registers afterModuleEndBlock
+func (m *Manager) RegisterAfterModuleEndBlock(cb func(moduleName string)) {
+	m.afterModuleEndBlock = cb
 }
 
 // RegisterServices registers all module services
@@ -559,7 +573,9 @@ func (m *Manager) BeginBlock(ctx sdk.Context, req abci.RequestBeginBlock) abci.R
 	for _, moduleName := range m.OrderBeginBlockers {
 		module, ok := m.Modules[moduleName].(BeginBlockAppModule)
 		if ok {
+			startTime := time.Now()
 			module.BeginBlock(ctx, req)
+			telemetry.ModuleMeasureSince(moduleName, startTime, telemetry.MetricKeyBeginBlocker)
 		}
 	}
 
@@ -580,7 +596,14 @@ func (m *Manager) EndBlock(ctx sdk.Context, req abci.RequestEndBlock) abci.Respo
 		if !ok {
 			continue
 		}
+
+		if m.beforeModuleEndBlock != nil {
+			m.beforeModuleEndBlock(moduleName)
+		}
 		moduleValUpdates := module.EndBlock(ctx, req)
+		if m.afterModuleEndBlock != nil {
+			m.afterModuleEndBlock(moduleName)
+		}
 
 		// use these validator updates if provided, the module manager assumes
 		// only one module will update the validator set

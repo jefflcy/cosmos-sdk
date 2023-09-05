@@ -44,7 +44,10 @@ type Server struct {
 }
 
 func (h Server) Start() error {
+<<<<<<< HEAD:tools/rosetta/lib/server/server.go
 	h.logger.Info(fmt.Sprintf("Rosetta server listening on add %s", h.addr))
+=======
+>>>>>>> v0.46.13-patch:server/rosetta/lib/server/server.go
 	return http.ListenAndServe(h.addr, h.h) //nolint:gosec
 }
 

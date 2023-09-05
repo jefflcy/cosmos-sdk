@@ -4,9 +4,14 @@ import (
 	"sort"
 
 	"cosmossdk.io/math"
+<<<<<<< HEAD
 
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	"github.com/cosmos/gogoproto/proto"
+=======
+	"github.com/gogo/protobuf/proto"
+	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+>>>>>>> v0.46.13-patch
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"

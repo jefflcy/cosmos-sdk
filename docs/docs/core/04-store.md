@@ -10,7 +10,7 @@ A store is a data structure that holds the state of the application.
 
 :::note Pre-requisite Readings
 
-* [Anatomy of a Cosmos SDK application](../basics/00-app-anatomy.md)
+- [Anatomy of a Cosmos SDK application](../basics/00-app-anatomy.md)
 
 :::
 
@@ -160,9 +160,9 @@ https://github.com/cosmos/cosmos-sdk/blob/v0.47.0-rc1/store/iavl/store.go#L37-L4
 
 `iavl` stores are based around an [IAVL Tree](https://github.com/cosmos/iavl), a self-balancing binary tree which guarantees that:
 
-* `Get` and `Set` operations are O(log n), where n is the number of elements in the tree.
-* Iteration efficiently returns the sorted elements within the range.
-* Each tree version is immutable and can be retrieved even after a commit (depending on the pruning settings).
+- `Get` and `Set` operations are O(log n), where n is the number of elements in the tree.
+- Iteration efficiently returns the sorted elements within the range.
+- Each tree version is immutable and can be retrieved even after a commit (depending on the pruning settings).
 
 The documentation on the IAVL Tree is located [here](https://github.com/cosmos/iavl/blob/master/docs/overview.md).
 
@@ -176,7 +176,7 @@ https://github.com/cosmos/cosmos-sdk/blob/v0.47.0-rc1/store/dbadapter/store.go#L
 
 `dbadapter.Store` embeds `dbm.DB`, meaning most of the `KVStore` interface functions are implemented. The other functions (mostly miscellaneous) are manually implemented. This store is primarily used within [Transient Stores](#transient-store)
 
-### `Transient` Store 
+### `Transient` Store
 
 `Transient.Store` is a base-layer `KVStore` which is automatically discarded at the end of the block.
 

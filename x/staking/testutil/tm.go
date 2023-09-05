@@ -2,8 +2,13 @@ package testutil
 
 import (
 	"cosmossdk.io/math"
+<<<<<<< HEAD:x/staking/testutil/tm.go
 	tmcrypto "github.com/cometbft/cometbft/crypto"
 	tmtypes "github.com/cometbft/cometbft/types"
+=======
+	tmcrypto "github.com/tendermint/tendermint/crypto"
+	tmtypes "github.com/tendermint/tendermint/types"
+>>>>>>> v0.46.13-patch:x/staking/teststaking/tm.go
 
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	"github.com/cosmos/cosmos-sdk/x/staking/types"

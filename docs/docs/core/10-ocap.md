@@ -32,12 +32,12 @@ foundation of an object capability system.
 > access to existing objects:
 >
 > 1. An object A can send a message to B only if object A holds a
->     reference to B.
+>    reference to B.
 > 2. An object A can obtain a reference to C only
->     if object A receives a message containing a reference to C. As a
->     consequence of these two rules, an object can obtain a reference
->     to another object only through a preexisting chain of references.
->     In short, "Only connectivity begets connectivity."
+>    if object A receives a message containing a reference to C. As a
+>    consequence of these two rules, an object can obtain a reference
+>    to another object only through a preexisting chain of references.
+>    In short, "Only connectivity begets connectivity."
 
 For an introduction to object-capabilities, see this [Wikipedia article](https://en.wikipedia.org/wiki/Object-capability_model).
 
@@ -74,4 +74,3 @@ https://github.com/cosmos/cosmos-sdk/blob/v0.47.0-rc1/simapp/app.go#L294-L318
 The following diagram shows the current dependencies between keepers.
 
 ![Keeper dependencies](https://raw.githubusercontent.com/cosmos/cosmos-sdk/release/v0.46.x/docs/uml/svg/keeper_dependencies.svg)
-

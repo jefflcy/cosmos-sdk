@@ -4,7 +4,10 @@ import (
 	"fmt"
 
 	"cosmossdk.io/math"
+<<<<<<< HEAD
 
+=======
+>>>>>>> v0.46.13-patch
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -70,7 +73,11 @@ func (m Minter) NextInflationRate(params Params, bondedRatio sdk.Dec) math.Legac
 
 // NextAnnualProvisions returns the annual provisions based on current total
 // supply and inflation rate.
+<<<<<<< HEAD
 func (m Minter) NextAnnualProvisions(_ Params, totalSupply math.Int) math.LegacyDec {
+=======
+func (m Minter) NextAnnualProvisions(_ Params, totalSupply math.Int) sdk.Dec {
+>>>>>>> v0.46.13-patch
 	return m.Inflation.MulInt(totalSupply)
 }
 

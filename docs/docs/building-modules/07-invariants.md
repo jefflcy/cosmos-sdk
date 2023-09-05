@@ -10,7 +10,7 @@ An invariant is a property of the application that should always be true. In the
 
 :::note Pre-requisite Readings
 
-* [Keepers](./06-keeper.md)
+- [Keepers](./06-keeper.md)
 
 :::
 

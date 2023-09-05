@@ -7,6 +7,28 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types/v1beta1"
 )
 
+<<<<<<< HEAD
+=======
+const (
+	// ProposalTypeCommunityPoolSpend defines the type for a CommunityPoolSpendProposal
+	ProposalTypeCommunityPoolSpend = "CommunityPoolSpend"
+)
+
+// Assert CommunityPoolSpendProposal implements govtypes.Content at compile-time
+var _ govtypes.Content = &CommunityPoolSpendProposal{}
+
+func init() {
+	govtypes.RegisterProposalType(ProposalTypeCommunityPoolSpend)
+}
+
+// NewCommunityPoolSpendProposal creates a new community pool spend proposal.
+//
+//nolint:interfacer
+func NewCommunityPoolSpendProposal(title, description string, recipient sdk.AccAddress, amount sdk.Coins) *CommunityPoolSpendProposal {
+	return &CommunityPoolSpendProposal{title, description, recipient.String(), amount}
+}
+
+>>>>>>> v0.46.13-patch
 // GetTitle returns the title of a community pool spend proposal.
 func (csp *CommunityPoolSpendProposal) GetTitle() string { return csp.Title }
 

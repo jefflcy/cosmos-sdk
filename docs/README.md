@@ -7,9 +7,9 @@ If you want to open a PR in Cosmos SDK to update the documentation, please follo
 The documentation for Cosmos SDK is hosted at https://docs.cosmos.network and built from the files in the `/docs` directory.
 It is built using the following stack:
 
-* [Docusaurus 2](https://docusaurus.io)
-* Vuepress (pre v0.47)
-* [Algolia DocSearch](https://docsearch.algolia.com/)
+- [Docusaurus 2](https://docusaurus.io)
+- Vuepress (pre v0.47)
+- [Algolia DocSearch](https://docsearch.algolia.com/)
 
   ```js
       algolia: {
@@ -20,7 +20,7 @@ It is built using the following stack:
       },
   ```
 
-* GitHub Pages
+- GitHub Pages
 
 ## Docs Build Workflow
 
@@ -62,18 +62,19 @@ make build-docs
 
 When a new major version of the SDK is released, the following steps should be taken:
 
-* On the `release/vX.Y.Z` branch, remove the deploy action (`.github/workflows/deploy-docs.yml`), for avoiding deploying the docs from the release branches
-* Each time a new version is released (on docusaurus), drop support from the oldest versions.
-    * If the old version is still running vuepress (v0.45, v0.46), remove its line from `vuepress_versions`
-    * If any, remove the outdated redirections from `docusaurus.config.js` and add the base version redirection (`/vX.XX`) to `/main`.
+- On the `release/vX.Y.Z` branch, remove the deploy action (`.github/workflows/deploy-docs.yml`), for avoiding deploying the docs from the release branches
+- Each time a new version is released (on docusaurus), drop support from the oldest versions.
 
-      ```js
-        {
-          from: ["/", "/master", "/v0.43", "/v0.44", "/v0.XX"], // here add the deprecated version
-          to: "/main",
-        },
-      ```
+  - If the old version is still running vuepress (v0.45, v0.46), remove its line from `vuepress_versions`
+  - If any, remove the outdated redirections from `docusaurus.config.js` and add the base version redirection (`/vX.XX`) to `/main`.
 
-* Add the new version sidebar to the list of versionned sidebar and add the version to `versions`
+    ```js
+      {
+        from: ["/", "/master", "/v0.43", "/v0.44", "/v0.XX"], // here add the deprecated version
+        to: "/main",
+      },
+    ```
+
+- Add the new version sidebar to the list of versionned sidebar and add the version to `versions`
 
 Learn more about [versioning](https://docusaurus.io/docs/versioning) in Docusaurus.

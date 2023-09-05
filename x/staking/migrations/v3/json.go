@@ -1,4 +1,8 @@
+<<<<<<< HEAD:x/staking/migrations/v3/json.go
 package v3
+=======
+package v046
+>>>>>>> v0.46.13-patch:x/staking/migrations/v046/json.go
 
 import "github.com/cosmos/cosmos-sdk/x/staking/types"
 

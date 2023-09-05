@@ -73,8 +73,12 @@ func (k Keeper) GrantAllowance(ctx sdk.Context, granter, grantee sdk.AccAddress,
 	}
 
 	newExp, err := feeAllowance.ExpiresAt()
+<<<<<<< HEAD
 	switch {
 	case err != nil:
+=======
+	if err != nil { //nolint:gocritic // should be rewritten to a switch statement
+>>>>>>> v0.46.13-patch
 		return err
 
 	case newExp != nil && newExp.Before(ctx.BlockTime()):
