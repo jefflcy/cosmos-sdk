@@ -8,11 +8,7 @@ import (
 	"strings"
 	"time"
 
-<<<<<<< HEAD
 	coretypes "github.com/cometbft/cometbft/rpc/core/types"
-=======
-	coretypes "github.com/tendermint/tendermint/rpc/core/types"
->>>>>>> v0.46.13-patch
 
 	"github.com/cosmos/cosmos-sdk/client"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"

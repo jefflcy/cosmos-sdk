@@ -141,23 +141,15 @@ func GetAccountAddressByIDCmd() *cobra.Command {
 				return err
 			}
 
-<<<<<<< HEAD
 			accNum, err := strconv.ParseUint(args[0], 10, 64)
-=======
-			accNum, err := strconv.ParseInt(args[0], 10, 64)
->>>>>>> v0.46.13-patch
 			if err != nil {
 				return err
 			}
 
 			queryClient := types.NewQueryClient(clientCtx)
-<<<<<<< HEAD
 			res, err := queryClient.AccountAddressByID(cmd.Context(), &types.QueryAccountAddressByIDRequest{
 				AccountId: accNum,
 			})
-=======
-			res, err := queryClient.AccountAddressByID(cmd.Context(), &types.QueryAccountAddressByIDRequest{Id: accNum})
->>>>>>> v0.46.13-patch
 			if err != nil {
 				return err
 			}

@@ -3,18 +3,12 @@ package keeper
 import (
 	"fmt"
 
-<<<<<<< HEAD
 	"github.com/cometbft/cometbft/libs/log"
 	gogotypes "github.com/cosmos/gogoproto/types"
-=======
-	"github.com/cosmos/cosmos-sdk/store/prefix"
-
-	gogotypes "github.com/gogo/protobuf/types"
-	"github.com/tendermint/tendermint/libs/log"
->>>>>>> v0.46.13-patch
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
+	"github.com/cosmos/cosmos-sdk/store/prefix"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/address"
@@ -55,12 +49,10 @@ type AccountKeeperI interface {
 	GetSequence(sdk.Context, sdk.AccAddress) (uint64, error)
 
 	// Fetch the next account number, and increment the internal counter.
-<<<<<<< HEAD
 	NextAccountNumber(sdk.Context) uint64
 
 	// GetModulePermissions fetches per-module account permissions
 	GetModulePermissions() map[string]types.PermissionsForAddress
-=======
 	GetNextAccountNumber(sdk.Context) uint64
 
 	// Fetch the corresponding eth address for a given cosmos addr
@@ -89,7 +81,6 @@ type AccountKeeperI interface {
 
 	// GetMappedAddress gets corresponding eth address if exists, else tries to get corresponding cosmos address. If both don't exist, it returns nil
 	GetMappedAddress(ctx sdk.Context, addr sdk.AccAddress) sdk.AccAddress
->>>>>>> v0.46.13-patch
 }
 
 // AccountKeeper encodes/decodes accounts using the go-amino (binary)

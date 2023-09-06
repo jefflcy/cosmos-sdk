@@ -8,13 +8,8 @@ import (
 	"time"
 
 	"cosmossdk.io/math"
-<<<<<<< HEAD
 	abci "github.com/cometbft/cometbft/abci/types"
 	tmprotocrypto "github.com/cometbft/cometbft/proto/tendermint/crypto"
-=======
-	abci "github.com/tendermint/tendermint/abci/types"
-	tmprotocrypto "github.com/tendermint/tendermint/proto/tendermint/crypto"
->>>>>>> v0.46.13-patch
 	"sigs.k8s.io/yaml"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -524,15 +519,9 @@ func (v Validator) GetBondedTokens() math.Int { return v.BondedTokens() }
 func (v Validator) GetConsensusPower(r math.Int) int64 {
 	return v.ConsensusPower(r)
 }
-<<<<<<< HEAD
 func (v Validator) GetCommission() math.LegacyDec      { return v.Commission.Rate }
 func (v Validator) GetMinSelfDelegation() math.Int     { return v.MinSelfDelegation }
 func (v Validator) GetDelegatorShares() math.LegacyDec { return v.DelegatorShares }
-=======
-func (v Validator) GetCommission() sdk.Dec         { return v.Commission.Rate }
-func (v Validator) GetMinSelfDelegation() math.Int { return v.MinSelfDelegation }
-func (v Validator) GetDelegatorShares() sdk.Dec    { return v.DelegatorShares }
->>>>>>> v0.46.13-patch
 
 // UnpackInterfaces implements UnpackInterfacesMessage.UnpackInterfaces
 func (v Validator) UnpackInterfaces(unpacker codectypes.AnyUnpacker) error {

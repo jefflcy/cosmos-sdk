@@ -6,9 +6,9 @@ import (
 	"os"
 	"time"
 
+	"github.com/coinbase/rosetta-sdk-go/types"
 	assert "github.com/cosmos/rosetta-sdk-go/asserter"
 	"github.com/cosmos/rosetta-sdk-go/server"
-	"github.com/coinbase/rosetta-sdk-go/types"
 
 	"cosmossdk.io/tools/rosetta/lib/internal/service"
 	crgtypes "cosmossdk.io/tools/rosetta/lib/types"
@@ -44,10 +44,7 @@ type Server struct {
 }
 
 func (h Server) Start() error {
-<<<<<<< HEAD:tools/rosetta/lib/server/server.go
 	h.logger.Info(fmt.Sprintf("Rosetta server listening on add %s", h.addr))
-=======
->>>>>>> v0.46.13-patch:server/rosetta/lib/server/server.go
 	return http.ListenAndServe(h.addr, h.h) //nolint:gosec
 }
 

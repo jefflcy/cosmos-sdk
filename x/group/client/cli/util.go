@@ -10,10 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/group"
 )
 
-<<<<<<< HEAD
 // parseDecisionPolicy reads and parses the decision policy.
-=======
->>>>>>> v0.46.13-patch
 func parseDecisionPolicy(cdc codec.Codec, decisionPolicyFile string) (group.DecisionPolicy, error) {
 	if decisionPolicyFile == "" {
 		return nil, fmt.Errorf("decision policy is required")
@@ -32,10 +29,7 @@ func parseDecisionPolicy(cdc codec.Codec, decisionPolicyFile string) (group.Deci
 	return policy, nil
 }
 
-<<<<<<< HEAD
 // parseMembers reads and parses the members.
-=======
->>>>>>> v0.46.13-patch
 func parseMembers(membersFile string) ([]group.MemberRequest, error) {
 	members := group.MemberRequests{}
 
@@ -58,12 +52,7 @@ func parseMembers(membersFile string) ([]group.MemberRequest, error) {
 
 func execFromString(execStr string) group.Exec {
 	exec := group.Exec_EXEC_UNSPECIFIED
-<<<<<<< HEAD
 	if execStr == ExecTry {
-=======
-	switch execStr { //nolint:gocritic
-	case ExecTry:
->>>>>>> v0.46.13-patch
 		exec = group.Exec_EXEC_TRY
 	}
 
@@ -76,13 +65,9 @@ type Proposal struct {
 	// Messages defines an array of sdk.Msgs proto-JSON-encoded as Anys.
 	Messages  []json.RawMessage `json:"messages,omitempty"`
 	Metadata  string            `json:"metadata"`
-<<<<<<< HEAD
 	Proposers []string          `json:"proposers"`
 	Title     string            `json:"title"`
 	Summary   string            `json:"summary"`
-=======
-	Proposers []string          `json:"proposers,omitempty"`
->>>>>>> v0.46.13-patch
 }
 
 func getCLIProposal(path string) (Proposal, error) {

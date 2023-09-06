@@ -20,22 +20,6 @@ func (s *E2ETestSuite) TestQueryBalanceGRPC() {
 		expectValue uint64
 	}{
 		{
-<<<<<<< HEAD:tests/e2e/nft/grpc.go
-=======
-			name: "fail not exist class id",
-			args: struct {
-				ClassID string
-				Owner   string
-			}{
-				ClassID: "invalid_class_id",
-				Owner:   s.owner.String(),
-			},
-			expectErr:   true,
-			errMsg:      "invalid class id",
-			expectValue: 0,
-		},
-		{
->>>>>>> v0.46.13-patch:x/nft/client/testutil/grpc.go
 			name: "fail not exist owner",
 			args: struct {
 				ClassID string
@@ -91,22 +75,6 @@ func (s *E2ETestSuite) TestQueryOwnerGRPC() {
 		expectResult string
 	}{
 		{
-<<<<<<< HEAD:tests/e2e/nft/grpc.go
-=======
-			name: "class id is invalid",
-			args: struct {
-				ClassID string
-				ID      string
-			}{
-				ClassID: "invalid_class_id",
-				ID:      ExpNFT.Id,
-			},
-			expectErr:    true,
-			errMsg:       "invalid class id",
-			expectResult: "",
-		},
-		{
->>>>>>> v0.46.13-patch:x/nft/client/testutil/grpc.go
 			name: "class id does not exist",
 			args: struct {
 				ClassID string
@@ -119,21 +87,6 @@ func (s *E2ETestSuite) TestQueryOwnerGRPC() {
 			expectResult: "",
 		},
 		{
-<<<<<<< HEAD:tests/e2e/nft/grpc.go
-=======
-			name: "nft id is invalid",
-			args: struct {
-				ClassID string
-				ID      string
-			}{
-				ClassID: ExpNFT.ClassId,
-				ID:      "invalid_nft_id",
-			},
-			expectErr:    true,
-			expectResult: "",
-		},
-		{
->>>>>>> v0.46.13-patch:x/nft/client/testutil/grpc.go
 			name: "nft id does not exist",
 			args: struct {
 				ClassID string
@@ -193,11 +146,7 @@ func (s *E2ETestSuite) TestQuerySupplyGRPC() {
 			args: struct {
 				ClassID string
 			}{
-<<<<<<< HEAD:tests/e2e/nft/grpc.go
 				ClassID: "",
-=======
-				ClassID: "invalid_class_id",
->>>>>>> v0.46.13-patch:x/nft/client/testutil/grpc.go
 			},
 			expectErr:    true,
 			errMsg:       nft.ErrEmptyClassID.Error(),
@@ -351,45 +300,6 @@ func (s *E2ETestSuite) TestQueryNFTGRPC() {
 		errorMsg  string
 	}{
 		{
-<<<<<<< HEAD:tests/e2e/nft/grpc.go
-=======
-			name: "class id is invalid",
-			args: struct {
-				ClassID string
-				ID      string
-			}{
-				ClassID: "invalid_class_id",
-				ID:      ExpNFT.Id,
-			},
-			expectErr: true,
-			errorMsg:  "invalid class id",
-		},
-		{
-			name: "class id does not exist",
-			args: struct {
-				ClassID string
-				ID      string
-			}{
-				ClassID: "class",
-				ID:      ExpNFT.Id,
-			},
-			expectErr: true,
-			errorMsg:  "not found nft",
-		},
-		{
-			name: "nft id is invalid",
-			args: struct {
-				ClassID string
-				ID      string
-			}{
-				ClassID: ExpNFT.ClassId,
-				ID:      "invalid_nft_id",
-			},
-			expectErr: true,
-			errorMsg:  "invalid nft id",
-		},
-		{
->>>>>>> v0.46.13-patch:x/nft/client/testutil/grpc.go
 			name: "nft id does not exist",
 			args: struct {
 				ClassID string

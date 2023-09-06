@@ -123,14 +123,8 @@ func SimulateMsgGrant(cdc *codec.ProtoCodec, ak authz.AccountKeeper, bk authz.Ba
 		if err != nil {
 			return simtypes.NoOpMsg(authz.ModuleName, TypeMsgGrant, err.Error()), nil, err
 		}
-<<<<<<< HEAD
 		txCfg := tx.NewTxConfig(cdc, tx.DefaultSignModes)
 		tx, err := simtestutil.GenSignedMockTx(
-=======
-
-		txCfg := simappparams.MakeTestEncodingConfig().TxConfig
-		tx, err := helpers.GenSignedMockTx(
->>>>>>> v0.46.13-patch
 			r,
 			txCfg,
 			[]sdk.Msg{msg},
@@ -202,11 +196,7 @@ func SimulateMsgRevoke(cdc *codec.ProtoCodec, ak authz.AccountKeeper, bk authz.B
 		msg := authz.NewMsgRevoke(granterAddr, granteeAddr, a.MsgTypeURL())
 		txCfg := tx.NewTxConfig(cdc, tx.DefaultSignModes)
 		account := ak.GetAccount(ctx, granterAddr)
-<<<<<<< HEAD
 		tx, err := simtestutil.GenSignedMockTx(
-=======
-		tx, err := helpers.GenSignedMockTx(
->>>>>>> v0.46.13-patch
 			r,
 			txCfg,
 			[]sdk.Msg{&msg},
@@ -300,11 +290,7 @@ func SimulateMsgExec(cdc *codec.ProtoCodec, ak authz.AccountKeeper, bk authz.Ban
 
 		txCfg := tx.NewTxConfig(cdc, tx.DefaultSignModes)
 		granteeAcc := ak.GetAccount(ctx, granteeAddr)
-<<<<<<< HEAD
 		tx, err := simtestutil.GenSignedMockTx(
-=======
-		tx, err := helpers.GenSignedMockTx(
->>>>>>> v0.46.13-patch
 			r,
 			txCfg,
 			[]sdk.Msg{&msgExec},

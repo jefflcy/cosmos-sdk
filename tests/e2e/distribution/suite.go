@@ -79,13 +79,8 @@ func (s *E2ETestSuite) TestGetCmdQueryParams() {
 	}{
 		{
 			"json output",
-<<<<<<< HEAD:tests/e2e/distribution/suite.go
 			[]string{fmt.Sprintf("--%s=json", flags.FlagOutput)},
-			`{"community_tax":"0.020000000000000000","base_proposer_reward":"0.000000000000000000","bonus_proposer_reward":"0.000000000000000000","withdraw_addr_enabled":true}`,
-=======
-			[]string{fmt.Sprintf("--%s=json", tmcli.OutputFlag)},
-			`{"community_tax":"0.020000000000000000","base_proposer_reward":"0.010000000000000000","bonus_proposer_reward":"0.040000000000000000","liquidity_provider_reward":"0.000000000000000000","withdraw_addr_enabled":true}`,
->>>>>>> v0.46.13-patch:x/distribution/client/testutil/suite.go
+			`{"community_tax":"0.020000000000000000","base_proposer_reward":"0.000000000000000000","bonus_proposer_reward":"0.000000000000000000","liquidity_provider_reward":"0.000000000000000000""withdraw_addr_enabled":true}`,
 		},
 		{
 			"text output",

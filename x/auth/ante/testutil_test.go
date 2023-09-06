@@ -3,13 +3,9 @@ package ante_test
 import (
 	"testing"
 
-<<<<<<< HEAD
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
-=======
 	"github.com/stretchr/testify/suite"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
->>>>>>> v0.46.13-patch
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -27,11 +23,6 @@ import (
 	xauthsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
 	authtestutil "github.com/cosmos/cosmos-sdk/x/auth/testutil"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
-<<<<<<< HEAD
-=======
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
->>>>>>> v0.46.13-patch
 )
 
 // TestAccount represents an account used in the tests in x/auth/ante.
@@ -57,7 +48,6 @@ func TestAnteTestSuite(t *testing.T) {
 }
 
 // SetupTest setups a new test, with new app, context, and anteHandler.
-<<<<<<< HEAD
 func SetupTestSuite(t *testing.T, isCheckTx bool) *AnteTestSuite {
 	suite := &AnteTestSuite{}
 	ctrl := gomock.NewController(t)
@@ -85,17 +75,11 @@ func SetupTestSuite(t *testing.T, isCheckTx bool) *AnteTestSuite {
 	suite.accountKeeper.GetModuleAccount(suite.ctx, types.FeeCollectorName)
 	err := suite.accountKeeper.SetParams(suite.ctx, types.DefaultParams())
 	require.NoError(t, err)
-=======
-func (s *AnteTestSuite) SetupTest(isCheckTx bool) {
-	s.app, s.ctx = createTestApp(s.T(), isCheckTx)
-	s.ctx = s.ctx.WithBlockHeight(1)
->>>>>>> v0.46.13-patch
 
 	// We're using TestMsg encoding in some tests, so register it here.
 	suite.encCfg.Amino.RegisterConcrete(&testdata.TestMsg{}, "testdata.TestMsg", nil)
 	testdata.RegisterInterfaces(suite.encCfg.InterfaceRegistry)
 
-<<<<<<< HEAD
 	suite.clientCtx = client.Context{}.
 		WithTxConfig(suite.encCfg.TxConfig)
 
@@ -105,22 +89,10 @@ func (s *AnteTestSuite) SetupTest(isCheckTx bool) {
 			BankKeeper:      suite.bankKeeper,
 			FeegrantKeeper:  suite.feeGrantKeeper,
 			SignModeHandler: suite.encCfg.TxConfig.SignModeHandler(),
-=======
-	s.clientCtx = client.Context{}.
-		WithTxConfig(encodingConfig.TxConfig)
-
-	anteHandler, err := ante.NewAnteHandler(
-		ante.HandlerOptions{
-			AccountKeeper:   s.app.AccountKeeper,
-			BankKeeper:      s.app.BankKeeper,
-			FeegrantKeeper:  s.app.FeeGrantKeeper,
-			SignModeHandler: encodingConfig.TxConfig.SignModeHandler(),
->>>>>>> v0.46.13-patch
 			SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
 		},
 	)
 
-<<<<<<< HEAD
 	require.NoError(t, err)
 	suite.anteHandler = anteHandler
 
@@ -130,38 +102,13 @@ func (s *AnteTestSuite) SetupTest(isCheckTx bool) {
 }
 
 func (suite *AnteTestSuite) CreateTestAccounts(numAccs int) []TestAccount {
-=======
-	s.Require().NoError(err)
-	s.anteHandler = anteHandler
-}
-
-// CreateTestAccounts creates `numAccs` accounts, and return all relevant
-// information about them including their private keys.
-func (s *AnteTestSuite) CreateTestAccounts(numAccs int) []TestAccount {
->>>>>>> v0.46.13-patch
 	var accounts []TestAccount
 
 	for i := 0; i < numAccs; i++ {
 		priv, _, addr := testdata.KeyTestPubAddr()
-<<<<<<< HEAD
 		acc := suite.accountKeeper.NewAccountWithAddress(suite.ctx, addr)
 		acc.SetAccountNumber(uint64(i))
 		suite.accountKeeper.SetAccount(suite.ctx, acc)
-=======
-		acc := s.app.AccountKeeper.NewAccountWithAddress(s.ctx, addr)
-		err := acc.SetAccountNumber(uint64(i))
-		s.Require().NoError(err)
-		s.app.AccountKeeper.SetAccount(s.ctx, acc)
-		someCoins := sdk.Coins{
-			sdk.NewInt64Coin("atom", 10000000),
-		}
-		err = s.app.BankKeeper.MintCoins(s.ctx, minttypes.ModuleName, someCoins)
-		s.Require().NoError(err)
-
-		err = s.app.BankKeeper.SendCoinsFromModuleToAccount(s.ctx, minttypes.ModuleName, addr, someCoins)
-		s.Require().NoError(err)
-
->>>>>>> v0.46.13-patch
 		accounts = append(accounts, TestAccount{acc, priv})
 	}
 
@@ -278,51 +225,3 @@ func (s *AnteTestSuite) CreateTestTx(privs []cryptotypes.PrivKey, accNums []uint
 
 	return s.txBuilder.GetTx(), nil
 }
-<<<<<<< HEAD
-=======
-
-// TestCase represents a test case used in test tables.
-type TestCase struct {
-	desc     string
-	malleate func()
-	simulate bool
-	expPass  bool
-	expErr   error
-}
-
-// CreateTestTx is a helper function to create a tx given multiple inputs.
-func (s *AnteTestSuite) RunTestCase(privs []cryptotypes.PrivKey, msgs []sdk.Msg, feeAmount sdk.Coins, gasLimit uint64, accNums, accSeqs []uint64, chainID string, tc TestCase) {
-	s.Run(fmt.Sprintf("Case %s", tc.desc), func() {
-		s.Require().NoError(s.txBuilder.SetMsgs(msgs...))
-		s.txBuilder.SetFeeAmount(feeAmount)
-		s.txBuilder.SetGasLimit(gasLimit)
-
-		// Theoretically speaking, ante handler unit tests should only test
-		// ante handlers, but here we sometimes also test the tx creation
-		// process.
-		tx, txErr := s.CreateTestTx(privs, accNums, accSeqs, chainID)
-		newCtx, anteErr := s.anteHandler(s.ctx, tx, tc.simulate)
-
-		if tc.expPass {
-			s.Require().NoError(txErr)
-			s.Require().NoError(anteErr)
-			s.Require().NotNil(newCtx)
-
-			s.ctx = newCtx
-		} else {
-			switch {
-			case txErr != nil:
-				s.Require().Error(txErr)
-				s.Require().True(errors.Is(txErr, tc.expErr))
-
-			case anteErr != nil:
-				s.Require().Error(anteErr)
-				s.Require().True(errors.Is(anteErr, tc.expErr))
-
-			default:
-				s.Fail("expected one of txErr,anteErr to be an error")
-			}
-		}
-	})
-}
->>>>>>> v0.46.13-patch

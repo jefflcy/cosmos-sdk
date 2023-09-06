@@ -164,7 +164,6 @@ func (am AppModule) BeginBlock(ctx sdk.Context, req abci.RequestBeginBlock) {
 	BeginBlocker(ctx, am.keeper)
 }
 
-<<<<<<< HEAD
 func init() {
 	appmodule.Register(
 		&modulev1.Module{},
@@ -196,8 +195,6 @@ func ProvideModule(in AuthzInputs) AuthzOutputs {
 	return AuthzOutputs{AuthzKeeper: k, Module: m}
 }
 
-=======
->>>>>>> v0.46.13-patch
 // ____________________________________________________________________________
 
 // AppModuleSimulation functions

@@ -27,13 +27,10 @@ func (ak AccountKeeper) NewAccount(ctx sdk.Context, acc types.AccountI) types.Ac
 
 // HasAccount implements AccountKeeperI.
 func (ak AccountKeeper) HasAccount(ctx sdk.Context, addr sdk.AccAddress) bool {
-<<<<<<< HEAD
-	store := ctx.KVStore(ak.storeKey)
-=======
 	if addr == nil {
 		return false
 	}
-	store := ctx.KVStore(ak.key)
+	store := ctx.KVStore(ak.storeKey)
 	if !store.Has(types.AddressStoreKey(addr)) {
 		cosmosAddr := ak.GetCorrespondingCosmosAddressIfExists(ctx, addr)
 		if cosmosAddr == nil {
@@ -48,23 +45,13 @@ func (ak AccountKeeper) HasAccount(ctx sdk.Context, addr sdk.AccAddress) bool {
 // Checks if account exists based on address directly, doesn't check for mapping.
 // Original cosmos implementation of HasAccount
 func (ak AccountKeeper) HasExactAccount(ctx sdk.Context, addr sdk.AccAddress) bool {
-	store := ctx.KVStore(ak.key)
->>>>>>> v0.46.13-patch
+	store := ctx.KVStore(ak.storeKey)
 	return store.Has(types.AddressStoreKey(addr))
 }
 
 // HasAccountAddressByID checks account address exists by id.
 func (ak AccountKeeper) HasAccountAddressByID(ctx sdk.Context, id uint64) bool {
-<<<<<<< HEAD
 	store := ctx.KVStore(ak.storeKey)
-	return store.Has(types.AccountNumberStoreKey(id))
-}
-
-// GetAccount implements AccountKeeperI.
-func (ak AccountKeeper) GetAccount(ctx sdk.Context, addr sdk.AccAddress) types.AccountI {
-	store := ctx.KVStore(ak.storeKey)
-=======
-	store := ctx.KVStore(ak.key)
 	return store.Has(types.AccountNumberStoreKey(id))
 }
 
@@ -83,8 +70,7 @@ func (ak AccountKeeper) GetAccount(ctx sdk.Context, addr sdk.AccAddress) types.A
 	if addr == nil {
 		return nil
 	}
-	store := ctx.KVStore(ak.key)
->>>>>>> v0.46.13-patch
+	store := ctx.KVStore(ak.storeKey)
 	bz := store.Get(types.AddressStoreKey(addr))
 	if bz == nil {
 		cosmosAddr := ak.GetCorrespondingCosmosAddressIfExists(ctx, addr)
@@ -100,11 +86,7 @@ func (ak AccountKeeper) GetAccount(ctx sdk.Context, addr sdk.AccAddress) types.A
 
 // GetAccountAddressById returns account address by id.
 func (ak AccountKeeper) GetAccountAddressByID(ctx sdk.Context, id uint64) string {
-<<<<<<< HEAD
 	store := ctx.KVStore(ak.storeKey)
-=======
-	store := ctx.KVStore(ak.key)
->>>>>>> v0.46.13-patch
 	bz := store.Get(types.AccountNumberStoreKey(id))
 	if bz == nil {
 		return ""
@@ -195,7 +177,7 @@ func (ak AccountKeeper) AddToEthToCosmosAddressMap(ctx sdk.Context, ethAddr sdk.
 }
 
 func (ak AccountKeeper) IterateEthToCosmosAddressMapping(ctx sdk.Context, cb func(ethAddress, cosmosAddress sdk.AccAddress) bool) {
-	store := ctx.KVStore(ak.key)
+	store := ctx.KVStore(ak.storeKey)
 	iterator := sdk.KVStorePrefixIterator(store, types.KeyPrefix(types.EthAddressToCosmosAddressKey))
 
 	defer iterator.Close()
@@ -211,7 +193,7 @@ func (ak AccountKeeper) IterateEthToCosmosAddressMapping(ctx sdk.Context, cb fun
 
 }
 func (ak AccountKeeper) IterateCosmosToEthAddressMapping(ctx sdk.Context, cb func(cosmosAddress, ethAddress sdk.AccAddress) bool) {
-	store := ctx.KVStore(ak.key)
+	store := ctx.KVStore(ak.storeKey)
 	iterator := sdk.KVStorePrefixIterator(store, types.KeyPrefix(types.CosmosAddressToEthAddressKey))
 
 	defer iterator.Close()

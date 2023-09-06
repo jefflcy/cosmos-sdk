@@ -5,10 +5,7 @@ import "google/protobuf/any.proto";
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";
 import "cosmos_proto/cosmos.proto";
-<<<<<<< HEAD
 import "amino/amino.proto";
-=======
->>>>>>> v0.46.13-patch
 
 option go_package                      = "github.com/cosmos/cosmos-sdk/x/upgrade/types";
 option (gogoproto.goproto_getters_all) = false;
@@ -54,21 +51,18 @@ message Plan {
 message SoftwareUpgradeProposal {
   option deprecated                          = true;
   option (cosmos_proto.implements_interface) = "cosmos.gov.v1beta1.Content";
-<<<<<<< HEAD
   option (amino.name)                        = "cosmos-sdk/SoftwareUpgradeProposal";
-=======
->>>>>>> v0.46.13-patch
   option (gogoproto.equal)                   = true;
   option (gogoproto.goproto_stringer)        = false;
 
   // title of the proposal
-  string title       = 1;
+  string title = 1;
 
   // description of the proposal
   string description = 2;
 
   // plan of the proposal
-  Plan   plan        = 3 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
+  Plan plan = 3 [(gogoproto.nullable) = false, (amino.dont_omitempty) = true];
 }
 
 // CancelSoftwareUpgradeProposal is a gov Content type for cancelling a software
@@ -78,15 +72,12 @@ message SoftwareUpgradeProposal {
 message CancelSoftwareUpgradeProposal {
   option deprecated                          = true;
   option (cosmos_proto.implements_interface) = "cosmos.gov.v1beta1.Content";
-<<<<<<< HEAD
   option (amino.name)                        = "cosmos-sdk/CancelSoftwareUpgradeProposal";
-=======
->>>>>>> v0.46.13-patch
   option (gogoproto.equal)                   = true;
   option (gogoproto.goproto_stringer)        = false;
 
   // title of the proposal
-  string title       = 1;
+  string title = 1;
 
   // description of the proposal
   string description = 2;

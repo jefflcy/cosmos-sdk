@@ -85,11 +85,7 @@ func TestConvertToLegacyProposalContent(t *testing.T) {
 		FinalTallyResult: &tallyResult,
 	}
 
-<<<<<<< HEAD:x/gov/migrations/v3/convert_test.go
 	legacyP, err := v3.ConvertToLegacyProposal(proposal)
-=======
-	legacyP, err := v046.ConvertToLegacyProposal(proposal)
->>>>>>> v0.46.13-patch:x/gov/migrations/v046/convert_test.go
 	require.NoError(t, err)
 	tp, ok := legacyP.Content.GetCachedValue().(*upgradetypes.MsgSoftwareUpgrade)
 	require.Truef(t, ok, "expected *MsgSoftwareUpgrade, got %T", legacyP.Content.GetCachedValue())
@@ -98,25 +94,15 @@ func TestConvertToLegacyProposalContent(t *testing.T) {
 	// more than one message is not supported
 	proposal.Messages, err = tx.SetMsgs([]sdk.Msg{&msg, &msg})
 	require.NoError(t, err)
-<<<<<<< HEAD:x/gov/migrations/v3/convert_test.go
 	_, err = v3.ConvertToLegacyProposal(proposal)
-=======
-	_, err = v046.ConvertToLegacyProposal(proposal)
->>>>>>> v0.46.13-patch:x/gov/migrations/v046/convert_test.go
 	require.ErrorIs(t, sdkerrors.ErrInvalidType, err)
 
 	// zero messages is not supported
 	proposal.Messages = nil
-<<<<<<< HEAD:x/gov/migrations/v3/convert_test.go
 	_, err = v3.ConvertToLegacyProposal(proposal)
 	require.ErrorIs(t, sdkerrors.ErrInvalidType, err)
 }
 
-=======
-	_, err = v046.ConvertToLegacyProposal(proposal)
-	require.ErrorIs(t, sdkerrors.ErrInvalidType, err)
-}
->>>>>>> v0.46.13-patch:x/gov/migrations/v046/convert_test.go
 func TestConvertToLegacyTallyResult(t *testing.T) {
 	tallyResult := v1.EmptyTallyResult()
 	testCases := map[string]struct {

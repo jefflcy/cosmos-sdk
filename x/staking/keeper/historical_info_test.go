@@ -4,22 +4,13 @@ import (
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 
 	"cosmossdk.io/math"
-<<<<<<< HEAD
-=======
-	"github.com/stretchr/testify/require"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
->>>>>>> v0.46.13-patch
 
 	"github.com/cosmos/cosmos-sdk/x/staking/testutil"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 // IsValSetSorted reports whether valset is sorted.
-<<<<<<< HEAD
 func IsValSetSorted(data []stakingtypes.Validator, powerReduction math.Int) bool {
-=======
-func IsValSetSorted(data []types.Validator, powerReduction math.Int) bool {
->>>>>>> v0.46.13-patch
 	n := len(data)
 	for i := n - 1; i > 0; i-- {
 		if stakingtypes.ValidatorsByVotingPower(data).Less(i, i-1, powerReduction) {

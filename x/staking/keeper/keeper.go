@@ -3,16 +3,10 @@ package keeper
 import (
 	"fmt"
 
-<<<<<<< HEAD
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cometbft/cometbft/libs/log"
 
 	"cosmossdk.io/math"
-=======
-	"cosmossdk.io/math"
-	storetypes "github.com/cosmos/cosmos-sdk/store/types"
-	"github.com/tendermint/tendermint/libs/log"
->>>>>>> v0.46.13-patch
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
@@ -93,11 +87,7 @@ func (k *Keeper) SetHooks(sh types.StakingHooks) {
 	k.hooks = sh
 }
 
-<<<<<<< HEAD
 // GetLastTotalPower Load the last total validator power.
-=======
-// Load the last total validator power.
->>>>>>> v0.46.13-patch
 func (k Keeper) GetLastTotalPower(ctx sdk.Context) math.Int {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.LastTotalPowerKey)
@@ -112,11 +102,7 @@ func (k Keeper) GetLastTotalPower(ctx sdk.Context) math.Int {
 	return ip.Int
 }
 
-<<<<<<< HEAD
 // SetLastTotalPower Set the last total validator power.
-=======
-// Set the last total validator power.
->>>>>>> v0.46.13-patch
 func (k Keeper) SetLastTotalPower(ctx sdk.Context, power math.Int) {
 	store := ctx.KVStore(k.storeKey)
 	bz := k.cdc.MustMarshal(&sdk.IntProto{Int: power})

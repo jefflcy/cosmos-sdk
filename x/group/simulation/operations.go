@@ -262,13 +262,8 @@ func SimulateMsgCreateGroup(cdc *codec.ProtoCodec, ak group.AccountKeeper, bk gr
 		members := genGroupMembers(r, accounts)
 		msg := &group.MsgCreateGroup{Admin: accAddr, Members: members, Metadata: simtypes.RandStringOfLength(r, 10)}
 
-<<<<<<< HEAD
 		txGen := tx.NewTxConfig(cdc, tx.DefaultSignModes)
 		tx, err := simtestutil.GenSignedMockTx(
-=======
-		txGen := simappparams.MakeTestEncodingConfig().TxConfig
-		tx, err := helpers.GenSignedMockTx(
->>>>>>> v0.46.13-patch
 			r,
 			txGen,
 			[]sdk.Msg{msg},
@@ -327,13 +322,8 @@ func SimulateMsgCreateGroupWithPolicy(cdc *codec.ProtoCodec, ak group.AccountKee
 			return simtypes.NoOpMsg(group.ModuleName, msg.Type(), "unable to set decision policy"), nil, err
 		}
 
-<<<<<<< HEAD
 		txGen := tx.NewTxConfig(cdc, tx.DefaultSignModes)
 		tx, err := simtestutil.GenSignedMockTx(
-=======
-		txGen := simappparams.MakeTestEncodingConfig().TxConfig
-		tx, err := helpers.GenSignedMockTx(
->>>>>>> v0.46.13-patch
 			r,
 			txGen,
 			[]sdk.Msg{msg},
@@ -392,13 +382,8 @@ func SimulateMsgCreateGroupPolicy(cdc *codec.ProtoCodec, ak group.AccountKeeper,
 			return simtypes.NoOpMsg(group.ModuleName, TypeMsgCreateGroupPolicy, err.Error()), nil, err
 		}
 
-<<<<<<< HEAD
 		txGen := tx.NewTxConfig(cdc, tx.DefaultSignModes)
 		tx, err := simtestutil.GenSignedMockTx(
-=======
-		txGen := simappparams.MakeTestEncodingConfig().TxConfig
-		tx, err := helpers.GenSignedMockTx(
->>>>>>> v0.46.13-patch
 			r,
 			txGen,
 			[]sdk.Msg{msg},
@@ -475,13 +460,8 @@ func SimulateMsgSubmitProposal(cdc *codec.ProtoCodec, ak group.AccountKeeper, bk
 			Summary:            "Summary of the proposal",
 		}
 
-<<<<<<< HEAD
 		txGen := tx.NewTxConfig(cdc, tx.DefaultSignModes)
 		tx, err := simtestutil.GenSignedMockTx(
-=======
-		txGen := simappparams.MakeTestEncodingConfig().TxConfig
-		tx, err := helpers.GenSignedMockTx(
->>>>>>> v0.46.13-patch
 			r,
 			txGen,
 			[]sdk.Msg{&msg},
@@ -540,13 +520,8 @@ func SimulateMsgUpdateGroupAdmin(cdc *codec.ProtoCodec, ak group.AccountKeeper, 
 			NewAdmin: newAdmin.Address.String(),
 		}
 
-<<<<<<< HEAD
 		txGen := tx.NewTxConfig(cdc, tx.DefaultSignModes)
 		tx, err := simtestutil.GenSignedMockTx(
-=======
-		txGen := simappparams.MakeTestEncodingConfig().TxConfig
-		tx, err := helpers.GenSignedMockTx(
->>>>>>> v0.46.13-patch
 			r,
 			txGen,
 			[]sdk.Msg{&msg},
@@ -596,13 +571,8 @@ func SimulateMsgUpdateGroupMetadata(cdc *codec.ProtoCodec, ak group.AccountKeepe
 			Metadata: simtypes.RandStringOfLength(r, 10),
 		}
 
-<<<<<<< HEAD
 		txGen := tx.NewTxConfig(cdc, tx.DefaultSignModes)
 		tx, err := simtestutil.GenSignedMockTx(
-=======
-		txGen := simappparams.MakeTestEncodingConfig().TxConfig
-		tx, err := helpers.GenSignedMockTx(
->>>>>>> v0.46.13-patch
 			r,
 			txGen,
 			[]sdk.Msg{&msg},
@@ -681,13 +651,8 @@ func SimulateMsgUpdateGroupMembers(cdc *codec.ProtoCodec, ak group.AccountKeeper
 			MemberUpdates: members,
 		}
 
-<<<<<<< HEAD
 		txGen := tx.NewTxConfig(cdc, tx.DefaultSignModes)
 		tx, err := simtestutil.GenSignedMockTx(
-=======
-		txGen := simappparams.MakeTestEncodingConfig().TxConfig
-		tx, err := helpers.GenSignedMockTx(
->>>>>>> v0.46.13-patch
 			r,
 			txGen,
 			[]sdk.Msg{&msg},
@@ -746,13 +711,8 @@ func SimulateMsgUpdateGroupPolicyAdmin(cdc *codec.ProtoCodec, ak group.AccountKe
 			NewAdmin:           newAdmin.Address.String(),
 		}
 
-<<<<<<< HEAD
 		txGen := tx.NewTxConfig(cdc, tx.DefaultSignModes)
 		tx, err := simtestutil.GenSignedMockTx(
-=======
-		txGen := simappparams.MakeTestEncodingConfig().TxConfig
-		tx, err := helpers.GenSignedMockTx(
->>>>>>> v0.46.13-patch
 			r,
 			txGen,
 			[]sdk.Msg{&msg},
@@ -813,13 +773,8 @@ func SimulateMsgUpdateGroupPolicyDecisionPolicy(cdc *codec.ProtoCodec, ak group.
 			return simtypes.NoOpMsg(group.ModuleName, TypeMsgUpdateGroupPolicyDecisionPolicy, err.Error()), nil, err
 		}
 
-<<<<<<< HEAD
 		txGen := tx.NewTxConfig(cdc, tx.DefaultSignModes)
 		tx, err := simtestutil.GenSignedMockTx(
-=======
-		txGen := simappparams.MakeTestEncodingConfig().TxConfig
-		tx, err := helpers.GenSignedMockTx(
->>>>>>> v0.46.13-patch
 			r,
 			txGen,
 			[]sdk.Msg{msg},
@@ -870,13 +825,8 @@ func SimulateMsgUpdateGroupPolicyMetadata(cdc *codec.ProtoCodec, ak group.Accoun
 			Metadata:           simtypes.RandStringOfLength(r, 10),
 		}
 
-<<<<<<< HEAD
 		txGen := tx.NewTxConfig(cdc, tx.DefaultSignModes)
 		tx, err := simtestutil.GenSignedMockTx(
-=======
-		txGen := simappparams.MakeTestEncodingConfig().TxConfig
-		tx, err := helpers.GenSignedMockTx(
->>>>>>> v0.46.13-patch
 			r,
 			txGen,
 			[]sdk.Msg{&msg},
@@ -978,13 +928,8 @@ func SimulateMsgWithdrawProposal(cdc *codec.ProtoCodec, ak group.AccountKeeper,
 			Address:    proposer.Address.String(),
 		}
 
-<<<<<<< HEAD
 		txGen := tx.NewTxConfig(cdc, tx.DefaultSignModes)
 		tx, err := simtestutil.GenSignedMockTx(
-=======
-		txGen := simappparams.MakeTestEncodingConfig().TxConfig
-		tx, err := helpers.GenSignedMockTx(
->>>>>>> v0.46.13-patch
 			r,
 			txGen,
 			[]sdk.Msg{&msg},
@@ -1089,13 +1034,8 @@ func SimulateMsgVote(cdc *codec.ProtoCodec, ak group.AccountKeeper,
 			Option:     group.VOTE_OPTION_YES,
 			Metadata:   simtypes.RandStringOfLength(r, 10),
 		}
-<<<<<<< HEAD
 		txGen := tx.NewTxConfig(cdc, tx.DefaultSignModes)
 		tx, err := simtestutil.GenSignedMockTx(
-=======
-		txGen := simappparams.MakeTestEncodingConfig().TxConfig
-		tx, err := helpers.GenSignedMockTx(
->>>>>>> v0.46.13-patch
 			r,
 			txGen,
 			[]sdk.Msg{&msg},
@@ -1173,13 +1113,8 @@ func SimulateMsgExec(cdc *codec.ProtoCodec, ak group.AccountKeeper,
 			ProposalId: uint64(proposalID),
 			Executor:   acc.Address.String(),
 		}
-<<<<<<< HEAD
 		txGen := tx.NewTxConfig(cdc, tx.DefaultSignModes)
 		tx, err := simtestutil.GenSignedMockTx(
-=======
-		txGen := simappparams.MakeTestEncodingConfig().TxConfig
-		tx, err := helpers.GenSignedMockTx(
->>>>>>> v0.46.13-patch
 			r,
 			txGen,
 			[]sdk.Msg{&msg},
@@ -1241,13 +1176,8 @@ func SimulateMsgLeaveGroup(cdc *codec.ProtoCodec, k keeper.Keeper, ak group.Acco
 			GroupId: groupInfo.Id,
 		}
 
-<<<<<<< HEAD
 		txGen := tx.NewTxConfig(cdc, tx.DefaultSignModes)
 		tx, err := simtestutil.GenSignedMockTx(
-=======
-		txGen := simappparams.MakeTestEncodingConfig().TxConfig
-		tx, err := helpers.GenSignedMockTx(
->>>>>>> v0.46.13-patch
 			r,
 			txGen,
 			[]sdk.Msg{msg},

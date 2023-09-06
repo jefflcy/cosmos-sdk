@@ -1,7 +1,6 @@
 package cli
 
 import (
-<<<<<<< HEAD
 	"bytes"
 	"encoding/base64"
 	"fmt"
@@ -15,14 +14,6 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/cosmos/cosmos-sdk/client"
-=======
-	"encoding/base64"
-	"fmt"
-	"testing"
-
-	"github.com/stretchr/testify/require"
-
->>>>>>> v0.46.13-patch
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/testutil"
@@ -34,11 +25,7 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
-<<<<<<< HEAD
 func TestParseSubmitLegacyProposal(t *testing.T) {
-=======
-func TestParseSubmitLegacyProposalFlags(t *testing.T) {
->>>>>>> v0.46.13-patch
 	okJSON := testutil.WriteToNewTempFile(t, `
 {
   "title": "Test Proposal",
@@ -53,29 +40,17 @@ func TestParseSubmitLegacyProposalFlags(t *testing.T) {
 
 	// nonexistent json
 	fs.Set(FlagProposal, "fileDoesNotExist")
-<<<<<<< HEAD
 	_, err := parseSubmitLegacyProposal(fs)
-=======
-	_, err := parseSubmitLegacyProposalFlags(fs)
->>>>>>> v0.46.13-patch
 	require.Error(t, err)
 
 	// invalid json
 	fs.Set(FlagProposal, badJSON.Name())
-<<<<<<< HEAD
 	_, err = parseSubmitLegacyProposal(fs)
-=======
-	_, err = parseSubmitLegacyProposalFlags(fs)
->>>>>>> v0.46.13-patch
 	require.Error(t, err)
 
 	// ok json
 	fs.Set(FlagProposal, okJSON.Name())
-<<<<<<< HEAD
 	proposal1, err := parseSubmitLegacyProposal(fs)
-=======
-	proposal1, err := parseSubmitLegacyProposalFlags(fs)
->>>>>>> v0.46.13-patch
 	require.Nil(t, err, "unexpected error")
 	require.Equal(t, "Test Proposal", proposal1.Title)
 	require.Equal(t, "My awesome proposal", proposal1.Description)
@@ -85,11 +60,7 @@ func TestParseSubmitLegacyProposalFlags(t *testing.T) {
 	// flags that can't be used with --proposal
 	for _, incompatibleFlag := range ProposalFlags {
 		fs.Set(incompatibleFlag, "some value")
-<<<<<<< HEAD
 		_, err := parseSubmitLegacyProposal(fs)
-=======
-		_, err := parseSubmitLegacyProposalFlags(fs)
->>>>>>> v0.46.13-patch
 		require.Error(t, err)
 		fs.Set(incompatibleFlag, "")
 	}
@@ -133,11 +104,7 @@ func TestParseSubmitLegacyProposalFlags(t *testing.T) {
 			fs.Set(FlagDescription, tc.pDescription)
 			fs.Set(FlagProposalType, tc.pType)
 			fs.Set(FlagDeposit, proposal1.Deposit)
-<<<<<<< HEAD
 			proposal2, err := parseSubmitLegacyProposal(fs)
-=======
-			proposal2, err := parseSubmitLegacyProposalFlags(fs)
->>>>>>> v0.46.13-patch
 
 			if tc.expErr {
 				require.Error(t, err)
@@ -194,11 +161,8 @@ func TestParseSubmitProposal(t *testing.T) {
 		}
   	],
 	"metadata": "%s",
-<<<<<<< HEAD
 	"title": "My awesome title",
 	"summary": "My awesome summary",
-=======
->>>>>>> v0.46.13-patch
 	"deposit": "1000test"
 }
 `, addr, addr, addr, addr, addr, base64.StdEncoding.EncodeToString(expectedMetadata)))
@@ -206,7 +170,6 @@ func TestParseSubmitProposal(t *testing.T) {
 	badJSON := testutil.WriteToNewTempFile(t, "bad json")
 
 	// nonexistent json
-<<<<<<< HEAD
 	_, _, _, _, _, err := parseSubmitProposal(cdc, "fileDoesNotExist") //nolint: dogsled
 	require.Error(t, err)
 
@@ -216,17 +179,6 @@ func TestParseSubmitProposal(t *testing.T) {
 
 	// ok json
 	msgs, metadata, title, summary, deposit, err := parseSubmitProposal(cdc, okJSON.Name())
-=======
-	_, _, _, err := parseSubmitProposal(cdc, "fileDoesNotExist")
-	require.Error(t, err)
-
-	// invalid json
-	_, _, _, err = parseSubmitProposal(cdc, badJSON.Name())
-	require.Error(t, err)
-
-	// ok json
-	msgs, metadata, deposit, err := parseSubmitProposal(cdc, okJSON.Name())
->>>>>>> v0.46.13-patch
 	require.NoError(t, err, "unexpected error")
 	require.Equal(t, sdk.NewCoins(sdk.NewCoin("test", sdk.NewInt(1000))), deposit)
 	require.Equal(t, base64.StdEncoding.EncodeToString(expectedMetadata), metadata)
@@ -248,18 +200,14 @@ func TestParseSubmitProposal(t *testing.T) {
 	require.True(t, ok)
 	require.Equal(t, "My awesome title", textProp.Title)
 	require.Equal(t, "My awesome description", textProp.Description)
-<<<<<<< HEAD
 	require.Equal(t, "My awesome title", title)
 	require.Equal(t, "My awesome summary", summary)
-=======
->>>>>>> v0.46.13-patch
 
 	err = okJSON.Close()
 	require.Nil(t, err, "unexpected error")
 	err = badJSON.Close()
 	require.Nil(t, err, "unexpected error")
 }
-<<<<<<< HEAD
 
 func getCommandHelp(t *testing.T, cmd *cobra.Command) string {
 	// Create a pipe, so we can capture the help sent to stdout.
@@ -736,5 +684,3 @@ func TestReadGovPropFlags(t *testing.T) {
 		})
 	}
 }
-=======
->>>>>>> v0.46.13-patch

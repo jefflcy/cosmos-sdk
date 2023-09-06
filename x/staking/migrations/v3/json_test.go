@@ -1,8 +1,4 @@
-<<<<<<< HEAD:x/staking/migrations/v3/json_test.go
 package v3_test
-=======
-package v046_test
->>>>>>> v0.46.13-patch:x/staking/migrations/v046/json_test.go
 
 import (
 	"encoding/json"
@@ -11,22 +7,13 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/cosmos/cosmos-sdk/client"
-<<<<<<< HEAD:x/staking/migrations/v3/json_test.go
 	moduletestutil "github.com/cosmos/cosmos-sdk/types/module/testutil"
 	v3 "github.com/cosmos/cosmos-sdk/x/staking/migrations/v3"
-=======
-	"github.com/cosmos/cosmos-sdk/simapp"
-	v046 "github.com/cosmos/cosmos-sdk/x/staking/migrations/v046"
->>>>>>> v0.46.13-patch:x/staking/migrations/v046/json_test.go
 	"github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 func TestMigrateJSON(t *testing.T) {
-<<<<<<< HEAD:x/staking/migrations/v3/json_test.go
 	encodingConfig := moduletestutil.MakeTestEncodingConfig()
-=======
-	encodingConfig := simapp.MakeTestEncodingConfig()
->>>>>>> v0.46.13-patch:x/staking/migrations/v046/json_test.go
 	clientCtx := client.Context{}.
 		WithInterfaceRegistry(encodingConfig.InterfaceRegistry).
 		WithTxConfig(encodingConfig.TxConfig).
@@ -34,11 +21,7 @@ func TestMigrateJSON(t *testing.T) {
 
 	oldState := types.DefaultGenesisState()
 
-<<<<<<< HEAD:x/staking/migrations/v3/json_test.go
 	newState, err := v3.MigrateJSON(*oldState)
-=======
-	newState, err := v046.MigrateJSON(*oldState)
->>>>>>> v0.46.13-patch:x/staking/migrations/v046/json_test.go
 	require.NoError(t, err)
 
 	bz, err := clientCtx.Codec.MarshalJSON(&newState)

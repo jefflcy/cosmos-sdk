@@ -183,11 +183,7 @@ func (k Keeper) IterateUnbondingDelegations(ctx sdk.Context, fn func(index int64
 
 // GetDelegatorUnbonding returns the total amount a delegator has unbonding.
 func (k Keeper) GetDelegatorUnbonding(ctx sdk.Context, delegator sdk.AccAddress) math.Int {
-<<<<<<< HEAD
 	unbonding := math.ZeroInt()
-=======
-	unbonding := sdk.ZeroInt()
->>>>>>> v0.46.13-patch
 	k.IterateDelegatorUnbondingDelegations(ctx, delegator, func(ubd types.UnbondingDelegation) bool {
 		for _, entry := range ubd.Entries {
 			unbonding = unbonding.Add(entry.Balance)
@@ -214,11 +210,7 @@ func (k Keeper) IterateDelegatorUnbondingDelegations(ctx sdk.Context, delegator 
 
 // GetDelegatorBonded returs the total amount a delegator has bonded.
 func (k Keeper) GetDelegatorBonded(ctx sdk.Context, delegator sdk.AccAddress) math.Int {
-<<<<<<< HEAD
 	bonded := math.LegacyZeroDec()
-=======
-	bonded := sdk.ZeroDec()
->>>>>>> v0.46.13-patch
 
 	k.IterateDelegatorDelegations(ctx, delegator, func(delegation types.Delegation) bool {
 		validatorAddr, err := sdk.ValAddressFromBech32(delegation.ValidatorAddress)
@@ -279,11 +271,7 @@ func (k Keeper) HasMaxUnbondingDelegationEntries(ctx sdk.Context, delegatorAddr 
 
 // SetUnbondingDelegation sets the unbonding delegation and associated index.
 func (k Keeper) SetUnbondingDelegation(ctx sdk.Context, ubd types.UnbondingDelegation) {
-<<<<<<< HEAD
 	delAddr := sdk.MustAccAddressFromBech32(ubd.DelegatorAddress)
-=======
-	delegatorAddress := sdk.MustAccAddressFromBech32(ubd.DelegatorAddress)
->>>>>>> v0.46.13-patch
 
 	store := ctx.KVStore(k.storeKey)
 	bz := types.MustMarshalUBD(k.cdc, ubd)

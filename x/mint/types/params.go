@@ -150,13 +150,8 @@ func validateGoalBonded(i interface{}) error {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
 
-<<<<<<< HEAD
 	if v.IsNil() {
 		return fmt.Errorf("goal bonded cannot be nil: %s", v)
-=======
-	if v.IsNegative() || v.IsZero() {
-		return fmt.Errorf("goal bonded must be positive: %s", v)
->>>>>>> v0.46.13-patch
 	}
 	if v.IsNegative() || v.IsZero() {
 		return fmt.Errorf("goal bonded must be positive: %s", v)

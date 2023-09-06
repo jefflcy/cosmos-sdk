@@ -1,12 +1,8 @@
 package types
 
-<<<<<<< HEAD
 import (
 	"cosmossdk.io/math"
 )
-=======
-import "cosmossdk.io/math"
->>>>>>> v0.46.13-patch
 
 // names used as root for pool module accounts:
 //

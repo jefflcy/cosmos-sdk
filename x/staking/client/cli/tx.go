@@ -7,10 +7,6 @@ import (
 	"strings"
 
 	"cosmossdk.io/math"
-<<<<<<< HEAD
-
-=======
->>>>>>> v0.46.13-patch
 	"github.com/spf13/cobra"
 	flag "github.com/spf13/pflag"
 

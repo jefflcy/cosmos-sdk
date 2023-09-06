@@ -365,10 +365,6 @@ func (s *E2ETestSuite) TestTxCreateGroup() {
 func (s *E2ETestSuite) TestTxUpdateGroupAdmin() {
 	val := s.network.Validators[0]
 	clientCtx := val.ClientCtx
-<<<<<<< HEAD:tests/e2e/group/tx.go
-=======
-	require := s.Require()
->>>>>>> v0.46.13-patch:x/group/client/testutil/tx.go
 
 	groupIDs := make([]string, 2)
 	for i := 0; i < 2; i++ {
@@ -1991,10 +1987,6 @@ func (s *E2ETestSuite) getProposalIDFromTxResponse(txResp sdk.TxResponse) string
 func (s *E2ETestSuite) TestTxExec() {
 	val := s.network.Validators[0]
 	clientCtx := val.ClientCtx
-<<<<<<< HEAD:tests/e2e/group/tx.go
-=======
-	require := s.Require()
->>>>>>> v0.46.13-patch:x/group/client/testutil/tx.go
 
 	var proposalIDs []string
 	// create proposals and vote
@@ -2639,33 +2631,7 @@ func (s *E2ETestSuite) createGroupThresholdPolicyWithBalance(adminAddress, group
 	return groupPolicyAddress
 }
 
-<<<<<<< HEAD:tests/e2e/group/tx.go
 func (s *E2ETestSuite) newValidMembers(weights, membersAddress []string) group.MemberRequests {
-=======
-// fundAllGroupPolicies sends tokens to all group policies of a given group ID.
-func (s *IntegrationTestSuite) fundAllGroupPolicies(groupID string, tokens sdk.Coin) { //nolint:unused
-	val := s.network.Validators[0]
-	clientCtx := val.ClientCtx
-
-	out, err := cli.ExecTestCLICmd(val.ClientCtx, client.QueryGroupPoliciesByGroupCmd(), []string{groupID, fmt.Sprintf("--%s=json", tmcli.OutputFlag)})
-	s.Require().NoError(err, out.String())
-	var res group.QueryGroupPoliciesByGroupResponse
-	s.Require().NoError(val.ClientCtx.Codec.UnmarshalJSON(out.Bytes(), &res))
-
-	for _, policy := range res.GroupPolicies {
-		address := policy.Address
-		addr, err := sdk.AccAddressFromBech32(address)
-		s.Require().NoError(err)
-		_, err = banktestutil.MsgSendExec(clientCtx, val.Address, addr,
-			sdk.NewCoins(tokens),
-			s.commonFlags...,
-		)
-		s.Require().NoError(err)
-	}
-}
-
-func (s *IntegrationTestSuite) newValidMembers(weights, membersAddress []string) group.MemberRequests {
->>>>>>> v0.46.13-patch:x/group/client/testutil/tx.go
 	s.Require().Equal(len(weights), len(membersAddress))
 	membersValid := group.MemberRequests{}
 	for i, address := range membersAddress {

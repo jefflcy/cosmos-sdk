@@ -85,11 +85,7 @@ service Query {
   };
 
   // Groups queries all groups in state.
-<<<<<<< HEAD
   //
-=======
-  // 
->>>>>>> v0.46.13-patch
   // Since: cosmos-sdk 0.47.1
   rpc Groups(QueryGroupsRequest) returns (QueryGroupsResponse) {
     option (google.api.http).get = "/cosmos/group/v1/groups";
@@ -324,7 +320,7 @@ message QueryGroupsResponse {
 }
 
 // QueryGroupsRequest is the Query/Groups request type.
-// 
+//
 // Since: cosmos-sdk 0.47.1
 message QueryGroupsRequest {
 
@@ -333,7 +329,7 @@ message QueryGroupsRequest {
 }
 
 // QueryGroupsResponse is the Query/Groups response type.
-// 
+//
 // Since: cosmos-sdk 0.47.1
 message QueryGroupsResponse {
   // `groups` is all the groups present in state.

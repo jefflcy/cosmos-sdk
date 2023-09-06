@@ -2,10 +2,7 @@ package v2
 
 import (
 	"cosmossdk.io/math"
-<<<<<<< HEAD:x/bank/migrations/v2/store.go
 	"github.com/cometbft/cometbft/libs/log"
-=======
->>>>>>> v0.46.13-patch:x/bank/migrations/v043/store.go
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
@@ -65,13 +62,8 @@ func migrateBalanceKeys(store sdk.KVStore, logger log.Logger) {
 	defer sdk.LogDeferred(logger, func() error { return oldStoreIter.Close() })
 
 	for ; oldStoreIter.Valid(); oldStoreIter.Next() {
-<<<<<<< HEAD:x/bank/migrations/v2/store.go
 		addr := v1.AddressFromBalancesStore(oldStoreIter.Key())
 		denom := oldStoreIter.Key()[v1auth.AddrLen:]
-=======
-		addr := v042bank.AddressFromBalancesStore(oldStoreIter.Key())
-		denom := oldStoreIter.Key()[v042auth.AddrLen:]
->>>>>>> v0.46.13-patch:x/bank/migrations/v043/store.go
 		newStoreKey := types.CreatePrefixedAccountStoreKey(addr, denom)
 
 		// Set new key on store. Values don't change.

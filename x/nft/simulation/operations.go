@@ -19,10 +19,6 @@ import (
 const (
 	// OpWeightMsgSend Simulation operation weights constants
 	OpWeightMsgSend = "op_weight_msg_send" //nolint:gosec
-<<<<<<< HEAD
-=======
-)
->>>>>>> v0.46.13-patch
 
 	// WeightSend nft operations weights
 	WeightSend = 100
@@ -96,13 +92,8 @@ func SimulateMsgSend(
 			Receiver: receiver.Address.String(),
 		}
 
-<<<<<<< HEAD
 		txCfg := tx.NewTxConfig(cdc, tx.DefaultSignModes)
 		tx, err := simtestutil.GenSignedMockTx(
-=======
-		txCfg := simappparams.MakeTestEncodingConfig().TxConfig
-		tx, err := helpers.GenSignedMockTx(
->>>>>>> v0.46.13-patch
 			r,
 			txCfg,
 			[]sdk.Msg{msg},

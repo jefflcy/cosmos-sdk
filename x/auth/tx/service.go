@@ -16,12 +16,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-<<<<<<< HEAD
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/query"
-=======
-	querytypes "github.com/cosmos/cosmos-sdk/types/query"
->>>>>>> v0.46.13-patch
 	txtypes "github.com/cosmos/cosmos-sdk/types/tx"
 	"github.com/cosmos/cosmos-sdk/x/auth/migrations/legacytx"
 )
@@ -49,12 +45,8 @@ var (
 	_ txtypes.ServiceServer = txServer{}
 
 	// EventRegex checks that an event string is formatted with {alphabetic}.{alphabetic}={value}
-<<<<<<< HEAD
 	// Note: in addition to equality, the `>=` and `<=` operators are also valid.
 	EventRegex = regexp.MustCompile(`^[a-zA-Z_]+\.[a-zA-Z_]+[<>]?=\S+$`)
-=======
-	EventRegex = regexp.MustCompile(`^[a-zA-Z_]+\.[a-zA-Z_]+=\S+$`)
->>>>>>> v0.46.13-patch
 )
 
 const (
@@ -76,11 +68,7 @@ func (s txServer) GetTxsEvent(ctx context.Context, req *txtypes.GetTxsEventReque
 
 	limit := int(req.Limit)
 	if limit == 0 {
-<<<<<<< HEAD
 		limit = query.DefaultLimit
-=======
-		limit = querytypes.DefaultLimit
->>>>>>> v0.46.13-patch
 	}
 	orderBy := parseOrderBy(req.OrderBy)
 
@@ -216,11 +204,7 @@ func (s txServer) GetBlockWithTxs(ctx context.Context, req *txtypes.GetBlockWith
 		limit = req.Pagination.Limit
 	} else {
 		offset = 0
-<<<<<<< HEAD
 		limit = query.DefaultLimit
-=======
-		limit = querytypes.DefaultLimit
->>>>>>> v0.46.13-patch
 	}
 
 	blockTxs := block.Data.Txs
@@ -260,11 +244,7 @@ func (s txServer) GetBlockWithTxs(ctx context.Context, req *txtypes.GetBlockWith
 		Txs:     txs,
 		BlockId: &blockID,
 		Block:   block,
-<<<<<<< HEAD
 		Pagination: &query.PageResponse{
-=======
-		Pagination: &querytypes.PageResponse{
->>>>>>> v0.46.13-patch
 			Total: blockTxsLn,
 		},
 	}, nil

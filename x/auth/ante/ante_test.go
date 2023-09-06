@@ -664,12 +664,8 @@ func TestAnteHandlerFees(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-<<<<<<< HEAD
 		t.Run(fmt.Sprintf("Case %s", tc.desc), func(t *testing.T) {
 			suite := SetupTestSuite(t, false)
-=======
-		suite.Run(fmt.Sprintf("Case %s", tc.desc), func() {
->>>>>>> v0.46.13-patch
 			suite.txBuilder = suite.clientCtx.TxConfig.NewTxBuilder()
 			args := tc.malleate(suite)
 			args.feeAmount = feeAmount
@@ -740,14 +736,8 @@ func TestAnteHandlerMemoGas(t *testing.T) {
 		},
 		{
 			"tx with memo has enough gas",
-<<<<<<< HEAD
 			func(suite *AnteTestSuite) TestCaseArgs {
 				accs := suite.CreateTestAccounts(1)
-=======
-			func() {
-				feeAmount = sdk.NewCoins(sdk.NewInt64Coin("atom", 0))
-				gasLimit = 60000
->>>>>>> v0.46.13-patch
 				suite.txBuilder.SetMemo(strings.Repeat("0123456789", 10))
 				return TestCaseArgs{
 					accNums:   []uint64{0},
@@ -1450,11 +1440,7 @@ func TestAnteHandlerReCheck(t *testing.T) {
 	// make signature array empty which would normally cause ValidateBasicDecorator and SigVerificationDecorator fail
 	// since these decorators don't run on recheck, the tx should pass the antehandler
 	txBuilder, err := suite.clientCtx.TxConfig.WrapTxBuilder(tx)
-<<<<<<< HEAD
 	require.NoError(t, err)
-=======
-	suite.Require().NoError(err)
->>>>>>> v0.46.13-patch
 
 	suite.bankKeeper.EXPECT().SendCoinsFromAccountToModule(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil).Times(2)
 	_, err = suite.anteHandler(suite.ctx, txBuilder.GetTx(), false)

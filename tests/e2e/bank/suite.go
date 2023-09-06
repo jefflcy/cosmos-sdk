@@ -5,12 +5,7 @@ import (
 	"io"
 	"os"
 
-<<<<<<< HEAD:tests/e2e/bank/suite.go
 	"github.com/cosmos/gogoproto/proto"
-=======
-	"cosmossdk.io/math"
-	"github.com/gogo/protobuf/proto"
->>>>>>> v0.46.13-patch:x/bank/client/testutil/suite.go
 	"github.com/stretchr/testify/suite"
 
 	"cosmossdk.io/math"
@@ -395,11 +390,7 @@ func (s *E2ETestSuite) TestNewSendTxCmdGenOnly() {
 	s.Require().Equal([]sdk.Msg{types.NewMsgSend(from, to, amount)}, tx.GetMsgs())
 }
 
-<<<<<<< HEAD:tests/e2e/bank/suite.go
 func (s *E2ETestSuite) TestNewSendTxCmdDryRun() {
-=======
-func (s *IntegrationTestSuite) TestNewSendTxCmdDryRun() {
->>>>>>> v0.46.13-patch:x/bank/client/testutil/suite.go
 	val := s.network.Validators[0]
 
 	clientCtx := val.ClientCtx
@@ -421,11 +412,7 @@ func (s *IntegrationTestSuite) TestNewSendTxCmdDryRun() {
 	r, w, _ := os.Pipe()
 	os.Stderr = w
 
-<<<<<<< HEAD:tests/e2e/bank/suite.go
 	_, err := clitestutil.MsgSendExec(clientCtx, from, to, amount, args...)
-=======
-	_, err := MsgSendExec(clientCtx, from, to, amount, args...)
->>>>>>> v0.46.13-patch:x/bank/client/testutil/suite.go
 	s.Require().NoError(err)
 
 	w.Close()
@@ -435,11 +422,7 @@ func (s *IntegrationTestSuite) TestNewSendTxCmdDryRun() {
 	s.Require().Regexp("gas estimate: [0-9]+", string(out))
 }
 
-<<<<<<< HEAD:tests/e2e/bank/suite.go
 func (s *E2ETestSuite) TestNewSendTxCmd() {
-=======
-func (s *IntegrationTestSuite) TestNewSendTxCmd() {
->>>>>>> v0.46.13-patch:x/bank/client/testutil/suite.go
 	val := s.network.Validators[0]
 
 	testCases := []struct {

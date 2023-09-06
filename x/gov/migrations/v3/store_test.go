@@ -74,11 +74,7 @@ func TestMigrateStore(t *testing.T) {
 	compareProps(t, prop2, newProp2)
 
 	var newVote1 v1.Vote
-<<<<<<< HEAD:x/gov/migrations/v3/store_test.go
 	err = cdc.Unmarshal(store.Get(v1gov.VoteKey(prop1.ProposalId, voter)), &newVote1)
-=======
-	err = cdc.Unmarshal(store.Get(v042gov.VoteKey(prop1.ProposalId, voter)), &newVote1)
->>>>>>> v0.46.13-patch:x/gov/migrations/v046/store_test.go
 	require.NoError(t, err)
 	// Without the votes migration, we would have 300000000000000000 in state,
 	// because of how sdk.Dec stores itself in state.

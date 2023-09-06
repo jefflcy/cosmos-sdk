@@ -292,7 +292,6 @@ func (app *BaseApp) SetStreamingService(s StreamingService) {
 	app.abciListeners = append(app.abciListeners, s)
 }
 
-<<<<<<< HEAD
 // SetTxDecoder sets the TxDecoder if it wasn't provided in the BaseApp constructor.
 func (app *BaseApp) SetTxDecoder(txDecoder sdk.TxDecoder) {
 	app.txDecoder = txDecoder
@@ -303,13 +302,10 @@ func (app *BaseApp) SetTxEncoder(txEncoder sdk.TxEncoder) {
 	app.txEncoder = txEncoder
 }
 
-=======
->>>>>>> v0.46.13-patch
 // SetQueryMultiStore set a alternative MultiStore implementation to support grpc query service.
 //
 // Ref: https://github.com/cosmos/cosmos-sdk/issues/13317
 func (app *BaseApp) SetQueryMultiStore(ms sdk.MultiStore) {
-<<<<<<< HEAD
 	app.qms = ms
 }
 
@@ -337,10 +333,3 @@ func (app *BaseApp) SetPrepareProposal(handler sdk.PrepareProposalHandler) {
 
 	app.prepareProposal = handler
 }
-=======
-	if app.sealed {
-		panic("SetQueryMultiStore() on sealed BaseApp")
-	}
-	app.qms = ms
-}
->>>>>>> v0.46.13-patch

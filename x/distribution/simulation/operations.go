@@ -23,14 +23,11 @@ const (
 	OpWeightMsgWithdrawDelegationReward    = "op_weight_msg_withdraw_delegation_reward"    //nolint:gosec
 	OpWeightMsgWithdrawValidatorCommission = "op_weight_msg_withdraw_validator_commission" //nolint:gosec
 	OpWeightMsgFundCommunityPool           = "op_weight_msg_fund_community_pool"           //nolint:gosec
-<<<<<<< HEAD
 
 	DefaultWeightMsgSetWithdrawAddress          int = 50
 	DefaultWeightMsgWithdrawDelegationReward    int = 50
 	DefaultWeightMsgWithdrawValidatorCommission int = 50
 	DefaultWeightMsgFundCommunityPool           int = 50
-=======
->>>>>>> v0.46.13-patch
 )
 
 // WeightedOperations returns all the operations from the module with their respective weights
@@ -63,12 +60,8 @@ func WeightedOperations(appParams simtypes.AppParams, cdc codec.JSONCodec, ak ty
 		},
 	)
 
-<<<<<<< HEAD
 	interfaceRegistry := codectypes.NewInterfaceRegistry()
 	txConfig := tx.NewTxConfig(codec.NewProtoCodec(interfaceRegistry), tx.DefaultSignModes)
-=======
-	stakeKeeper := sk.(stakingkeeper.Keeper)
->>>>>>> v0.46.13-patch
 
 	return simulation.WeightedOperations{
 		simulation.NewWeightedOperation(
@@ -77,7 +70,6 @@ func WeightedOperations(appParams simtypes.AppParams, cdc codec.JSONCodec, ak ty
 		),
 		simulation.NewWeightedOperation(
 			weightMsgWithdrawDelegationReward,
-<<<<<<< HEAD
 			SimulateMsgWithdrawDelegatorReward(txConfig, ak, bk, k, sk),
 		),
 		simulation.NewWeightedOperation(
@@ -87,17 +79,6 @@ func WeightedOperations(appParams simtypes.AppParams, cdc codec.JSONCodec, ak ty
 		simulation.NewWeightedOperation(
 			weightMsgFundCommunityPool,
 			SimulateMsgFundCommunityPool(txConfig, ak, bk, k, sk),
-=======
-			SimulateMsgWithdrawDelegatorReward(ak, bk, k, stakeKeeper),
-		),
-		simulation.NewWeightedOperation(
-			weightMsgWithdrawValidatorCommission,
-			SimulateMsgWithdrawValidatorCommission(ak, bk, k, stakeKeeper),
-		),
-		simulation.NewWeightedOperation(
-			weightMsgFundCommunityPool,
-			SimulateMsgFundCommunityPool(ak, bk, k, stakeKeeper),
->>>>>>> v0.46.13-patch
 		),
 	}
 }

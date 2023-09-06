@@ -17,11 +17,7 @@ func (s Keeper) doExecuteMsgs(ctx sdk.Context, router *baseapp.MsgServiceRouter,
 	// Ensure it's not too early to execute the messages.
 	minExecutionDate := proposal.SubmitTime.Add(decisionPolicy.GetMinExecutionPeriod())
 	if ctx.BlockTime().Before(minExecutionDate) {
-<<<<<<< HEAD
 		return nil, errors.ErrInvalid.Wrapf("must wait until %s to execute proposal %d", minExecutionDate, proposal.Id)
-=======
-		return nil, grouperrors.ErrInvalid.Wrapf("must wait until %s to execute proposal %d", minExecutionDate, proposal.Id)
->>>>>>> v0.46.13-patch
 	}
 
 	// Ensure it's not too late to execute the messages.

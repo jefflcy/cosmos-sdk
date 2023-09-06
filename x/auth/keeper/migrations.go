@@ -1,16 +1,7 @@
 package keeper
 
 import (
-<<<<<<< HEAD
 	"github.com/cosmos/gogoproto/grpc"
-=======
-	"github.com/gogo/protobuf/grpc"
-
-	v043 "github.com/cosmos/cosmos-sdk/x/auth/migrations/v043"
-	v046 "github.com/cosmos/cosmos-sdk/x/auth/migrations/v046"
-
-	"github.com/cosmos/cosmos-sdk/x/auth/types"
->>>>>>> v0.46.13-patch
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/exported"
@@ -57,7 +48,6 @@ func (m Migrator) Migrate1to2(ctx sdk.Context) error {
 // Migrate2to3 migrates from consensus version 2 to version 3. Specifically, for each account
 // we index the account's ID to their address.
 func (m Migrator) Migrate2to3(ctx sdk.Context) error {
-<<<<<<< HEAD
 	return v3.MigrateStore(ctx, m.keeper.storeKey, m.keeper.cdc)
 }
 
@@ -67,9 +57,6 @@ func (m Migrator) Migrate2to3(ctx sdk.Context) error {
 // module state.
 func (m Migrator) Migrate3to4(ctx sdk.Context) error {
 	return v4.Migrate(ctx, ctx.KVStore(m.keeper.storeKey), m.legacySubspace, m.keeper.cdc)
-=======
-	return v046.MigrateStore(ctx, m.keeper.key, m.keeper.cdc)
->>>>>>> v0.46.13-patch
 }
 
 // V45_SetAccount implements V45_SetAccount
@@ -78,11 +65,7 @@ func (m Migrator) Migrate3to4(ctx sdk.Context) error {
 // NOTE: This is used for testing purposes only.
 func (m Migrator) V45_SetAccount(ctx sdk.Context, acc types.AccountI) error {
 	addr := acc.GetAddress()
-<<<<<<< HEAD
 	store := ctx.KVStore(m.keeper.storeKey)
-=======
-	store := ctx.KVStore(m.keeper.key)
->>>>>>> v0.46.13-patch
 
 	bz, err := m.keeper.MarshalAccount(acc)
 	if err != nil {

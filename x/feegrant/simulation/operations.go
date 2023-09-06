@@ -18,15 +18,10 @@ import (
 //
 //nolint:gosec // These aren't harcoded credentials.
 const (
-<<<<<<< HEAD
 	OpWeightMsgGrantAllowance        = "op_weight_msg_grant_fee_allowance"
 	OpWeightMsgRevokeAllowance       = "op_weight_msg_grant_revoke_allowance"
 	DefaultWeightGrantAllowance  int = 100
 	DefaultWeightRevokeAllowance int = 100
-=======
-	OpWeightMsgGrantAllowance  = "op_weight_msg_grant_fee_allowance"    //nolint:gosec
-	OpWeightMsgRevokeAllowance = "op_weight_msg_grant_revoke_allowance" //nolint:gosec
->>>>>>> v0.46.13-patch
 )
 
 var (

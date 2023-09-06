@@ -15,11 +15,6 @@ import (
 	tmtime "github.com/cometbft/cometbft/types/time"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/suite"
-<<<<<<< HEAD
-=======
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	tmtime "github.com/tendermint/tendermint/types/time"
->>>>>>> v0.46.13-patch
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/testutil"
@@ -38,11 +33,8 @@ import (
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 )
 
-<<<<<<< HEAD
 var EventProposalPruned = "cosmos.group.v1.EventProposalPruned"
 
-=======
->>>>>>> v0.46.13-patch
 const minExecutionPeriod = 5 * time.Second
 
 type TestSuite struct {
@@ -157,11 +149,6 @@ func TestKeeperTestSuite(t *testing.T) {
 	suite.Run(t, new(TestSuite))
 }
 
-<<<<<<< HEAD
-=======
-// Testing a deadlock issue when querying group members
-// https://github.com/cosmos/cosmos-sdk/issues/12111
->>>>>>> v0.46.13-patch
 func (s *TestSuite) TestCreateGroupWithLotsOfMembers() {
 	for i := 50; i < 70; i++ {
 		membersResp := s.createGroupAndGetMembers(i)
@@ -170,11 +157,7 @@ func (s *TestSuite) TestCreateGroupWithLotsOfMembers() {
 }
 
 func (s *TestSuite) createGroupAndGetMembers(numMembers int) []*group.GroupMember {
-<<<<<<< HEAD
 	addressPool := simtestutil.CreateIncrementalAccounts(numMembers)
-=======
-	addressPool := simapp.AddTestAddrsIncremental(s.app, s.sdkCtx, numMembers, sdk.NewInt(30000000))
->>>>>>> v0.46.13-patch
 	members := make([]group.MemberRequest, numMembers)
 	for i := 0; i < len(members); i++ {
 		members[i] = group.MemberRequest{
@@ -183,22 +166,14 @@ func (s *TestSuite) createGroupAndGetMembers(numMembers int) []*group.GroupMembe
 		}
 	}
 
-<<<<<<< HEAD
 	g, err := s.groupKeeper.CreateGroup(s.ctx, &group.MsgCreateGroup{
-=======
-	g, err := s.keeper.CreateGroup(s.ctx, &group.MsgCreateGroup{
->>>>>>> v0.46.13-patch
 		Admin:   members[0].Address,
 		Members: members,
 	})
 	s.Require().NoErrorf(err, "failed to create group with %d members", len(members))
 	s.T().Logf("group %d created with %d members", g.GroupId, len(members))
 
-<<<<<<< HEAD
 	groupMemberResp, err := s.groupKeeper.GroupMembers(s.ctx, &group.QueryGroupMembersRequest{GroupId: g.GroupId})
-=======
-	groupMemberResp, err := s.keeper.GroupMembers(s.ctx, &group.QueryGroupMembersRequest{GroupId: g.GroupId})
->>>>>>> v0.46.13-patch
 	s.Require().NoError(err)
 
 	s.T().Logf("got %d members from group %d", len(groupMemberResp.Members), g.GroupId)
@@ -1359,21 +1334,12 @@ func (s *TestSuite) TestUpdateGroupPolicyMetadata() {
 			events := s.ctx.(sdk.Context).EventManager().ABCIEvents()
 			for _, event := range events {
 				event, err := sdk.ParseTypedEvent(event)
-<<<<<<< HEAD
 				s.Require().NoError(err)
 
 				if e, ok := event.(*group.EventUpdateGroupPolicy); ok {
 					s.Require().Equal(e.Address, groupPolicyAddr)
 					hasUpdateGroupPolicyEvent = true
 					break
-=======
-				if err == nil {
-					if e, ok := event.(*group.EventUpdateGroupPolicy); ok {
-						s.Require().Equal(e.Address, groupPolicyAddr)
-						hasUpdateGroupPolicyEvent = true
-						break
-					}
->>>>>>> v0.46.13-patch
 				}
 			}
 
@@ -1628,17 +1594,10 @@ func (s *TestSuite) TestSubmitProposal() {
 	)
 	err := policyReq.SetDecisionPolicy(noMinExecPeriodPolicy)
 	s.Require().NoError(err)
-<<<<<<< HEAD
 	s.setNextAccount()
 	res, err := s.groupKeeper.CreateGroupPolicy(s.ctx, policyReq)
 	s.Require().NoError(err)
 	noMinExecPeriodPolicyAddr := sdk.MustAccAddressFromBech32(res.Address)
-=======
-	res, err := s.app.GroupKeeper.CreateGroupPolicy(s.ctx, policyReq)
-	s.Require().NoError(err)
-	noMinExecPeriodPolicyAddr := sdk.MustAccAddressFromBech32(res.Address)
-	s.Require().NoError(testutil.FundAccount(s.app.BankKeeper, s.sdkCtx, noMinExecPeriodPolicyAddr, sdk.Coins{sdk.NewInt64Coin("test", 10000)}))
->>>>>>> v0.46.13-patch
 
 	// Create a new group policy with super high threshold
 	bigThresholdPolicy := group.NewThresholdDecisionPolicy(
@@ -1646,16 +1605,10 @@ func (s *TestSuite) TestSubmitProposal() {
 		time.Second,
 		minExecutionPeriod,
 	)
-<<<<<<< HEAD
 	s.setNextAccount()
 	err = policyReq.SetDecisionPolicy(bigThresholdPolicy)
 	s.Require().NoError(err)
 	bigThresholdRes, err := s.groupKeeper.CreateGroupPolicy(s.ctx, policyReq)
-=======
-	err = policyReq.SetDecisionPolicy(bigThresholdPolicy)
-	s.Require().NoError(err)
-	bigThresholdRes, err := s.app.GroupKeeper.CreateGroupPolicy(s.ctx, policyReq)
->>>>>>> v0.46.13-patch
 	s.Require().NoError(err)
 	bigThresholdAddr := bigThresholdRes.Address
 
@@ -1799,14 +1752,10 @@ func (s *TestSuite) TestSubmitProposal() {
 				ExecutorResult: group.PROPOSAL_EXECUTOR_RESULT_SUCCESS,
 			},
 			postRun: func(sdkCtx sdk.Context) {
-<<<<<<< HEAD
 				s.bankKeeper.EXPECT().GetAllBalances(sdkCtx, noMinExecPeriodPolicyAddr).Return(sdk.NewCoins(sdk.NewInt64Coin("test", 9900)))
 				s.bankKeeper.EXPECT().GetAllBalances(sdkCtx, addr2).Return(sdk.NewCoins(sdk.NewInt64Coin("test", 100)))
 
 				fromBalances := s.bankKeeper.GetAllBalances(sdkCtx, noMinExecPeriodPolicyAddr)
-=======
-				fromBalances := s.app.BankKeeper.GetAllBalances(sdkCtx, noMinExecPeriodPolicyAddr)
->>>>>>> v0.46.13-patch
 				s.Require().Contains(fromBalances, sdk.NewInt64Coin("test", 9900))
 				toBalances := s.bankKeeper.GetAllBalances(sdkCtx, addr2)
 				s.Require().Contains(toBalances, sdk.NewInt64Coin("test", 100))
@@ -2634,11 +2583,7 @@ func (s *TestSuite) TestExecProposal() {
 				sdkCtx = sdkCtx.WithBlockTime(sdkCtx.BlockTime().Add(minExecutionPeriod)) // MinExecutionPeriod is 5s
 				ctx = sdk.WrapSDKContext(sdkCtx)
 
-<<<<<<< HEAD
 				_, err := s.groupKeeper.Exec(ctx, &group.MsgExec{Executor: addr1.String(), ProposalId: myProposalID})
-=======
-				_, err := s.app.GroupKeeper.Exec(ctx, &group.MsgExec{Executor: addr1.String(), ProposalId: myProposalID})
->>>>>>> v0.46.13-patch
 				s.Require().NoError(err)
 				return myProposalID
 			},
@@ -2675,7 +2620,6 @@ func (s *TestSuite) TestExecProposal() {
 				// Wait after min execution period end before Exec
 				sdkCtx := sdk.UnwrapSDKContext(ctx)
 				sdkCtx = sdkCtx.WithBlockTime(sdkCtx.BlockTime().Add(minExecutionPeriod)) // MinExecutionPeriod is 5s
-<<<<<<< HEAD
 				ctx = sdk.WrapSDKContext(sdkCtx)
 
 				s.bankKeeper.EXPECT().Send(gomock.Any(), msgSend2).Return(nil, fmt.Errorf("error"))
@@ -2684,9 +2628,6 @@ func (s *TestSuite) TestExecProposal() {
 
 				s.Require().NoError(err)
 				s.Require().NoError(s.bankKeeper.SendCoinsFromModuleToAccount(s.sdkCtx, minttypes.ModuleName, s.groupPolicyAddr, sdk.Coins{sdk.NewInt64Coin("test", 10000)}))
-=======
-				s.Require().NoError(testutil.FundAccount(s.app.BankKeeper, sdkCtx, s.groupPolicyAddr, sdk.Coins{sdk.NewInt64Coin("test", 10002)}))
->>>>>>> v0.46.13-patch
 
 				return myProposalID
 			},
@@ -2886,20 +2827,7 @@ func (s *TestSuite) TestExecPrunedProposalsAndVotes() {
 
 				myProposalID := submitProposalAndVote(ctx, s, msgs, proposers, group.VOTE_OPTION_YES)
 
-<<<<<<< HEAD
 				s.bankKeeper.EXPECT().Send(gomock.Any(), msgSend2).Return(nil, fmt.Errorf("error"))
-=======
-				// Wait for min execution period end
-				sdkCtx := sdk.UnwrapSDKContext(ctx)
-				sdkCtx = sdkCtx.WithBlockTime(sdkCtx.BlockTime().Add(minExecutionPeriod))
-				ctx = sdk.WrapSDKContext(sdkCtx)
-
-				_, err := s.app.GroupKeeper.Exec(ctx, &group.MsgExec{Executor: addr1.String(), ProposalId: myProposalID})
-				s.Require().NoError(err)
-
-				sdkCtx = sdk.UnwrapSDKContext(ctx)
-				s.Require().NoError(testutil.FundAccount(s.app.BankKeeper, sdkCtx, s.groupPolicyAddr, sdk.Coins{sdk.NewInt64Coin("test", 10002)}))
->>>>>>> v0.46.13-patch
 
 				// Wait for min execution period end
 				sdkCtx := sdk.UnwrapSDKContext(ctx)
@@ -3416,34 +3344,22 @@ func (s *TestSuite) TestTallyProposalsAtVPEnd() {
 	)
 	s.Require().NoError(groupMsg.SetDecisionPolicy(policy))
 
-<<<<<<< HEAD
 	s.setNextAccount()
 	groupRes, err := s.groupKeeper.CreateGroupWithPolicy(s.ctx, groupMsg)
-=======
-	groupRes, err := s.app.GroupKeeper.CreateGroupWithPolicy(s.ctx, groupMsg)
->>>>>>> v0.46.13-patch
 	s.Require().NoError(err)
 	accountAddr := groupRes.GetGroupPolicyAddress()
 	groupPolicy, err := sdk.AccAddressFromBech32(accountAddr)
 	s.Require().NoError(err)
 	s.Require().NotNil(groupPolicy)
 
-<<<<<<< HEAD
 	proposalRes, err := s.groupKeeper.SubmitProposal(s.ctx, &group.MsgSubmitProposal{
-=======
-	proposalRes, err := s.app.GroupKeeper.SubmitProposal(s.ctx, &group.MsgSubmitProposal{
->>>>>>> v0.46.13-patch
 		GroupPolicyAddress: accountAddr,
 		Proposers:          []string{addr1.String()},
 		Messages:           nil,
 	})
 	s.Require().NoError(err)
 
-<<<<<<< HEAD
 	_, err = s.groupKeeper.Vote(s.ctx, &group.MsgVote{
-=======
-	_, err = s.app.GroupKeeper.Vote(s.ctx, &group.MsgVote{
->>>>>>> v0.46.13-patch
 		ProposalId: proposalRes.ProposalId,
 		Voter:      addr1.String(),
 		Option:     group.VOTE_OPTION_YES,
@@ -3453,23 +3369,14 @@ func (s *TestSuite) TestTallyProposalsAtVPEnd() {
 	// move forward in time
 	ctx := s.sdkCtx.WithBlockTime(s.sdkCtx.BlockTime().Add(votingPeriod + 1))
 
-<<<<<<< HEAD
 	result, err := s.groupKeeper.TallyResult(ctx, &group.QueryTallyResultRequest{
-=======
-	result, err := s.app.GroupKeeper.TallyResult(ctx, &group.QueryTallyResultRequest{
->>>>>>> v0.46.13-patch
 		ProposalId: proposalRes.ProposalId,
 	})
 	s.Require().Equal("1", result.Tally.YesCount)
 	s.Require().NoError(err)
 
-<<<<<<< HEAD
 	s.Require().NoError(s.groupKeeper.TallyProposalsAtVPEnd(ctx))
 	s.NotPanics(func() { module.EndBlocker(ctx, s.groupKeeper) })
-=======
-	s.Require().NoError(s.app.GroupKeeper.TallyProposalsAtVPEnd(ctx))
-	s.NotPanics(func() { module.EndBlocker(ctx, s.app.GroupKeeper) })
->>>>>>> v0.46.13-patch
 }
 
 // TestTallyProposalsAtVPEnd_GroupMemberLeaving test that the node doesn't
@@ -3497,23 +3404,15 @@ func (s *TestSuite) TestTallyProposalsAtVPEnd_GroupMemberLeaving() {
 	)
 	s.Require().NoError(groupMsg.SetDecisionPolicy(policy))
 
-<<<<<<< HEAD
 	s.setNextAccount()
 	groupRes, err := s.groupKeeper.CreateGroupWithPolicy(s.ctx, groupMsg)
-=======
-	groupRes, err := s.app.GroupKeeper.CreateGroupWithPolicy(s.ctx, groupMsg)
->>>>>>> v0.46.13-patch
 	s.Require().NoError(err)
 	accountAddr := groupRes.GetGroupPolicyAddress()
 	groupPolicy, err := sdk.AccAddressFromBech32(accountAddr)
 	s.Require().NoError(err)
 	s.Require().NotNil(groupPolicy)
 
-<<<<<<< HEAD
 	proposalRes, err := s.groupKeeper.SubmitProposal(s.ctx, &group.MsgSubmitProposal{
-=======
-	proposalRes, err := s.app.GroupKeeper.SubmitProposal(s.ctx, &group.MsgSubmitProposal{
->>>>>>> v0.46.13-patch
 		GroupPolicyAddress: accountAddr,
 		Proposers:          []string{addr1.String()},
 		Messages:           nil,
@@ -3521,21 +3420,13 @@ func (s *TestSuite) TestTallyProposalsAtVPEnd_GroupMemberLeaving() {
 	s.Require().NoError(err)
 
 	// group members vote
-<<<<<<< HEAD
 	_, err = s.groupKeeper.Vote(s.ctx, &group.MsgVote{
-=======
-	_, err = s.app.GroupKeeper.Vote(s.ctx, &group.MsgVote{
->>>>>>> v0.46.13-patch
 		ProposalId: proposalRes.ProposalId,
 		Voter:      addr1.String(),
 		Option:     group.VOTE_OPTION_NO,
 	})
 	s.Require().NoError(err)
-<<<<<<< HEAD
 	_, err = s.groupKeeper.Vote(s.ctx, &group.MsgVote{
-=======
-	_, err = s.app.GroupKeeper.Vote(s.ctx, &group.MsgVote{
->>>>>>> v0.46.13-patch
 		ProposalId: proposalRes.ProposalId,
 		Voter:      addr2.String(),
 		Option:     group.VOTE_OPTION_NO,
@@ -3546,25 +3437,16 @@ func (s *TestSuite) TestTallyProposalsAtVPEnd_GroupMemberLeaving() {
 	ctx := s.sdkCtx.WithBlockTime(s.sdkCtx.BlockTime().Add(votingPeriod + 1))
 
 	// Tally the result. This saves the tally result to state.
-<<<<<<< HEAD
 	s.Require().NoError(s.groupKeeper.TallyProposalsAtVPEnd(ctx))
 	s.NotPanics(func() { module.EndBlocker(ctx, s.groupKeeper) })
 
 	// member 2 (high weight) leaves group.
 	_, err = s.groupKeeper.LeaveGroup(ctx, &group.MsgLeaveGroup{
-=======
-	s.Require().NoError(s.app.GroupKeeper.TallyProposalsAtVPEnd(ctx))
-	s.NotPanics(func() { module.EndBlocker(ctx, s.app.GroupKeeper) })
-
-	// member 2 (high weight) leaves group.
-	_, err = s.app.GroupKeeper.LeaveGroup(ctx, &group.MsgLeaveGroup{
->>>>>>> v0.46.13-patch
 		Address: addr2.String(),
 		GroupId: groupRes.GroupId,
 	})
 	s.Require().NoError(err)
 
-<<<<<<< HEAD
 	s.Require().NoError(s.groupKeeper.TallyProposalsAtVPEnd(ctx))
 	s.NotPanics(func() { module.EndBlocker(ctx, s.groupKeeper) })
 }
@@ -3578,8 +3460,4 @@ func eventTypeFound(events []abci.Event, eventType string) bool {
 		}
 	}
 	return eventTypeFound
-=======
-	s.Require().NoError(s.app.GroupKeeper.TallyProposalsAtVPEnd(ctx))
-	s.NotPanics(func() { module.EndBlocker(ctx, s.app.GroupKeeper) })
->>>>>>> v0.46.13-patch
 }

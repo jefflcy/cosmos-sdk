@@ -9,16 +9,10 @@ import (
 	"sync"
 	"testing"
 
-<<<<<<< HEAD
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cometbft/cometbft/libs/log"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	"github.com/stretchr/testify/require"
-=======
-	"github.com/stretchr/testify/require"
-	abci "github.com/tendermint/tendermint/abci/types"
-	types1 "github.com/tendermint/tendermint/proto/tendermint/types"
->>>>>>> v0.46.13-patch
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	codecTypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -61,11 +55,7 @@ var (
 	}
 	testEndBlockRes = abci.ResponseEndBlock{
 		Events:                []abci.Event{},
-<<<<<<< HEAD
 		ConsensusParamUpdates: &tmproto.ConsensusParams{},
-=======
-		ConsensusParamUpdates: &abci.ConsensusParams{},
->>>>>>> v0.46.13-patch
 		ValidatorUpdates:      []abci.ValidatorUpdate{},
 	}
 	testCommitRes = abci.ResponseCommit{
@@ -130,11 +120,7 @@ func TestFileStreamingService(t *testing.T) {
 
 	testKeys := []types.StoreKey{mockStoreKey1, mockStoreKey2}
 	var err error
-<<<<<<< HEAD
 	testStreamingService, err = NewStreamingService(testDir, testPrefix, testKeys, testMarshaller, log.NewNopLogger(), true, false, false)
-=======
-	testStreamingService, err = NewStreamingService(testDir, testPrefix, testKeys, testMarshaller, true, false, false)
->>>>>>> v0.46.13-patch
 	require.Nil(t, err)
 	require.IsType(t, &StreamingService{}, testStreamingService)
 	require.Equal(t, testPrefix, testStreamingService.filePrefix)
@@ -313,14 +299,9 @@ func testListenBlock(t *testing.T) {
 	metaFileName := fmt.Sprintf("%s-block-%d-meta", testPrefix, testBeginBlockReq.GetHeader().Height)
 	dataFileName := fmt.Sprintf("%s-block-%d-data", testPrefix, testBeginBlockReq.GetHeader().Height)
 	metaFileBytes, err := readInFile(metaFileName)
-<<<<<<< HEAD
 	require.Nil(t, err)
 	dataFileBytes, err := readInFile(dataFileName)
 	require.Nil(t, err)
-=======
-	dataFileBytes, err := readInFile(dataFileName)
-	require.Nil(t, err)
->>>>>>> v0.46.13-patch
 
 	metadata := types.BlockMetadata{
 		RequestBeginBlock:  &testBeginBlockReq,

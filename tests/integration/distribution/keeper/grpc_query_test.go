@@ -89,18 +89,11 @@ func (suite *KeeperTestSuite) TestGRPCParams() {
 			"valid request",
 			func() {
 				params = types.Params{
-<<<<<<< HEAD:tests/integration/distribution/keeper/grpc_query_test.go
-					CommunityTax:        sdk.NewDecWithPrec(3, 1),
-					BaseProposerReward:  sdk.ZeroDec(),
-					BonusProposerReward: sdk.ZeroDec(),
-					WithdrawAddrEnabled: true,
-=======
 					CommunityTax:            sdk.NewDecWithPrec(3, 1),
 					BaseProposerReward:      sdk.NewDecWithPrec(2, 1),
 					BonusProposerReward:     sdk.NewDecWithPrec(1, 1),
 					LiquidityProviderReward: sdk.NewDecWithPrec(1, 1),
 					WithdrawAddrEnabled:     true,
->>>>>>> v0.46.13-patch:x/distribution/keeper/grpc_query_test.go
 				}
 
 				suite.NoError(suite.distrKeeper.SetParams(ctx, params))

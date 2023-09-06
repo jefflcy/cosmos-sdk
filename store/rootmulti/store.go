@@ -538,10 +538,6 @@ func (rs *Store) CacheMultiStoreWithVersion(version int64) (types.CacheMultiStor
 					return nil, err
 				}
 			}
-<<<<<<< HEAD
-
-=======
->>>>>>> v0.46.13-patch
 		default:
 			cacheStore = store
 		}

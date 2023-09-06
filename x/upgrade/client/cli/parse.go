@@ -13,11 +13,7 @@ func parseArgsToContent(fs *pflag.FlagSet, name string) (gov.Content, error) {
 		return nil, err
 	}
 
-<<<<<<< HEAD
 	description, err := fs.GetString(cli.FlagDescription) //nolint:staticcheck // we are intentionally using a deprecated flag here.
-=======
-	description, err := fs.GetString(cli.FlagDescription) //nolint:staticcheck
->>>>>>> v0.46.13-patch
 	if err != nil {
 		return nil, err
 	}

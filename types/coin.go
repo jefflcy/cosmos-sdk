@@ -343,13 +343,14 @@ func (coins Coins) safeAdd(coinsB Coins) (coalesced Coins) {
 			coalesced = append(coalesced, comboCoin)
 		}
 	}
-<<<<<<< HEAD
+
 	if coalesced == nil {
 		return Coins{}
 	}
->>>>>>> v0.46.13-patch
+
 	return coalesced.Sort()
 }
+
 // is subset of coinsB's denoms.
 func (coins Coins) DenomsSubsetOf(coinsB Coins) bool {
 	// more denoms in B than in receiver
