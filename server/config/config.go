@@ -309,8 +309,9 @@ func DefaultConfig() *Config {
 			AppDBBackend:        "",
 		},
 		Telemetry: telemetry.Config{
-			Enabled:      false,
-			GlobalLabels: [][]string{},
+			Enabled:                  false,
+			GlobalLabels:             [][]string{},
+			MonitorStoreSizeInterval: 0,
 		},
 		API: APIConfig{
 			Enable:             false,
