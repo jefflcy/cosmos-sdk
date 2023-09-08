@@ -143,7 +143,7 @@ func TestMigrateDenomMetaData(t *testing.T) {
 		require.Equal(t, string(newKey), metaData[i].Base, "idx: %d", i)
 		bz = denomMetadataStore.Get(denomMetadataIter.Key())
 		require.NotNil(t, bz)
-		err := cdc.Unmarshal(bz, &result)
+		err := encCfg.Codec.Unmarshal(bz, &result)
 		require.NoError(t, err)
 		assertMetaDataEqual(t, metaData[i], result)
 		i++

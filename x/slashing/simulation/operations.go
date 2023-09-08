@@ -107,7 +107,7 @@ func SimulateMsgUnjail(cdc *codec.ProtoCodec, ak types.AccountKeeper, bk types.B
 			return simtypes.NoOpMsg(types.ModuleName, msg.Type(), "unable to generate mock tx"), nil, err
 		}
 
-		_, res, err := app.SimDeliver(txCfg.TxEncoder(), tx)
+		_, res, err := app.SimDeliver(txGen.TxEncoder(), tx)
 
 		// result should fail if:
 		// - validator cannot be unjailed due to tombstone

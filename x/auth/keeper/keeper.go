@@ -53,7 +53,6 @@ type AccountKeeperI interface {
 
 	// GetModulePermissions fetches per-module account permissions
 	GetModulePermissions() map[string]types.PermissionsForAddress
-	GetNextAccountNumber(sdk.Context) uint64
 
 	// Fetch the corresponding eth address for a given cosmos addr
 	GetCorrespondingEthAddressIfExists(ctx sdk.Context, cosmosAddr sdk.AccAddress) (correspondingEthAddr sdk.AccAddress)
@@ -296,6 +295,6 @@ func (ak AccountKeeper) getBech32Prefix() (string, error) {
 
 // Store fetches the permanent store
 func (ak AccountKeeper) Store(ctx sdk.Context, key string) prefix.Store {
-	mainStore := ctx.KVStore(ak.key)
+	mainStore := ctx.KVStore(ak.storeKey)
 	return prefix.NewStore(mainStore, types.KeyPrefix(key))
 }

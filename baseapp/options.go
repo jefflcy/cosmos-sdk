@@ -206,7 +206,7 @@ func (app *BaseApp) SetMsgHandlerMiddleware(msgHandlerMiddleware sdk.MsgHandlerM
 	app.msgHandlerMiddleware = msgHandlerMiddleware
 }
 
-func (app *BaseApp) SetPostHandler(ph sdk.AnteHandler) {
+func (app *BaseApp) SetPostHandler(ph sdk.PostHandler) {
 	if app.sealed {
 		panic("SetPostHandler() on sealed BaseApp")
 	}

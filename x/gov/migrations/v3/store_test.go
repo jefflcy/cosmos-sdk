@@ -50,15 +50,6 @@ func TestMigrateStore(t *testing.T) {
 	vote1Bz := cdc.MustMarshal(&vote1)
 	store.Set(v1gov.VoteKey(1, voter), vote1Bz)
 
-	// Vote on prop 1
-	options := []v1beta1.WeightedVoteOption{
-		{Option: v1beta1.OptionNo, Weight: sdk.MustNewDecFromStr("0.3")},
-		{Option: v1beta1.OptionYes, Weight: sdk.MustNewDecFromStr("0.7")},
-	}
-	vote1 := v1beta1.NewVote(1, voter, options)
-	vote1Bz := cdc.MustMarshal(&vote1)
-	store.Set(v042gov.VoteKey(1, voter), vote1Bz)
-
 	// Run migrations.
 	err = v3gov.MigrateStore(ctx, govKey, cdc)
 	require.NoError(t, err)

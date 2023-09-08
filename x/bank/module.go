@@ -122,7 +122,7 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
 	types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
 	basekeeper := am.keeper.(*keeper.BaseKeeper)
-	m := keeper.NewMigrator(*basekeeper)
+	m := keeper.NewMigrator(*basekeeper, am.legacySubspace)
 	if err := cfg.RegisterMigration(types.ModuleName, 1, m.Migrate1to2); err != nil {
 		panic(fmt.Sprintf("failed to migrate x/bank from version 1 to 2: %v", err))
 	}
@@ -258,7 +258,7 @@ func ProvideModule(in BankInputs) BankOutputs {
 		blockedAddresses,
 		authority.String(),
 	)
-	m := NewAppModule(in.Cdc, bankKeeper, in.AccountKeeper, in.LegacySubspace)
+	m := NewAppModule(in.Cdc, &bankKeeper, in.AccountKeeper, in.LegacySubspace)
 
 	return BankOutputs{BankKeeper: bankKeeper, Module: m}
 }

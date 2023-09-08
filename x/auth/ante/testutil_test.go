@@ -5,7 +5,6 @@ import (
 
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
-	"github.com/stretchr/testify/suite"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -41,10 +40,6 @@ type AnteTestSuite struct {
 	bankKeeper     *authtestutil.MockBankKeeper
 	feeGrantKeeper *antetestutil.MockFeegrantKeeper
 	encCfg         moduletestutil.TestEncodingConfig
-}
-
-func TestAnteTestSuite(t *testing.T) {
-	suite.Run(t, new(AnteTestSuite))
 }
 
 // SetupTest setups a new test, with new app, context, and anteHandler.

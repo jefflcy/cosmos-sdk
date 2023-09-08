@@ -4,7 +4,6 @@ package simapp
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -303,13 +302,15 @@ func NewSimApp(
 	// add keepers
 	app.AccountKeeper = authkeeper.NewAccountKeeper(appCodec, keys[authtypes.StoreKey], authtypes.ProtoBaseAccount, maccPerms, sdk.Bech32MainPrefix, authtypes.NewModuleAddress(govtypes.ModuleName).String())
 
-	app.BankKeeper = bankkeeper.NewBaseKeeper(
+	bankkeeper := bankkeeper.NewBaseKeeper(
 		appCodec,
 		keys[banktypes.StoreKey],
 		app.AccountKeeper,
 		BlockedAddresses(),
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
+	app.BankKeeper = &bankkeeper
+
 	app.StakingKeeper = stakingkeeper.NewKeeper(
 		appCodec, keys[stakingtypes.StoreKey], app.AccountKeeper, app.BankKeeper, authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
@@ -476,12 +477,8 @@ func NewSimApp(
 	}
 	reflectionv1.RegisterReflectionServiceServer(app.GRPCQueryRouter(), reflectionSvc)
 
-	// RegisterUpgradeHandlers is used for registering any on-chain upgrades.
-	// Make sure it's called after `app.mm` and `app.configurator` are set.
-	app.RegisterUpgradeHandlers()
-
 	// add test gRPC service for testing gRPC queries in isolation
-	testdata.RegisterQueryServer(app.GRPCQueryRouter(), testdata.QueryImpl{})
+	testdata_pulsar.RegisterQueryServer(app.GRPCQueryRouter(), testdata_pulsar.QueryImpl{})
 
 	// create the simulation manager and define the order of the modules for deterministic simulations
 	//

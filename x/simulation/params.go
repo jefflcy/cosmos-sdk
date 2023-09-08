@@ -184,8 +184,8 @@ func randomConsensusParams(r *rand.Rand, appState json.RawMessage, cdc codec.JSO
 	}
 
 	stakingGenesisState := stakingtypes.GetGenesisStateFromAppState(cdc, genesisState)
-	consensusParams := &abci.ConsensusParams{
-		Block: &abci.BlockParams{
+	consensusParams := &tmproto.ConsensusParams{
+		Block: &tmproto.BlockParams{
 			MaxBytes: int64(simulation.RandIntBetween(r, 20000000, 30000000)),
 			MaxGas:   maxGas,
 		},

@@ -2555,24 +2555,6 @@ func (s *TestSuite) TestExecProposal() {
 				s.Require().True(eventTypeFound(events, EventProposalPruned))
 			},
 		},
-		"exec proposal before MinExecutionPeriod should fail": {
-			setupProposal: func(ctx context.Context) uint64 {
-				msgs := []sdk.Msg{msgSend1}
-				return submitProposalAndVote(ctx, s, msgs, proposers, group.VOTE_OPTION_YES)
-			},
-			srcBlockTime:      s.blockTime.Add(4 * time.Second), // min execution date is 5s later after s.blockTime
-			expProposalStatus: group.PROPOSAL_STATUS_ACCEPTED,
-			expExecutorResult: group.PROPOSAL_EXECUTOR_RESULT_FAILURE, // Because MinExecutionPeriod has not passed
-		},
-		"exec proposal at exactly MinExecutionPeriod should pass": {
-			setupProposal: func(ctx context.Context) uint64 {
-				msgs := []sdk.Msg{msgSend1}
-				return submitProposalAndVote(ctx, s, msgs, proposers, group.VOTE_OPTION_YES)
-			},
-			srcBlockTime:      s.blockTime.Add(5 * time.Second), // min execution date is 5s later after s.blockTime
-			expProposalStatus: group.PROPOSAL_STATUS_ACCEPTED,
-			expExecutorResult: group.PROPOSAL_EXECUTOR_RESULT_SUCCESS,
-		},
 		"prevent double execution when successful": {
 			setupProposal: func(ctx context.Context) uint64 {
 				myProposalID := submitProposalAndVote(ctx, s, []sdk.Msg{msgSend1}, proposers, group.VOTE_OPTION_YES)

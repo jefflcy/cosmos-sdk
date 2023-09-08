@@ -31,9 +31,10 @@ package module
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/cosmos/cosmos-sdk/telemetry"
 	"sort"
 	"time"
+
+	"github.com/cosmos/cosmos-sdk/telemetry"
 
 	"cosmossdk.io/core/appmodule"
 	abci "github.com/cometbft/cometbft/abci/types"
@@ -248,7 +249,7 @@ func (GenesisOnlyAppModule) EndBlock(_ sdk.Context, _ abci.RequestEndBlock) []ab
 // Manager defines a module manager that provides the high level utility for managing and executing
 // operations for a group of modules
 type Manager struct {
-	Modules              map[string]AppModule
+	Modules              map[string]interface{}
 	OrderInitGenesis     []string
 	OrderExportGenesis   []string
 	OrderBeginBlockers   []string

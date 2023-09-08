@@ -927,6 +927,12 @@ func (m *MockBankKeeper) ValidateBalance(ctx types.Context, addr types.AccAddres
 	return ret0
 }
 
+func (m *MockBankKeeper) AfterMultiSend(ctx types.Context, inputs []types1.Input, outputs []types1.Output) error
+func (m *MockBankKeeper) AfterSend(ctx types.Context, fromAddr types.AccAddress, toAddr types.AccAddress, amt types.Coins) error
+func (m *MockBankKeeper) BeforeMultiSend(ctx types.Context, inputs []types1.Input, outputs []types1.Output) error
+func (m *MockBankKeeper) BeforeSend(ctx types.Context, fromAddr types.AccAddress, toAddr types.AccAddress, amt types.Coins) error
+func (m *MockBankKeeper) SetHooks(sh types1.SendHooks) *keeper.BaseSendKeeper
+
 // ValidateBalance indicates an expected call of ValidateBalance.
 func (mr *MockBankKeeperMockRecorder) ValidateBalance(ctx, addr interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()

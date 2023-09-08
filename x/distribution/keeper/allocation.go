@@ -11,7 +11,9 @@ import (
 
 // AllocateTokens performs reward and fee distribution to all validators based
 // on the F1 fee distribution specification.
-func (k Keeper) AllocateTokens(ctx sdk.Context, totalPreviousPower int64, bondedVotes []abci.VoteInfo) {
+func (k Keeper) AllocateTokens(
+	ctx sdk.Context, sumPreviousPrecommitPower, totalPreviousPower int64,
+	previousProposer sdk.ConsAddress, bondedVotes []abci.VoteInfo) {
 	// fetch and clear the collected fees for distribution, since this is
 	// called in BeginBlock, collected fees will be from the previous block
 	// (and distributed to the previous proposer)
@@ -34,10 +36,16 @@ func (k Keeper) AllocateTokens(ctx sdk.Context, totalPreviousPower int64, bonded
 		return
 	}
 
+	// calculate fraction votes
+	previousFractionVotes := sdk.NewDec(sumPreviousPrecommitPower).Quo(sdk.NewDec(totalPreviousPower))
+
 	// calculate fraction allocated to validators
 	remaining := feesCollected
 	communityTax := k.GetCommunityTax(ctx)
 	liquidityProviderReward := k.GetLiquidityProviderReward(ctx)
+	baseProposerReward := k.GetBaseProposerReward(ctx)
+	bonusProposerReward := k.GetBonusProposerReward(ctx)
+	proposerMultiplier := baseProposerReward.Add(bonusProposerReward.MulTruncate(previousFractionVotes))
 	voteMultiplier := sdk.OneDec().Sub(proposerMultiplier).Sub(communityTax).Sub(liquidityProviderReward)
 	feeMultiplier := feesCollected.MulDecTruncate(voteMultiplier)
 

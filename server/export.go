@@ -83,18 +83,17 @@ func ExportCmd(appExporter types.AppExporter, defaultNodeHome string) *cobra.Com
 			doc.AppState = exported.AppState
 			doc.Validators = exported.Validators
 			doc.InitialHeight = exported.Height
-			doc.ConsensusParams = &tmproto.ConsensusParams{
-				Block: tmproto.BlockParams{
-					MaxBytes:   exported.ConsensusParams.Block.MaxBytes,
-					MaxGas:     exported.ConsensusParams.Block.MaxGas,
-					TimeIotaMs: doc.ConsensusParams.Block.TimeIotaMs,
+			doc.ConsensusParams = &tmtypes.ConsensusParams{
+				Block: tmtypes.BlockParams{
+					MaxBytes: exported.ConsensusParams.Block.MaxBytes,
+					MaxGas:   exported.ConsensusParams.Block.MaxGas,
 				},
-				Evidence: tmproto.EvidenceParams{
+				Evidence: tmtypes.EvidenceParams{
 					MaxAgeNumBlocks: exported.ConsensusParams.Evidence.MaxAgeNumBlocks,
 					MaxAgeDuration:  exported.ConsensusParams.Evidence.MaxAgeDuration,
 					MaxBytes:        exported.ConsensusParams.Evidence.MaxBytes,
 				},
-				Validator: tmproto.ValidatorParams{
+				Validator: tmtypes.ValidatorParams{
 					PubKeyTypes: exported.ConsensusParams.Validator.PubKeyTypes,
 				},
 			}

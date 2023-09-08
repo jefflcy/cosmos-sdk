@@ -10,7 +10,7 @@ import (
 func ConsensusParamsKeyTable() KeyTable {
 	return NewKeyTable(
 		NewParamSetPair(
-			baseapp.ParamStoreKeyBlockParams, abci.BlockParams{}, baseapp.ValidateBlockParams,
+			baseapp.ParamStoreKeyBlockParams, tmproto.BlockParams{}, baseapp.ValidateBlockParams,
 		),
 		NewParamSetPair(
 			baseapp.ParamStoreKeyEvidenceParams, tmproto.EvidenceParams{}, baseapp.ValidateEvidenceParams,

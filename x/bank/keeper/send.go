@@ -64,7 +64,7 @@ type BaseSendKeeper struct {
 	// the address capable of executing a MsgUpdateParams message. Typically, this
 	// should be the x/gov module account.
 	authority string
-	hooks        types.SendHooks
+	hooks     types.SendHooks
 }
 
 func NewBaseSendKeeper(
@@ -91,15 +91,17 @@ func NewBaseSendKeeper(
 // GetAuthority returns the x/bank module's authority.
 func (k BaseSendKeeper) GetAuthority() string {
 	return k.authority
+}
+
 // SetHooks sets the hooks for bank
-func (keeper *BaseSendKeeper) SetHooks(sh types.SendHooks) *BaseSendKeeper {
-	if keeper.hooks != nil {
+func (k *BaseSendKeeper) SetHooks(sh types.SendHooks) *BaseSendKeeper {
+	if k.hooks != nil {
 		panic("cannot set send hooks twice")
 	}
 
-	keeper.hooks = sh
+	k.hooks = sh
 
-	return keeper
+	return k
 }
 
 // GetParams returns the total set of bank parameters.

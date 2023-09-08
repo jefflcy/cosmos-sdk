@@ -306,8 +306,6 @@ func startInProcess(ctx *Context, clientCtx client.Context, appCreator types.App
 	}
 	genDocProvider := node.DefaultGenesisDocProviderFunc(cfg)
 
-	genDocProvider := node.DefaultGenesisDocProviderFunc(cfg)
-
 	var (
 		tmNode   *node.Node
 		gRPCOnly = ctx.Viper.GetBool(flagGRPCOnly)

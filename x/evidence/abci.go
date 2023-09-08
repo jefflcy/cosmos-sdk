@@ -2,7 +2,6 @@ package evidence
 
 import (
 	"fmt"
-	"time"
 
 	abci "github.com/cometbft/cometbft/abci/types"
 

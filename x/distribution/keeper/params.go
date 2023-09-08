@@ -40,6 +40,19 @@ func (k Keeper) GetCommunityTax(ctx sdk.Context) math.LegacyDec {
 	return k.GetParams(ctx).CommunityTax
 }
 
+// GetBaseProposerReward returns the current distribution base proposer rate.
+func (k Keeper) GetBaseProposerReward(ctx sdk.Context) (percent sdk.Dec) {
+	k.paramSpace.Get(ctx, types.ParamStoreKeyBaseProposerReward, &percent)
+	return percent
+}
+
+// GetBonusProposerReward returns the current distribution bonus proposer reward
+// rate.
+func (k Keeper) GetBonusProposerReward(ctx sdk.Context) (percent sdk.Dec) {
+	k.paramSpace.Get(ctx, types.ParamStoreKeyBonusProposerReward, &percent)
+	return percent
+}
+
 // GetLiquidityProviderReward returns the current distribution liquidity provider reward rate.
 func (k Keeper) GetLiquidityProviderReward(ctx sdk.Context) (percent sdk.Dec) {
 	k.paramSpace.Get(ctx, types.ParamStoreKeyLiquidityProviderReward, &percent)

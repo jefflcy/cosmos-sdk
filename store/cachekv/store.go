@@ -338,16 +338,6 @@ func (store *Store) dirtyItems(start, end []byte) {
 		}
 	}
 
-	var endIndex int
-	if end == nil {
-		endIndex = len(strL) - 1
-	} else {
-		endIndex = findEndIndex(strL, endStr)
-	}
-	if endIndex < 0 {
-		endIndex = len(strL) - 1
-	}
-
 	kvL := make([]*kv.Pair, 0)
 	for i := startIndex; i <= endIndex; i++ {
 		key := strL[i]

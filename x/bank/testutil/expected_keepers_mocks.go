@@ -226,3 +226,7 @@ func (mr *MockAccountKeeperMockRecorder) ValidatePermissions(macc interface{}) *
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ValidatePermissions", reflect.TypeOf((*MockAccountKeeper)(nil).ValidatePermissions), macc)
 }
+
+func (m *MockAccountKeeper) GetMergedAccountAddressIfExists(ctx types.Context, addr types.AccAddress) types.AccAddress
+
+func (m *MockAccountKeeper) GetMappedAddress(ctx types.Context, addr types.AccAddress) types.AccAddress
