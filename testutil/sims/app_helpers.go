@@ -15,6 +15,7 @@ import (
 	"cosmossdk.io/depinject"
 	"cosmossdk.io/math"
 
+	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -256,8 +257,19 @@ func GenesisStateWithValSet(
 	return genesisState, nil
 }
 
+type GenesisState map[string]json.RawMessage
+
 // EmptyAppOptions is a stub implementing AppOptions
 type EmptyAppOptions struct{}
+
+// EncodingConfig specifies the concrete encoding types to use for a given app.
+// This is provided for compatibility between protobuf and amino implementations.
+type EncodingConfig struct {
+	InterfaceRegistry codectypes.InterfaceRegistry
+	Codec             codec.Codec
+	TxConfig          client.TxConfig
+	Amino             *codec.LegacyAmino
+}
 
 // Get implements AppOptions
 func (ao EmptyAppOptions) Get(o string) interface{} {

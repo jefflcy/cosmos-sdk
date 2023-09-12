@@ -1,9 +1,13 @@
 package runtime
 
 import (
+	"encoding/json"
+
 	abci "github.com/cometbft/cometbft/abci/types"
 
+	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	"github.com/cosmos/cosmos-sdk/server/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
@@ -36,4 +40,16 @@ type AppI interface {
 
 	// Helper for the simulation framework.
 	SimulationManager() *module.SimulationManager
+}
+
+type GenesisState map[string]json.RawMessage
+type EmptyAppOptions struct{}
+
+// EncodingConfig specifies the concrete encoding types to use for a given app.
+// This is provided for compatibility between protobuf and amino implementations.
+type EncodingConfig struct {
+	InterfaceRegistry codectypes.InterfaceRegistry
+	Codec             codec.Codec
+	TxConfig          client.TxConfig
+	Amino             *codec.LegacyAmino
 }
