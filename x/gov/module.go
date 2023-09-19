@@ -318,7 +318,7 @@ func (AppModule) ConsensusVersion() uint64 { return ConsensusVersion }
 // EndBlock returns the end blocker for the gov module. It returns no validator
 // updates.
 func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
-	EndBlocker(ctx, am.keeper)
+	EndBlocker(ctx, *am.keeper)
 	return []abci.ValidatorUpdate{}
 }
 

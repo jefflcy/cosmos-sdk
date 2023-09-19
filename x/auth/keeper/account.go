@@ -177,7 +177,7 @@ func (ak AccountKeeper) AddToEthToCosmosAddressMap(ctx sdk.Context, ethAddr sdk.
 }
 
 func (ak AccountKeeper) IterateEthToCosmosAddressMapping(ctx sdk.Context, cb func(ethAddress, cosmosAddress sdk.AccAddress) bool) {
-	store := ctx.KVStore(ak.key)
+	store := ctx.KVStore(ak.storeKey)
 	iterator := sdk.KVStorePrefixIterator(store, types.KeyPrefix(types.EthAddressToCosmosAddressKey))
 
 	defer iterator.Close()
@@ -193,7 +193,7 @@ func (ak AccountKeeper) IterateEthToCosmosAddressMapping(ctx sdk.Context, cb fun
 
 }
 func (ak AccountKeeper) IterateCosmosToEthAddressMapping(ctx sdk.Context, cb func(cosmosAddress, ethAddress sdk.AccAddress) bool) {
-	store := ctx.KVStore(ak.key)
+	store := ctx.KVStore(ak.storeKey)
 	iterator := sdk.KVStorePrefixIterator(store, types.KeyPrefix(types.CosmosAddressToEthAddressKey))
 
 	defer iterator.Close()

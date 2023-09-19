@@ -57,6 +57,7 @@ type BaseApp struct { //nolint: maligned
 	storeLoader       StoreLoader          // function to handle store loading, may be overridden with SetStoreLoader()
 	grpcQueryRouter   *GRPCQueryRouter     // router for redirecting gRPC query calls
 	msgServiceRouter  *MsgServiceRouter    // router for redirecting Msg service messages
+	router            sdk.Router           // handle any kind of message
 	interfaceRegistry codectypes.InterfaceRegistry
 	txDecoder         sdk.TxDecoder // unmarshal []byte into sdk.Tx
 	txEncoder         sdk.TxEncoder // marshal sdk.Tx into []byte
@@ -172,6 +173,7 @@ func NewBaseApp(
 		db:               db,
 		cms:              store.NewCommitMultiStore(db),
 		storeLoader:      DefaultStoreLoader,
+		router:           NewRouter(),
 		grpcQueryRouter:  NewGRPCQueryRouter(),
 		msgServiceRouter: NewMsgServiceRouter(),
 		txDecoder:        txDecoder,
@@ -415,6 +417,17 @@ func (app *BaseApp) setIndexEvents(ie []string) {
 	for _, e := range ie {
 		app.indexEvents[e] = struct{}{}
 	}
+}
+
+// Router returns the legacy router of the BaseApp.
+func (app *BaseApp) Router() sdk.Router {
+	if app.sealed {
+		// We cannot return a Router when the app is sealed because we can't have
+		// any routes modified which would cause unexpected routing behavior.
+		panic("Router() on sealed BaseApp")
+	}
+
+	return app.router
 }
 
 // Seal seals a BaseApp. It prohibits any further modifications to a BaseApp.
@@ -690,7 +703,6 @@ func (app *BaseApp) runTx(mode runTxMode, txBytes []byte) (gInfo sdk.GasInfo, re
 		return sdk.GasInfo{}, nil, nil, 0, err
 	}
 
-	var events sdk.Events
 	if app.anteHandler != nil {
 		var (
 			anteCtx sdk.Context
@@ -827,15 +839,16 @@ func (app *BaseApp) runMsgs(ctx sdk.Context, msgs []sdk.Msg, mode runTxMode) (*s
 		}
 
 		var (
-			msgResult    *sdk.Result
-			eventMsgName string // name to use as value in event `message.action`
-			err          error
+			msgResult *sdk.Result
+			err       error
 		)
 
 		if handler := app.msgServiceRouter.Handler(msg); handler != nil {
 			// ADR 031 request type routing
 			msgResult, err = middleware(ctx, msg, handler)
-			eventMsgName = sdk.MsgTypeURL(msg)
+			if err != nil {
+				return nil, sdkerrors.Wrapf(err, "failed to execute message; message index: %d", i)
+			}
 		} else if legacyMsg, ok := msg.(legacytx.LegacyMsg); ok {
 			// legacy sdk.Msg routing
 			// Assuming that the app developer has migrated all their Msgs to
@@ -843,7 +856,6 @@ func (app *BaseApp) runMsgs(ctx sdk.Context, msgs []sdk.Msg, mode runTxMode) (*s
 			// path should never be called, because all those Msgs should be
 			// registered within the `msgServiceRouter` already.
 			msgRoute := legacyMsg.Route()
-			eventMsgName = legacyMsg.Type()
 			handler := app.router.Route(ctx, msgRoute)
 			if handler == nil {
 				return nil, sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unrecognized message route: %s; message index: %d", msgRoute, i)
@@ -852,12 +864,6 @@ func (app *BaseApp) runMsgs(ctx sdk.Context, msgs []sdk.Msg, mode runTxMode) (*s
 			msgResult, err = middleware(ctx, msg, handler)
 		} else {
 			return nil, sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "can't route message %+v", msg)
-		}
-
-		// ADR 031 request type routing
-		msgResult, err := handler(ctx, msg)
-		if err != nil {
-			return nil, sdkerrors.Wrapf(err, "failed to execute message; message index: %d", i)
 		}
 
 		// create message events

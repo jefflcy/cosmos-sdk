@@ -294,6 +294,6 @@ func (ak AccountKeeper) getBech32Prefix() (string, error) {
 
 // Store fetches the permanent store
 func (ak AccountKeeper) Store(ctx sdk.Context, key string) prefix.Store {
-	mainStore := ctx.KVStore(ak.key)
+	mainStore := ctx.KVStore(ak.storeKey)
 	return prefix.NewStore(mainStore, types.KeyPrefix(key))
 }

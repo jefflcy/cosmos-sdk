@@ -255,7 +255,7 @@ func ProvideModule(in BankInputs) BankOutputs {
 		blockedAddresses,
 		authority.String(),
 	)
-	m := NewAppModule(in.Cdc, bankKeeper, in.AccountKeeper, in.LegacySubspace)
+	m := NewAppModule(in.Cdc, &bankKeeper, in.AccountKeeper, in.LegacySubspace)
 
 	return BankOutputs{BankKeeper: bankKeeper, Module: m}
 }

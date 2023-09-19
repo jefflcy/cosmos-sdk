@@ -30,7 +30,7 @@ func TestParams_ValidateBasic(t *testing.T) {
 		{"negative bonus proposer reward", fields{toDec("0.1"), toDec("0.2"), toDec("-0.1"), toDec("0.4"), false}, true},
 		{"negative liquidity provider reward", fields{toDec("0.1"), toDec("0.2"), toDec("0.1"), toDec("-0.4"), false}, true},
 		{"total sum greater than 1", fields{toDec("0.4"), toDec("0.2"), toDec("0.1"), toDec("0.4"), false}, true},
-		{"community tax greater than 1", fields{toDec("1.1"), toDec("0"), toDec("0"), false}, true},
+		{"community tax greater than 1", fields{toDec("1.1"), toDec("0"), toDec("0"), toDec("0"), false}, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
