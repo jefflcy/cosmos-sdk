@@ -29,7 +29,6 @@ const (
 	Query_DelegatorValidators_FullMethodName         = "/cosmos.distribution.v1beta1.Query/DelegatorValidators"
 	Query_DelegatorWithdrawAddress_FullMethodName    = "/cosmos.distribution.v1beta1.Query/DelegatorWithdrawAddress"
 	Query_CommunityPool_FullMethodName               = "/cosmos.distribution.v1beta1.Query/CommunityPool"
-	Query_LiquidityProviderRewards_FullMethodName    = "/cosmos.distribution.v1beta1.Query/LiquidityProviderRewards"
 )
 
 // QueryClient is the client API for Query service.
@@ -57,8 +56,6 @@ type QueryClient interface {
 	DelegatorWithdrawAddress(ctx context.Context, in *QueryDelegatorWithdrawAddressRequest, opts ...grpc.CallOption) (*QueryDelegatorWithdrawAddressResponse, error)
 	// CommunityPool queries the community pool coins.
 	CommunityPool(ctx context.Context, in *QueryCommunityPoolRequest, opts ...grpc.CallOption) (*QueryCommunityPoolResponse, error)
-	// LiquidityProviderRewards queries the outstanding liquidity provider reward coins.
-	LiquidityProviderRewards(ctx context.Context, in *QueryLiquidityProviderRewardsRequest, opts ...grpc.CallOption) (*QueryLiquidityProviderRewardsResponse, error)
 }
 
 type queryClient struct {
@@ -159,15 +156,6 @@ func (c *queryClient) CommunityPool(ctx context.Context, in *QueryCommunityPoolR
 	return out, nil
 }
 
-func (c *queryClient) LiquidityProviderRewards(ctx context.Context, in *QueryLiquidityProviderRewardsRequest, opts ...grpc.CallOption) (*QueryLiquidityProviderRewardsResponse, error) {
-	out := new(QueryLiquidityProviderRewardsResponse)
-	err := c.cc.Invoke(ctx, Query_LiquidityProviderRewards_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // QueryServer is the server API for Query service.
 // All implementations must embed UnimplementedQueryServer
 // for forward compatibility
@@ -193,8 +181,6 @@ type QueryServer interface {
 	DelegatorWithdrawAddress(context.Context, *QueryDelegatorWithdrawAddressRequest) (*QueryDelegatorWithdrawAddressResponse, error)
 	// CommunityPool queries the community pool coins.
 	CommunityPool(context.Context, *QueryCommunityPoolRequest) (*QueryCommunityPoolResponse, error)
-	// LiquidityProviderRewards queries the outstanding liquidity provider reward coins.
-	LiquidityProviderRewards(context.Context, *QueryLiquidityProviderRewardsRequest) (*QueryLiquidityProviderRewardsResponse, error)
 	mustEmbedUnimplementedQueryServer()
 }
 
@@ -231,9 +217,6 @@ func (UnimplementedQueryServer) DelegatorWithdrawAddress(context.Context, *Query
 }
 func (UnimplementedQueryServer) CommunityPool(context.Context, *QueryCommunityPoolRequest) (*QueryCommunityPoolResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CommunityPool not implemented")
-}
-func (UnimplementedQueryServer) LiquidityProviderRewards(context.Context, *QueryLiquidityProviderRewardsRequest) (*QueryLiquidityProviderRewardsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method LiquidityProviderRewards not implemented")
 }
 func (UnimplementedQueryServer) mustEmbedUnimplementedQueryServer() {}
 
@@ -428,24 +411,6 @@ func _Query_CommunityPool_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_LiquidityProviderRewards_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryLiquidityProviderRewardsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).LiquidityProviderRewards(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Query_LiquidityProviderRewards_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).LiquidityProviderRewards(ctx, req.(*QueryLiquidityProviderRewardsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Query_ServiceDesc is the grpc.ServiceDesc for Query service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -492,10 +457,6 @@ var Query_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CommunityPool",
 			Handler:    _Query_CommunityPool_Handler,
-		},
-		{
-			MethodName: "LiquidityProviderRewards",
-			Handler:    _Query_LiquidityProviderRewards_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
