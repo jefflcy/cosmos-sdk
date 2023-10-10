@@ -22,12 +22,12 @@ const FlagAppDBBackend = "app-db-backend"
 // PruningCmd prunes the sdk root multi store history versions based on the pruning options
 // specified by command flags.
 // Deprecated: Use Cmd instead.
-func PruningCmd(appCreator servertypes.AppCreator) *cobra.Command {
-	cmd := Cmd(appCreator, "")
-	cmd.Flags().String(server.FlagPruning, pruningtypes.PruningOptionDefault, "Pruning strategy (default|nothing|everything|custom)")
+// func PruningCmd(appCreator servertypes.AppCreator) *cobra.Command {
+// 	cmd := Cmd(appCreator, "")
+// 	cmd.Flags().String(server.FlagPruning, pruningtypes.PruningOptionDefault, "Pruning strategy (default|nothing|everything|custom)")
 
-	return cmd
-}
+// 	return cmd
+// }
 
 // Cmd prunes the sdk root multi store history versions based on the pruning options
 // specified by command flags.
