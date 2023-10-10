@@ -40,7 +40,7 @@ message Params {
 
   bool withdraw_addr_enabled = 4;
   string liquidity_provider_reward = 5 [
-    (gogoproto.moretags)   = "yaml:\"liquidity_provider_reward\"",
+    (cosmos_proto.scalar)  = "cosmos.Dec",
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec",
     (gogoproto.nullable)   = false
   ];
