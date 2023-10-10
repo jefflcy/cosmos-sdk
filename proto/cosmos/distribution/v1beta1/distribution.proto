@@ -129,8 +129,8 @@ message FeePool {
   // pool for lps yet to be distributed
   repeated cosmos.base.v1beta1.DecCoin liquidity_provider_pool = 2 [
     (gogoproto.nullable)     = false,
-    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins",
-    (gogoproto.moretags)     = "yaml:\"liquidity_provider_pool\""
+    (amino.dont_omitempty)   = true,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.DecCoins"
   ];
 }
 
