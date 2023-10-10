@@ -158,7 +158,7 @@ func (AppModule) ConsensusVersion() uint64 { return consensusVersion }
 //
 // CONTRACT: this is registered in BeginBlocker *before* all other modules' BeginBlock functions
 func (am AppModule) BeginBlock(ctx sdk.Context, req abci.RequestBeginBlock) {
-	BeginBlocker(*am.keeper, ctx, req)
+	BeginBlocker(am.keeper, ctx, req)
 }
 
 //

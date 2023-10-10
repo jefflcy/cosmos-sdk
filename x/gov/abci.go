@@ -10,7 +10,7 @@ import (
 )
 
 // EndBlocker called every block, process inflation, update validator set.
-func EndBlocker(ctx sdk.Context, keeper keeper.Keeper) {
+func EndBlocker(ctx sdk.Context, keeper *keeper.Keeper) {
 	logger := keeper.Logger(ctx)
 
 	// delete dead proposals from store and returns theirs deposits.

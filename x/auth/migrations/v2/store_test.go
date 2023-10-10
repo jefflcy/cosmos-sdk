@@ -710,7 +710,7 @@ func createValidator(t *testing.T, ctx sdk.Context, bankKeeper bankkeeper.Keeper
 	_, err = stakingKeeper.Delegate(ctx, addrs[0], valTokens, stakingtypes.Unbonded, val1, true)
 	require.NoError(t, err)
 
-	_ = staking.EndBlocker(ctx, *stakingKeeper)
+	_ = staking.EndBlocker(ctx, stakingKeeper)
 
 	return addrs[0], valAddrs[0]
 }

@@ -71,7 +71,7 @@ func TestTickExpiredDepositPeriod(t *testing.T) {
 	require.True(t, inactiveQueue.Valid())
 	inactiveQueue.Close()
 
-	gov.EndBlocker(ctx, *suite.GovKeeper)
+	gov.EndBlocker(ctx, suite.GovKeeper)
 
 	inactiveQueue = suite.GovKeeper.InactiveProposalQueueIterator(ctx, ctx.BlockHeader().Time)
 	require.False(t, inactiveQueue.Valid())
@@ -141,7 +141,7 @@ func TestTickMultipleExpiredDepositPeriod(t *testing.T) {
 	require.True(t, inactiveQueue.Valid())
 	inactiveQueue.Close()
 
-	gov.EndBlocker(ctx, *suite.GovKeeper)
+	gov.EndBlocker(ctx, suite.GovKeeper)
 
 	inactiveQueue = suite.GovKeeper.InactiveProposalQueueIterator(ctx, ctx.BlockHeader().Time)
 	require.False(t, inactiveQueue.Valid())
@@ -155,7 +155,7 @@ func TestTickMultipleExpiredDepositPeriod(t *testing.T) {
 	require.True(t, inactiveQueue.Valid())
 	inactiveQueue.Close()
 
-	gov.EndBlocker(ctx, *suite.GovKeeper)
+	gov.EndBlocker(ctx, suite.GovKeeper)
 
 	inactiveQueue = suite.GovKeeper.InactiveProposalQueueIterator(ctx, ctx.BlockHeader().Time)
 	require.False(t, inactiveQueue.Valid())
@@ -279,7 +279,7 @@ func TestTickPassedVotingPeriod(t *testing.T) {
 
 	activeQueue.Close()
 
-	gov.EndBlocker(ctx, *suite.GovKeeper)
+	gov.EndBlocker(ctx, suite.GovKeeper)
 
 	activeQueue = suite.GovKeeper.ActiveProposalQueueIterator(ctx, ctx.BlockHeader().Time)
 	require.False(t, activeQueue.Valid())
@@ -303,7 +303,7 @@ func TestProposalPassedEndblocker(t *testing.T) {
 	valAddr := sdk.ValAddress(addrs[0])
 
 	createValidators(t, stakingMsgSvr, ctx, []sdk.ValAddress{valAddr}, []int64{10})
-	staking.EndBlocker(ctx, *suite.StakingKeeper)
+	staking.EndBlocker(ctx, suite.StakingKeeper)
 
 	macc := suite.GovKeeper.GetGovernanceAccount(ctx)
 	require.NotNil(t, macc)
@@ -333,7 +333,7 @@ func TestProposalPassedEndblocker(t *testing.T) {
 	newHeader.Time = ctx.BlockHeader().Time.Add(*suite.GovKeeper.GetParams(ctx).MaxDepositPeriod).Add(*suite.GovKeeper.GetParams(ctx).VotingPeriod)
 	ctx = ctx.WithBlockHeader(newHeader)
 
-	gov.EndBlocker(ctx, *suite.GovKeeper)
+	gov.EndBlocker(ctx, suite.GovKeeper)
 
 	macc = suite.GovKeeper.GetGovernanceAccount(ctx)
 	require.NotNil(t, macc)
@@ -355,7 +355,7 @@ func TestEndBlockerProposalHandlerFailed(t *testing.T) {
 	valAddr := sdk.ValAddress(addrs[0])
 
 	createValidators(t, stakingMsgSvr, ctx, []sdk.ValAddress{valAddr}, []int64{10})
-	staking.EndBlocker(ctx, *suite.StakingKeeper)
+	staking.EndBlocker(ctx, suite.StakingKeeper)
 
 	msg := banktypes.NewMsgSend(authtypes.NewModuleAddress(types.ModuleName), addrs[0], sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(100000))))
 	proposal, err := suite.GovKeeper.SubmitProposal(ctx, []sdk.Msg{msg}, "", "Bank Msg Send", "send message", addrs[0])
@@ -377,7 +377,7 @@ func TestEndBlockerProposalHandlerFailed(t *testing.T) {
 	ctx = ctx.WithBlockHeader(newHeader)
 
 	// validate that the proposal fails/has been rejected
-	gov.EndBlocker(ctx, *suite.GovKeeper)
+	gov.EndBlocker(ctx, suite.GovKeeper)
 
 	proposal, ok := suite.GovKeeper.GetProposal(ctx, proposal.Id)
 	require.True(t, ok)
