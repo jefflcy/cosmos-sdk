@@ -129,16 +129,6 @@ func (st *Store) GetImmutable(version int64) (*Store, error) {
 func (st *Store) Commit() types.CommitID {
 	defer telemetry.MeasureSince(time.Now(), "store", "iavl", "commit")
 
-	v := st.tree.Version()
-	if v == 34604710 && st.tree.VersionExists(v+1) {
-		fmt.Printf("next version already exists: %v\n", v)
-		e := st.tree.(*iavl.MutableTree).DeleteVersionUnsafe(v + 1)
-		if e != nil {
-			panic(e)
-		}
-		fmt.Printf("deleted version: %v\n", v+1)
-	}
-
 	hash, version, err := st.tree.SaveVersion()
 	if err != nil {
 		panic(err)
@@ -246,42 +236,12 @@ func (st *Store) DeleteVersions(versions ...int64) error {
 // LoadVersionForOverwriting attempts to load a tree at a previously committed
 // version, or the latest version below it. Any versions greater than targetVersion will be deleted.
 func (st *Store) LoadVersionForOverwriting(targetVersion int64) (int64, error) {
-	v, err := st.tree.(*iavl.MutableTree).LoadVersion(targetVersion)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Printf("Deleting version: %v\n", targetVersion+1)
-	err = st.tree.(*iavl.MutableTree).DeleteVersionUnsafe(targetVersion + 1)
-	if err != nil {
-		fmt.Printf("%v\n", err.Error())
-	} else {
-		fmt.Println("Version deleted!")
-	}
-	return v, nil
+	return st.tree.LoadVersionForOverwriting(targetVersion)
 }
 
 // LazyLoadVersionForOverwriting is the lazy version of LoadVersionForOverwriting.
 func (st *Store) LazyLoadVersionForOverwriting(targetVersion int64) (int64, error) {
 	return st.tree.LazyLoadVersionForOverwriting(targetVersion)
-}
-
-// RollbackToVersion attempts to rollback a tree to a previously committed version,
-// deleting all versions greater than targetVersion.
-func (st *Store) RollbackToVersion(targetVersion int64) error {
-	tree := st.tree.(*iavl.MutableTree)
-	v, err := tree.LoadVersion(targetVersion)
-	if err != nil {
-		panic(err)
-	}
-	for deleteVersion := v + 1; tree.VersionExists(deleteVersion); deleteVersion += 1 {
-		st.logger.Info("Deleting version: %v\n", deleteVersion)
-		err = tree.DeleteVersionUnsafe(deleteVersion)
-		if err != nil {
-			return err
-		}
-		st.logger.Info("Deleted version : %v\n", deleteVersion)
-	}
-	return nil
 }
 
 // Implements types.KVStore.
