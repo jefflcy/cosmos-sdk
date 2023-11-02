@@ -22,12 +22,12 @@ const FlagAppDBBackend = "app-db-backend"
 // PruningCmd prunes the sdk root multi store history versions based on the pruning options
 // specified by command flags.
 // Deprecated: Use Cmd instead.
-func PruningCmd(appCreator servertypes.AppCreator) *cobra.Command {
-	cmd := Cmd(appCreator, "")
-	cmd.Flags().String(server.FlagPruning, pruningtypes.PruningOptionDefault, "Pruning strategy (default|nothing|everything|custom)")
+// func PruningCmd(appCreator servertypes.AppCreator) *cobra.Command {
+// 	cmd := Cmd(appCreator, "")
+// 	cmd.Flags().String(server.FlagPruning, pruningtypes.PruningOptionDefault, "Pruning strategy (default|nothing|everything|custom)")
 
-	return cmd
-}
+// 	return cmd
+// }
 
 // Cmd prunes the sdk root multi store history versions based on the pruning options
 // specified by command flags.
@@ -95,7 +95,7 @@ Supported app-db-backend types include 'goleveldb', 'rocksdb', 'pebbledb'.`,
 			}
 
 			var pruningHeights []int64
-			for height := int64(1); height < latestHeight; height++ {
+			for height := int64(pruningOptions.PruningStartHeight); height < latestHeight; height++ {
 				if height < latestHeight-int64(pruningOptions.KeepRecent) {
 					pruningHeights = append(pruningHeights, height)
 				}
@@ -117,6 +117,8 @@ Supported app-db-backend types include 'goleveldb', 'rocksdb', 'pebbledb'.`,
 
 	cmd.Flags().String(flags.FlagHome, defaultNodeHome, "The application home directory")
 	cmd.Flags().String(FlagAppDBBackend, "", "The type of database for application and snapshots databases")
+	cmd.Flags().Uint64(pruningtypes.PruningOptionStartHeight, 1, "Start height to prune from")
+	cmd.Flags().String(server.FlagPruning, pruningtypes.PruningOptionDefault, "Pruning strategy (default|nothing|everything|custom)")
 	cmd.Flags().Uint64(server.FlagPruningKeepRecent, 0, "Number of recent heights to keep on disk (ignored if pruning is not 'custom')")
 	cmd.Flags().Uint64(server.FlagPruningInterval, 10,
 		`Height interval at which pruned heights are removed from disk (ignored if pruning is not 'custom'), 

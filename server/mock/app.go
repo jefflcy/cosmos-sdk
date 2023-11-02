@@ -54,6 +54,9 @@ func NewApp(rootDir string, logger log.Logger) (abci.Application, error) {
 	router.RegisterService(newDesc, &MsgServerImpl{capKeyMainStore})
 	baseApp.SetMsgServiceRouter(router)
 
+	// Set a Route.
+	baseApp.Router().AddRoute(sdk.NewRoute("kvstore", KVStoreHandler(capKeyMainStore)))
+
 	if err := baseApp.LoadLatestVersion(); err != nil {
 		return nil, err
 	}

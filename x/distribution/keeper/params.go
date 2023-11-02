@@ -40,6 +40,11 @@ func (k Keeper) GetCommunityTax(ctx sdk.Context) math.LegacyDec {
 	return k.GetParams(ctx).CommunityTax
 }
 
+// GetLiquidityProviderReward returns the current distribution liquidity provider reward rate.
+func (k Keeper) GetLiquidityProviderReward(ctx sdk.Context) (percent sdk.Dec) {
+	return k.GetParams(ctx).LiquidityProviderReward
+}
+
 // GetWithdrawAddrEnabled returns the current distribution withdraw address
 // enabled parameter.
 func (k Keeper) GetWithdrawAddrEnabled(ctx sdk.Context) (enabled bool) {

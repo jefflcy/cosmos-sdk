@@ -21,6 +21,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/mempool"
+	"github.com/cosmos/cosmos-sdk/x/auth/migrations/legacytx"
 )
 
 type (
@@ -56,6 +57,7 @@ type BaseApp struct { //nolint: maligned
 	storeLoader       StoreLoader          // function to handle store loading, may be overridden with SetStoreLoader()
 	grpcQueryRouter   *GRPCQueryRouter     // router for redirecting gRPC query calls
 	msgServiceRouter  *MsgServiceRouter    // router for redirecting Msg service messages
+	router            sdk.Router           // handle any kind of message
 	interfaceRegistry codectypes.InterfaceRegistry
 	txDecoder         sdk.TxDecoder // unmarshal []byte into sdk.Tx
 	txEncoder         sdk.TxEncoder // marshal sdk.Tx into []byte
@@ -63,6 +65,7 @@ type BaseApp struct { //nolint: maligned
 	mempool         mempool.Mempool            // application side mempool
 	anteHandler     sdk.AnteHandler            // ante handler for fee and auth
 	postHandler     sdk.PostHandler            // post handler, optional, e.g. for tips
+	refundHandler   sdk.AnteHandler            // refund handler for failed tx
 	initChainer     sdk.InitChainer            // initialize state with validators and state blob
 	beginBlocker    sdk.BeginBlocker           // logic to run before any txs
 	processProposal sdk.ProcessProposalHandler // the handler which runs on ABCI ProcessProposal
@@ -71,6 +74,8 @@ type BaseApp struct { //nolint: maligned
 	addrPeerFilter  sdk.PeerFilter             // filter peers by address and port
 	idPeerFilter    sdk.PeerFilter             // filter peers by node ID
 	fauxMerkleMode  bool                       // if true, IAVL MountStores uses MountStoresDB for simulation speed.
+
+	customMiddlewares
 
 	// manages snapshots, i.e. dumps of app state at certain intervals
 	snapshotManager *snapshots.Manager
@@ -146,6 +151,14 @@ type BaseApp struct { //nolint: maligned
 	chainID string
 }
 
+type customMiddlewares struct {
+	deliverTxer     sdk.DeliverTxer     // logic to run on any deliver tx
+	beforeCommitter sdk.BeforeCommitter // logic to run before committing state
+	afterCommitter  sdk.AfterCommitter  // logic to run after committing state
+
+	msgHandlerMiddleware sdk.MsgHandlerMiddleware // middleware that wraps msg handlers
+}
+
 // NewBaseApp returns a reference to an initialized BaseApp. It accepts a
 // variadic number of option functions, which act on the BaseApp to set
 // configuration choices.
@@ -160,6 +173,7 @@ func NewBaseApp(
 		db:               db,
 		cms:              store.NewCommitMultiStore(db),
 		storeLoader:      DefaultStoreLoader,
+		router:           NewRouter(),
 		grpcQueryRouter:  NewGRPCQueryRouter(),
 		msgServiceRouter: NewMsgServiceRouter(),
 		txDecoder:        txDecoder,
@@ -403,6 +417,17 @@ func (app *BaseApp) setIndexEvents(ie []string) {
 	for _, e := range ie {
 		app.indexEvents[e] = struct{}{}
 	}
+}
+
+// Router returns the legacy router of the BaseApp.
+func (app *BaseApp) Router() sdk.Router {
+	if app.sealed {
+		// We cannot return a Router when the app is sealed because we can't have
+		// any routes modified which would cause unexpected routing behavior.
+		panic("Router() on sealed BaseApp")
+	}
+
+	return app.router
 }
 
 // Seal seals a BaseApp. It prohibits any further modifications to a BaseApp.
@@ -770,6 +795,23 @@ func (app *BaseApp) runTx(mode runTxMode, txBytes []byte) (gInfo sdk.GasInfo, re
 			// append the events in the order of occurrence
 			result.Events = append(anteEvents, result.Events...)
 		}
+	} else {
+		if app.refundHandler != nil {
+			refundCtx, msCache := app.cacheTxContext(ctx, txBytes)
+			refundCtx = refundCtx.WithEventManager(sdk.NewEventManager())
+			newCtx, err := app.refundHandler(refundCtx, tx, mode == runTxModeSimulate)
+			if err != nil {
+				return gInfo, result, anteEvents, priority, err
+			}
+
+			if mode == runTxModeDeliver {
+				msCache.Write()
+			}
+
+			if len(anteEvents) > 0 && (mode == runTxModeDeliver || mode == runTxModeSimulate) {
+				anteEvents = append(anteEvents, newCtx.EventManager().ABCIEvents()...)
+			}
+		}
 	}
 
 	return gInfo, result, anteEvents, priority, err
@@ -785,21 +827,43 @@ func (app *BaseApp) runMsgs(ctx sdk.Context, msgs []sdk.Msg, mode runTxMode) (*s
 	events := sdk.EmptyEvents()
 	var msgResponses []*codectypes.Any
 
+	middleware := app.msgHandlerMiddleware
+	if middleware == nil {
+		middleware = noopMiddleware
+	}
+
 	// NOTE: GasWanted is determined by the AnteHandler and GasUsed by the GasMeter.
 	for i, msg := range msgs {
 		if mode != runTxModeDeliver && mode != runTxModeSimulate {
 			break
 		}
 
-		handler := app.msgServiceRouter.Handler(msg)
-		if handler == nil {
-			return nil, sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "can't route message %+v", msg)
-		}
+		var (
+			msgResult *sdk.Result
+			err       error
+		)
 
-		// ADR 031 request type routing
-		msgResult, err := handler(ctx, msg)
-		if err != nil {
-			return nil, sdkerrors.Wrapf(err, "failed to execute message; message index: %d", i)
+		if handler := app.msgServiceRouter.Handler(msg); handler != nil {
+			// ADR 031 request type routing
+			msgResult, err = middleware(ctx, msg, handler)
+			if err != nil {
+				return nil, sdkerrors.Wrapf(err, "failed to execute message; message index: %d", i)
+			}
+		} else if legacyMsg, ok := msg.(legacytx.LegacyMsg); ok {
+			// legacy sdk.Msg routing
+			// Assuming that the app developer has migrated all their Msgs to
+			// proto messages and has registered all `Msg services`, then this
+			// path should never be called, because all those Msgs should be
+			// registered within the `msgServiceRouter` already.
+			msgRoute := legacyMsg.Route()
+			handler := app.router.Route(ctx, msgRoute)
+			if handler == nil {
+				return nil, sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unrecognized message route: %s; message index: %d", msgRoute, i)
+			}
+
+			msgResult, err = middleware(ctx, msg, handler)
+		} else {
+			return nil, sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "can't route message %+v", msg)
 		}
 
 		// create message events
@@ -1073,4 +1137,8 @@ func NoOpProcessProposal() sdk.ProcessProposalHandler {
 // Close is called in start cmd to gracefully cleanup resources.
 func (app *BaseApp) Close() error {
 	return nil
+}
+
+var noopMiddleware sdk.MsgHandlerMiddleware = func(c sdk.Context, m sdk.Msg, h sdk.Handler) (*sdk.Result, error) {
+	return h(c, m)
 }

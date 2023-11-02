@@ -266,6 +266,12 @@ func (s *Store) Save(
 		if err != nil {
 			return nil, sdkerrors.Wrapf(err, "failed to create snapshot directory %q", dir)
 		}
+		path := s.PathChunk(height, format, index)
+		file, err := os.Create(path)
+		if err != nil {
+			return nil, sdkerrors.Wrapf(err, "failed to create snapshot chunk file %q", path)
+		}
+		defer file.Close() // nolint: staticcheck
 
 		if err := s.saveChunk(chunkBody, index, snapshot, chunkHasher, snapshotHasher); err != nil {
 			return nil, err

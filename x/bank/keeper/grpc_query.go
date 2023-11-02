@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 
-	"cosmossdk.io/math"
 	gogotypes "github.com/cosmos/gogoproto/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -17,6 +16,7 @@ import (
 var _ types.QueryServer = BaseKeeper{}
 
 // Balance implements the Query/Balance gRPC method
+// Gets mapped account balance if mapping exists
 func (k BaseKeeper) Balance(ctx context.Context, req *types.QueryBalanceRequest) (*types.QueryBalanceResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
@@ -38,6 +38,7 @@ func (k BaseKeeper) Balance(ctx context.Context, req *types.QueryBalanceRequest)
 }
 
 // AllBalances implements the Query/AllBalances gRPC method
+// Gets mapped account balance if mapping exists
 func (k BaseKeeper) AllBalances(ctx context.Context, req *types.QueryAllBalancesRequest) (*types.QueryAllBalancesResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
@@ -51,7 +52,8 @@ func (k BaseKeeper) AllBalances(ctx context.Context, req *types.QueryAllBalances
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
 	balances := sdk.NewCoins()
-	accountStore := k.getAccountStore(sdkCtx, addr)
+	address := k.ak.GetMergedAccountAddressIfExists(sdkCtx, addr)
+	accountStore := k.getAccountStore(sdkCtx, address)
 
 	pageRes, err := query.Paginate(accountStore, req.Pagination, func(key, value []byte) error {
 		denom := string(key)
@@ -71,6 +73,7 @@ func (k BaseKeeper) AllBalances(ctx context.Context, req *types.QueryAllBalances
 
 // SpendableBalances implements a gRPC query handler for retrieving an account's
 // spendable balances.
+// Gets mapped account balance if mapping exists
 func (k BaseKeeper) SpendableBalances(ctx context.Context, req *types.QuerySpendableBalancesRequest) (*types.QuerySpendableBalancesResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "empty request")
@@ -84,8 +87,9 @@ func (k BaseKeeper) SpendableBalances(ctx context.Context, req *types.QuerySpend
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
 	balances := sdk.NewCoins()
-	accountStore := k.getAccountStore(sdkCtx, addr)
-	zeroAmt := math.ZeroInt()
+	address := k.ak.GetMergedAccountAddressIfExists(sdkCtx, addr)
+	accountStore := k.getAccountStore(sdkCtx, address)
+	zeroAmt := sdk.ZeroInt()
 
 	pageRes, err := query.Paginate(accountStore, req.Pagination, func(key, _ []byte) error {
 		balances = append(balances, sdk.NewCoin(string(key), zeroAmt))
@@ -96,6 +100,7 @@ func (k BaseKeeper) SpendableBalances(ctx context.Context, req *types.QuerySpend
 	}
 
 	result := sdk.NewCoins()
+	// Mapping to cosmos account is done within this method so is safe to pass in the original address
 	spendable := k.SpendableCoins(sdkCtx, addr)
 
 	for _, c := range balances {
