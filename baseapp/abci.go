@@ -542,7 +542,8 @@ func (app *BaseApp) Query(req abci.RequestQuery) (res abci.ResponseQuery) {
 
 	telemetry.IncrCounter(1, "query", "count")
 	telemetry.IncrCounter(1, "query", req.Path)
-	defer telemetry.MeasureSince(time.Now(), req.Path)
+	//defer telemetry.MeasureSince(time.Now(), req.Path)
+	defer telemetry.ModuleMeasureSince(req.Path, time.Now(), "ABCI_query")
 
 	if req.Path == "/cosmos.tx.v1beta1.Service/BroadcastTx" {
 		return sdkerrors.QueryResult(sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "can't route a broadcast tx message"), app.trace)
@@ -699,7 +700,6 @@ func (app *BaseApp) ApplySnapshotChunk(req abci.RequestApplySnapshotChunk) abci.
 }
 
 func (app *BaseApp) handleQueryGRPC(handler GRPCQueryHandler, req abci.RequestQuery) abci.ResponseQuery {
-	defer telemetry.ModuleMeasureSince(req.Path, time.Now(), "GRPC_query")
 	ctx, err := app.CreateQueryContext(req.Height, req.Prove)
 	if err != nil {
 		return sdkerrors.QueryResult(err, app.trace)
