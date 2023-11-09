@@ -216,6 +216,7 @@ func (ak AccountKeeper) GetModuleAddressAndPermissions(moduleName string) (addr 
 // GetModuleAccountAndPermissions gets the module account from the auth account store and its
 // registered permissions
 func (ak AccountKeeper) GetModuleAccountAndPermissions(ctx sdk.Context, moduleName string) (types.ModuleAccountI, []string) {
+
 	addr, perms := ak.GetModuleAddressAndPermissions(moduleName)
 	if addr == nil {
 		return nil, []string{}
@@ -225,6 +226,9 @@ func (ak AccountKeeper) GetModuleAccountAndPermissions(ctx sdk.Context, moduleNa
 	if acc != nil {
 		macc, ok := acc.(types.ModuleAccountI)
 		if !ok {
+			fmt.Println("xx moduleName: ", moduleName)
+			fmt.Println("xx acc: ", acc.GetAddress())
+			fmt.Printf("xx not a moduleAccount:%#+v\n ", acc)
 			panic("account is not a module account")
 		}
 		return macc, perms

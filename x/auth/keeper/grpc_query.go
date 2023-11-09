@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 	"errors"
+	"fmt"
 	"sort"
 	"strings"
 
@@ -119,7 +120,7 @@ func (ak AccountKeeper) ModuleAccounts(c context.Context, req *types.QueryModule
 	sort.Strings(sortedPermAddrs)
 
 	modAccounts := make([]*codectypes.Any, 0, len(ak.permAddrs))
-
+	fmt.Println("xx sortedPermAddrs: ", sortedPermAddrs)
 	for _, moduleName := range sortedPermAddrs {
 		account := ak.GetModuleAccount(ctx, moduleName)
 		if account == nil {
