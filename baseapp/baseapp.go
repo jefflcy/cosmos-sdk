@@ -21,7 +21,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/types/mempool"
-	"github.com/cosmos/cosmos-sdk/x/auth/migrations/legacytx"
 )
 
 type (
@@ -843,27 +842,15 @@ func (app *BaseApp) runMsgs(ctx sdk.Context, msgs []sdk.Msg, mode runTxMode) (*s
 			err       error
 		)
 
-		if handler := app.msgServiceRouter.Handler(msg); handler != nil {
-			// ADR 031 request type routing
-			msgResult, err = middleware(ctx, msg, handler)
-			if err != nil {
-				return nil, sdkerrors.Wrapf(err, "failed to execute message; message index: %d", i)
-			}
-		} else if legacyMsg, ok := msg.(legacytx.LegacyMsg); ok {
-			// legacy sdk.Msg routing
-			// Assuming that the app developer has migrated all their Msgs to
-			// proto messages and has registered all `Msg services`, then this
-			// path should never be called, because all those Msgs should be
-			// registered within the `msgServiceRouter` already.
-			msgRoute := legacyMsg.Route()
-			handler := app.router.Route(ctx, msgRoute)
-			if handler == nil {
-				return nil, sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unrecognized message route: %s; message index: %d", msgRoute, i)
-			}
-
-			msgResult, err = middleware(ctx, msg, handler)
-		} else {
+		handler := app.msgServiceRouter.Handler(msg)
+		if handler == nil {
 			return nil, sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "can't route message %+v", msg)
+		}
+
+		// ADR 031 request type routing
+		msgResult, err = middleware(ctx, msg, handler)
+		if err != nil {
+			return nil, sdkerrors.Wrapf(err, "failed to execute message; message index: %d", i)
 		}
 
 		// create message events
