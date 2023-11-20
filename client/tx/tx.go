@@ -129,9 +129,6 @@ func BroadcastTx(clientCtx client.Context, txf Factory, msgs ...sdk.Msg) error {
 		return err
 	}
 
-	fmt.Print("printing res...\n")
-	fmt.Print(res)
-
 	return clientCtx.PrintProto(res)
 }
 
