@@ -26,7 +26,7 @@ func ResponseDeliverTxWithEvents(err error, gw, gu uint64, events []abci.Event, 
 		Codespace: space,
 		Code:      code,
 		Log:       log,
-		GasWanted: int64(555),
+		GasWanted: int64(gw),
 		GasUsed:   int64(gu),
 	}
 }

@@ -369,18 +369,15 @@ func (app *BaseApp) CheckTx(req abci.RequestCheckTx) abci.ResponseCheckTx {
 
 	gInfo, result, anteEvents, priority, err := app.runTx(mode, req.Tx)
 	if err != nil {
+		app.logger.Info("FAILED CHECKTX: \n")
 		return sdkerrors.ResponseCheckTxWithEvents(err, gInfo.GasWanted, gInfo.GasUsed, anteEvents, app.trace)
 	}
 
-	fmt.Print("CHECKTX: \n")
-	fmt.Print("gas info: \n")
-	fmt.Print(gInfo)
-	fmt.Print("result: \n")
-	fmt.Print(result)
-	fmt.Print("anteEvents: \n")
-	fmt.Print(anteEvents)
-	fmt.Print("err: \n")
-	fmt.Print(err)
+	app.logger.Info("CHECKTX: \n")
+	app.logger.Info("gas info: \n", gInfo)
+	app.logger.Info("result: \n", result)
+	app.logger.Info("anteEvents: \n", anteEvents)
+	app.logger.Info("err: \n", err)
 
 	return abci.ResponseCheckTx{
 		GasWanted: int64(gInfo.GasWanted), // TODO: Should type accept unsigned ints?
@@ -425,23 +422,19 @@ func (app *BaseApp) DeliverTx(req abci.RequestDeliverTx) (res abci.ResponseDeliv
 	gInfo, result, anteEvents, _, err := app.runTx(runTxModeDeliver, req.Tx)
 	if err != nil {
 		resultStr = "failed"
-		fmt.Print("failed tx...")
+		app.logger.Info("failed tx...")
 		return sdkerrors.ResponseDeliverTxWithEvents(err, gInfo.GasWanted, gInfo.GasUsed, sdk.MarkEventsToIndex(anteEvents, app.indexEvents), app.trace)
 	}
 
-	fmt.Print("DELIVERTX: \n")
-	fmt.Print("gas info: \n")
-	fmt.Print(gInfo)
-	fmt.Print("result: \n")
-	fmt.Print(result)
-	fmt.Print("anteEvents: \n")
-	fmt.Print(anteEvents)
-	fmt.Print("err: \n")
-	fmt.Print(err)
+	app.logger.Info("DELIVERTX: \n")
+	app.logger.Info("gas info: \n", gInfo)
+	app.logger.Info("result: \n", result)
+	app.logger.Info("anteEvents: \n", anteEvents)
+	app.logger.Info("err: \n", err)
 
 	return abci.ResponseDeliverTx{
-		GasWanted: int64(222),           // TODO: Should type accept unsigned ints?
-		GasUsed:   int64(gInfo.GasUsed), // TODO: Should type accept unsigned ints?
+		GasWanted: int64(gInfo.GasWanted), // TODO: Should type accept unsigned ints?
+		GasUsed:   int64(gInfo.GasUsed),   // TODO: Should type accept unsigned ints?
 		Log:       result.Log,
 		Data:      result.Data,
 		Events:    sdk.MarkEventsToIndex(result.Events, app.indexEvents),
