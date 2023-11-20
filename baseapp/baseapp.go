@@ -814,7 +814,9 @@ func (app *BaseApp) runTx(mode runTxMode, txBytes []byte) (gInfo sdk.GasInfo, re
 	}
 
 	if err != nil {
-		panic(err)
+		panic(fmt.Sprintf("ERROR: \n gInfo: %v \n result: %v \n anteEvents: %v \n priority: %v \n err: %v \n", gInfo, result, anteEvents, priority, err))
+	} else {
+		panic(fmt.Sprintf("NO ERROR: \n gInfo: %v \n result: %v \n anteEvents: %v \n priority: %v \n err: %v \n", gInfo, result, anteEvents, priority, err))
 	}
 
 	return gInfo, result, anteEvents, priority, err

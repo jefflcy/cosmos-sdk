@@ -369,15 +369,8 @@ func (app *BaseApp) CheckTx(req abci.RequestCheckTx) abci.ResponseCheckTx {
 
 	gInfo, result, anteEvents, priority, err := app.runTx(mode, req.Tx)
 	if err != nil {
-		app.logger.Info("FAILED CHECKTX: \n")
 		return sdkerrors.ResponseCheckTxWithEvents(err, gInfo.GasWanted, gInfo.GasUsed, anteEvents, app.trace)
 	}
-
-	app.logger.Info("CHECKTX: \n")
-	app.logger.Info("gas info: \n", gInfo)
-	app.logger.Info("result: \n", result)
-	app.logger.Info("anteEvents: \n", anteEvents)
-	app.logger.Info("err: \n", err)
 
 	return abci.ResponseCheckTx{
 		GasWanted: int64(gInfo.GasWanted), // TODO: Should type accept unsigned ints?
@@ -422,15 +415,8 @@ func (app *BaseApp) DeliverTx(req abci.RequestDeliverTx) (res abci.ResponseDeliv
 	gInfo, result, anteEvents, _, err := app.runTx(runTxModeDeliver, req.Tx)
 	if err != nil {
 		resultStr = "failed"
-		app.logger.Info("failed tx...")
 		return sdkerrors.ResponseDeliverTxWithEvents(err, gInfo.GasWanted, gInfo.GasUsed, sdk.MarkEventsToIndex(anteEvents, app.indexEvents), app.trace)
 	}
-
-	app.logger.Info("DELIVERTX: \n")
-	app.logger.Info("gas info: \n", gInfo)
-	app.logger.Info("result: \n", result)
-	app.logger.Info("anteEvents: \n", anteEvents)
-	app.logger.Info("err: \n", err)
 
 	return abci.ResponseDeliverTx{
 		GasWanted: int64(gInfo.GasWanted), // TODO: Should type accept unsigned ints?
