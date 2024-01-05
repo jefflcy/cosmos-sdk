@@ -175,6 +175,8 @@ type GovInputs struct {
 	BankKeeper    govtypes.BankKeeper
 	StakingKeeper govtypes.StakingKeeper
 
+	ProposalMsgWhitelist []string
+
 	// LegacySubspace is used solely for migration of x/params managed parameters
 	LegacySubspace govtypes.ParamSubspace `optional:"true"`
 }
@@ -208,6 +210,7 @@ func ProvideModule(in GovInputs) GovOutputs {
 		in.MsgServiceRouter,
 		kConfig,
 		authority.String(),
+		in.ProposalMsgWhitelist,
 	)
 	m := NewAppModule(in.Cdc, k, in.AccountKeeper, in.BankKeeper, in.LegacySubspace)
 	hr := v1beta1.HandlerRoute{Handler: v1beta1.ProposalHandler, RouteKey: govtypes.RouterKey}

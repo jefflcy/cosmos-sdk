@@ -44,6 +44,9 @@ type Keeper struct {
 	// the address capable of executing a MsgUpdateParams message. Typically, this
 	// should be the x/gov module account.
 	authority string
+
+	// whitelist of msgs that can be passed into gov prop
+	proposalMsgWhitelist []string
 }
 
 // GetAuthority returns the x/gov module's authority.
@@ -62,6 +65,7 @@ func NewKeeper(
 	cdc codec.BinaryCodec, key storetypes.StoreKey, authKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper, sk types.StakingKeeper,
 	router *baseapp.MsgServiceRouter, config types.Config, authority string,
+	proposalMsgWhitelist []string,
 ) *Keeper {
 	// ensure governance module account is set
 	if addr := authKeeper.GetModuleAddress(types.ModuleName); addr == nil {
@@ -78,14 +82,15 @@ func NewKeeper(
 	}
 
 	return &Keeper{
-		storeKey:   key,
-		authKeeper: authKeeper,
-		bankKeeper: bankKeeper,
-		sk:         sk,
-		cdc:        cdc,
-		router:     router,
-		config:     config,
-		authority:  authority,
+		storeKey:             key,
+		authKeeper:           authKeeper,
+		bankKeeper:           bankKeeper,
+		sk:                   sk,
+		cdc:                  cdc,
+		router:               router,
+		config:               config,
+		authority:            authority,
+		proposalMsgWhitelist: proposalMsgWhitelist,
 	}
 }
 
@@ -226,4 +231,13 @@ func (keeper Keeper) assertMetadataLength(metadata string) error {
 		return types.ErrMetadataTooLong.Wrapf("got metadata with length %d", len(metadata))
 	}
 	return nil
+}
+
+func (keeper Keeper) isMessageWhitelisted(msg string) bool {
+	for _, whitelistedMsg := range keeper.proposalMsgWhitelist {
+		if whitelistedMsg == msg {
+			return true
+		}
+	}
+	return false
 }

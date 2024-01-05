@@ -22,4 +22,5 @@ var (
 	ErrInvalidSignalMsg        = sdkerrors.Register(ModuleName, 14, "signal message is invalid")
 	ErrMetadataTooLong         = sdkerrors.Register(ModuleName, 15, "metadata too long")
 	ErrMinDepositTooSmall      = sdkerrors.Register(ModuleName, 16, "minimum deposit is too small")
+	ErrPropMsgNotWhitelisted   = sdkerrors.Register(ModuleName, 17, "proposal message not whitelisted")
 )
