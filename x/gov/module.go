@@ -175,7 +175,7 @@ type GovInputs struct {
 	BankKeeper    govtypes.BankKeeper
 	StakingKeeper govtypes.StakingKeeper
 
-	ProposalMsgWhitelist []string
+	ProposalMsgWhitelist map[string]bool
 
 	// LegacySubspace is used solely for migration of x/params managed parameters
 	LegacySubspace govtypes.ParamSubspace `optional:"true"`
