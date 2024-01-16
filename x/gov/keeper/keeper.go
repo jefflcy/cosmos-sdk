@@ -46,7 +46,7 @@ type Keeper struct {
 	authority string
 
 	// whitelist of msgs that can be passed into gov prop
-	proposalMsgWhitelist map[string]bool
+	proposalMsgWhitelist map[string]struct{}
 }
 
 // GetAuthority returns the x/gov module's authority.
@@ -65,7 +65,7 @@ func NewKeeper(
 	cdc codec.BinaryCodec, key storetypes.StoreKey, authKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper, sk types.StakingKeeper,
 	router *baseapp.MsgServiceRouter, config types.Config, authority string,
-	proposalMsgWhitelist map[string]bool,
+	proposalMsgWhitelist []string,
 ) *Keeper {
 	// ensure governance module account is set
 	if addr := authKeeper.GetModuleAddress(types.ModuleName); addr == nil {
@@ -81,6 +81,11 @@ func NewKeeper(
 		config.MaxMetadataLen = types.DefaultConfig().MaxMetadataLen
 	}
 
+	proposalMsgWhitelistMap := make(map[string]struct{})
+	for _, msg := range proposalMsgWhitelist {
+		proposalMsgWhitelistMap[msg] = struct{}{}
+	}
+
 	return &Keeper{
 		storeKey:             key,
 		authKeeper:           authKeeper,
@@ -90,7 +95,7 @@ func NewKeeper(
 		router:               router,
 		config:               config,
 		authority:            authority,
-		proposalMsgWhitelist: proposalMsgWhitelist,
+		proposalMsgWhitelist: proposalMsgWhitelistMap,
 	}
 }
 
@@ -234,5 +239,5 @@ func (keeper Keeper) assertMetadataLength(metadata string) error {
 }
 
 func (keeper Keeper) isMessageWhitelisted(msg string) bool {
-	return keeper.proposalMsgWhitelist[msg]
+	return keeper.proposalMsgWhitelist[msg] == struct{}{}
 }
