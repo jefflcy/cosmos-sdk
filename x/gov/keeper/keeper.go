@@ -239,5 +239,6 @@ func (keeper Keeper) assertMetadataLength(metadata string) error {
 }
 
 func (keeper Keeper) isMessageWhitelisted(msg string) bool {
-	return keeper.proposalMsgWhitelist[msg] == struct{}{}
+	_, exists := keeper.proposalMsgWhitelist[msg]
+	return exists
 }
