@@ -963,6 +963,14 @@ func (app *BaseApp) Commit() (*abci.ResponseCommit, error) {
 	return resp, nil
 }
 
+func (app *BaseApp) SignGossipVote(req *abci.RequestSignGossipVote) (*abci.ResponseSignGossipVote, error) {
+	if app.signGossipVote != nil {
+		return app.signGossipVote(app.prepareProposalState.ctx, req)
+	}
+	return &abci.ResponseSignGossipVote{}, fmt.Errorf("signGossipVote hook is not set")
+
+}
+
 // workingHash gets the apphash that will be finalized in commit.
 // These writes will be persisted to the root multi-store (app.cms) and flushed to
 // disk in the Commit phase. This means when the ABCI client requests Commit(), the application

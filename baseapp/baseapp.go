@@ -193,6 +193,7 @@ type customMiddlewares struct {
 	deliverTxer     sdk.DeliverTxer     // logic to run on any deliver tx
 	beforeCommitter sdk.BeforeCommitter // logic to run before committing state
 	afterCommitter  sdk.AfterCommitter  // logic to run after committing state
+	signGossipVote  sdk.SignGossipVoteHandler
 
 	msgHandlerMiddleware sdk.MsgHandlerMiddleware // middleware that wraps msg handlers
 }

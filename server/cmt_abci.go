@@ -44,6 +44,10 @@ func (w cometABCIWrapper) FinalizeBlock(_ context.Context, req *abci.RequestFina
 	return w.app.FinalizeBlock(req)
 }
 
+func (w cometABCIWrapper) SignGossipVote(_ context.Context, req *abci.RequestSignGossipVote) (*abci.ResponseSignGossipVote, error) {
+	return w.app.SignGossipVote(req)
+}
+
 func (w cometABCIWrapper) ExtendVote(ctx context.Context, req *abci.RequestExtendVote) (*abci.ResponseExtendVote, error) {
 	return w.app.ExtendVote(ctx, req)
 }

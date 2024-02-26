@@ -24,6 +24,8 @@ type BeforeCommitter func(ctx Context)
 
 type AfterCommitter func(ctx Context)
 
+type SignGossipVoteHandler func(Context, *abci.RequestSignGossipVote) (*abci.ResponseSignGossipVote, error)
+
 type MsgHandlerMiddleware func(ctx Context, msg Msg, handler Handler) (*Result, error)
 
 // PeerFilter responds to p2p filtering queries from Tendermint

@@ -234,6 +234,14 @@ func (app *BaseApp) SetAfterCommitter(afterCommitter sdk.AfterCommitter) {
 	app.afterCommitter = afterCommitter
 }
 
+func (app *BaseApp) SetSignGossipVote(signGossipVote sdk.SignGossipVoteHandler) {
+	if app.sealed {
+		panic("SetSignGossipVote() on sealed BaseApp")
+	}
+
+	app.signGossipVote = signGossipVote
+}
+
 func (app *BaseApp) SetAnteHandler(ah sdk.AnteHandler) {
 	if app.sealed {
 		panic("SetAnteHandler() on sealed BaseApp")
