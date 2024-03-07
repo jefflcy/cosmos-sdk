@@ -964,10 +964,10 @@ func (app *BaseApp) Commit() (*abci.ResponseCommit, error) {
 }
 
 func (app *BaseApp) SignGossipVote(req *abci.RequestSignGossipVote) (*abci.ResponseSignGossipVote, error) {
-	if app.signGossipVote != nil {
+	if app.signGossipVote != nil && app.prepareProposalState != nil {
 		return app.signGossipVote(app.prepareProposalState.ctx, req)
 	}
-	return &abci.ResponseSignGossipVote{}, fmt.Errorf("signGossipVote hook is not set")
+	return &abci.ResponseSignGossipVote{}, fmt.Errorf("signGossipVote hook or prepareProposalState is not set")
 
 }
 
