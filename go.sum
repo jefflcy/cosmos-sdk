@@ -76,8 +76,8 @@ github.com/Shopify/sarama v1.19.0/go.mod h1:FVkBWblsNy7DGZRfXLU0O9RCGt5g3g3yEuWX
 github.com/Shopify/toxiproxy v2.1.4+incompatible/go.mod h1:OXgGpZ6Cli1/URJOF1DMxUHB2q5Ap20/P/eIdh4G0pI=
 github.com/StackExchange/wmi v1.2.1 h1:VIkavFPXSjcnS+O8yTq7NI32k0R5Aj+v39y29VYDOSA=
 github.com/StackExchange/wmi v1.2.1/go.mod h1:rcmrprowKIVzvc+NUiLncP2uuArMWLCbu9SBzvHz7e8=
-github.com/Switcheo/cometbft v0.0.0-20240307040145-9cd2e53eab0d h1:TrMWV1Es9mo7Ci+xcZ6xiefH3S2CPSTeM2SLVna2ShM=
-github.com/Switcheo/cometbft v0.0.0-20240307040145-9cd2e53eab0d/go.mod h1:QD9X51JcXS0Pu5dK+iQXaIVNm0RnYzrDiTFV12AeEbM=
+github.com/Switcheo/cometbft v0.0.0-20240308092337-e6f036dee8fc h1:ipCE3YNGNOa/7lQ08f2QI3mOA++c1kXG9q6BQb14An4=
+github.com/Switcheo/cometbft v0.0.0-20240308092337-e6f036dee8fc/go.mod h1:QD9X51JcXS0Pu5dK+iQXaIVNm0RnYzrDiTFV12AeEbM=
 github.com/VictoriaMetrics/fastcache v1.12.1 h1:i0mICQuojGDL3KblA7wUNlY5lOK6a4bwt3uRKnkZU40=
 github.com/VictoriaMetrics/fastcache v1.12.1/go.mod h1:tX04vaqcNoQeGLD+ra5pU5sWkuxnzWhEzLwhP9w653o=
 github.com/VividCortex/gohistogram v1.0.0 h1:6+hBz+qvs0JOrrNhhmR7lFxo5sINxBCGXrdtl/UvroE=
