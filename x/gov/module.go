@@ -107,12 +107,6 @@ func (ab AppModuleBasic) GetTxCmd() *cobra.Command {
 	return cli.NewTxCmd(legacyProposalCLIHandlers)
 }
 
-// GetQueryCmd returns the custom query commands for the gov modules.
-// This command will be enhanced by AutoCLI as defined in the AutoCLIOptions() method.
-func (ab AppModuleBasic) GetQueryCmd() *cobra.Command {
-	return cli.GetCustomQueryCmd(ab.ac)
-}
-
 func getProposalCLIHandlers(handlers []govclient.ProposalHandler) []*cobra.Command {
 	proposalCLIHandlers := make([]*cobra.Command, 0, len(handlers))
 	for _, proposalHandler := range handlers {
@@ -180,6 +174,8 @@ type ModuleInputs struct {
 	StakingKeeper      govtypes.StakingKeeper
 	DistributionKeeper govtypes.DistributionKeeper
 
+	ProposalMsgWhitelist []string
+
 	// LegacySubspace is used solely for migration of x/params managed parameters
 	LegacySubspace govtypes.ParamSubspace `optional:"true"`
 }
@@ -214,6 +210,7 @@ func ProvideModule(in ModuleInputs) ModuleOutputs {
 		in.MsgServiceRouter,
 		defaultConfig,
 		authority.String(),
+		in.ProposalMsgWhitelist,
 	)
 	m := NewAppModule(in.Cdc, k, in.AccountKeeper, in.BankKeeper, in.LegacySubspace)
 	hr := v1beta1.HandlerRoute{Handler: v1beta1.ProposalHandler, RouteKey: govtypes.RouterKey}
