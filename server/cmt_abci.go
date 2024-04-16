@@ -48,6 +48,10 @@ func (w cometABCIWrapper) SignGossipVote(_ context.Context, req *abci.RequestSig
 	return w.app.SignGossipVote(req)
 }
 
+func (w cometABCIWrapper) PrepareOracleVotes(_ context.Context, req *abci.RequestPrepareOracleVotes) (*abci.ResponsePrepareOracleVotes, error) {
+	return w.app.PrepareOracleVotes(req)
+}
+
 func (w cometABCIWrapper) ExtendVote(ctx context.Context, req *abci.RequestExtendVote) (*abci.ResponseExtendVote, error) {
 	return w.app.ExtendVote(ctx, req)
 }

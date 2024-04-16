@@ -252,6 +252,14 @@ func (app *BaseApp) SetSignGossipVote(signGossipVote sdk.SignGossipVoteHandler) 
 	app.signGossipVote = signGossipVote
 }
 
+func (app *BaseApp) SetPrepareOracleVotes(prepareOracleVotes sdk.PrepareOracleVotesHandler) {
+	if app.sealed {
+		panic("SetPrepareOracleVotes() on sealed BaseApp")
+	}
+
+	app.prepareOracleVotes = prepareOracleVotes
+}
+
 func (app *BaseApp) SetAnteHandler(ah sdk.AnteHandler) {
 	if app.sealed {
 		panic("SetAnteHandler() on sealed BaseApp")

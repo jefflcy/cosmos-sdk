@@ -982,7 +982,13 @@ func (app *BaseApp) SignGossipVote(req *abci.RequestSignGossipVote) (*abci.Respo
 		return app.signGossipVote(app.prepareProposalState.ctx, req)
 	}
 	return &abci.ResponseSignGossipVote{}, fmt.Errorf("signGossipVote hook or prepareProposalState is not set")
+}
 
+func (app *BaseApp) PrepareOracleVotes(req *abci.RequestPrepareOracleVotes) (*abci.ResponsePrepareOracleVotes, error) {
+	if app.prepareOracleVotes != nil && app.prepareProposalState != nil {
+		return app.prepareOracleVotes(app.prepareProposalState.ctx, req)
+	}
+	return &abci.ResponsePrepareOracleVotes{}, fmt.Errorf("prepareOracleVotes hook or prepareProposalState is not set")
 }
 
 // workingHash gets the apphash that will be finalized in commit.
