@@ -238,8 +238,8 @@ github.com/OneOfOne/xxhash v1.2.2 h1:KMrpdQIwFcEqXDklaen+P1axHaj9BSKzvpUUfnHldSE
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/Shopify/sarama v1.19.0/go.mod h1:FVkBWblsNy7DGZRfXLU0O9RCGt5g3g3yEuWXgklEdEo=
 github.com/Shopify/toxiproxy v2.1.4+incompatible/go.mod h1:OXgGpZ6Cli1/URJOF1DMxUHB2q5Ap20/P/eIdh4G0pI=
-github.com/Switcheo/cometbft v0.0.0-20240416100951-5ddda97279f5 h1:Wb9ipivzBaRSJsFFyp8dNcCYqV2oAyJmZ286g3pPvW0=
-github.com/Switcheo/cometbft v0.0.0-20240416100951-5ddda97279f5/go.mod h1:EHtLmKK1ViMKfwGDHUtn/u/nP5ChMD2guWJMYoZbOLQ=
+github.com/Switcheo/cometbft v0.0.0-20240418102254-8149b7110696 h1:W+B2tzFXRrXnk6t8lp6dvfyWI3cx+R8Q+/zI9oZtKm4=
+github.com/Switcheo/cometbft v0.0.0-20240418102254-8149b7110696/go.mod h1:EHtLmKK1ViMKfwGDHUtn/u/nP5ChMD2guWJMYoZbOLQ=
 github.com/VividCortex/gohistogram v1.0.0 h1:6+hBz+qvs0JOrrNhhmR7lFxo5sINxBCGXrdtl/UvroE=
 github.com/VividCortex/gohistogram v1.0.0/go.mod h1:Pf5mBqqDxYaXu3hDrrU+w6nw50o/4+TcAqDqk/vUH7g=
 github.com/adlio/schema v1.3.3 h1:oBJn8I02PyTB466pZO1UZEn1TV5XLlifBSyMrmHl/1I=

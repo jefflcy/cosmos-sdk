@@ -260,6 +260,14 @@ func (app *BaseApp) SetPrepareOracleVotes(prepareOracleVotes sdk.PrepareOracleVo
 	app.prepareOracleVotes = prepareOracleVotes
 }
 
+func (app *BaseApp) SetValidateOracleVotes(validateOracleVotes sdk.ValidateOracleVotesHandler) {
+	if app.sealed {
+		panic("SetValidateOracleVotes() on sealed BaseApp")
+	}
+
+	app.validateOracleVotes = validateOracleVotes
+}
+
 func (app *BaseApp) SetAnteHandler(ah sdk.AnteHandler) {
 	if app.sealed {
 		panic("SetAnteHandler() on sealed BaseApp")

@@ -52,6 +52,10 @@ func (w cometABCIWrapper) PrepareOracleVotes(_ context.Context, req *abci.Reques
 	return w.app.PrepareOracleVotes(req)
 }
 
+func (w cometABCIWrapper) ValidateOracleVotes(_ context.Context, req *abci.RequestValidateOracleVotes) (*abci.ResponseValidateOracleVotes, error) {
+	return w.app.ValidateOracleVotes(req)
+}
+
 func (w cometABCIWrapper) ExtendVote(ctx context.Context, req *abci.RequestExtendVote) (*abci.ResponseExtendVote, error) {
 	return w.app.ExtendVote(ctx, req)
 }

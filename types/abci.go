@@ -28,6 +28,8 @@ type SignGossipVoteHandler func(Context, *abci.RequestSignGossipVote) (*abci.Res
 
 type PrepareOracleVotesHandler func(Context, *abci.RequestPrepareOracleVotes) (*abci.ResponsePrepareOracleVotes, error)
 
+type ValidateOracleVotesHandler func(Context, *abci.RequestValidateOracleVotes) (*abci.ResponseValidateOracleVotes, error)
+
 type MsgHandlerMiddleware func(ctx Context, msg Msg, handler Handler) (*Result, error)
 
 // PeerFilter responds to p2p filtering queries from Tendermint

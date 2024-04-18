@@ -38,4 +38,5 @@ type ABCI interface {
 	// Hooks
 	SignGossipVote(*abci.RequestSignGossipVote) (*abci.ResponseSignGossipVote, error)
 	PrepareOracleVotes(*abci.RequestPrepareOracleVotes) (*abci.ResponsePrepareOracleVotes, error)
+	ValidateOracleVotes(*abci.RequestValidateOracleVotes) (*abci.ResponseValidateOracleVotes, error)
 }
