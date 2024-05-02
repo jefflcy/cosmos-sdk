@@ -24,9 +24,9 @@ type BeforeCommitter func(ctx Context)
 
 type AfterCommitter func(ctx Context)
 
-type SignGossipVoteHandler func(Context, *abci.RequestSignGossipVote) (*abci.ResponseSignGossipVote, error)
+type CreateOracleResultTxHandler func(Context, *abci.RequestCreateOracleResultTx) (*abci.ResponseCreateOracleResultTx, error)
 
-type PrepareOracleVotesHandler func(Context, *abci.RequestPrepareOracleVotes) (*abci.ResponsePrepareOracleVotes, error)
+type FetchOracleVotesHandler func(Context, *abci.RequestFetchOracleVotes) (*abci.ResponseFetchOracleVotes, error)
 
 type ValidateOracleVotesHandler func(Context, *abci.RequestValidateOracleVotes) (*abci.ResponseValidateOracleVotes, error)
 

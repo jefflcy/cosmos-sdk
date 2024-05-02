@@ -977,18 +977,18 @@ func (app *BaseApp) Commit() (*abci.ResponseCommit, error) {
 	return resp, nil
 }
 
-func (app *BaseApp) SignGossipVote(req *abci.RequestSignGossipVote) (*abci.ResponseSignGossipVote, error) {
-	if app.signGossipVote != nil && app.prepareProposalState != nil {
-		return app.signGossipVote(app.prepareProposalState.ctx, req)
+func (app *BaseApp) CreateOracleResultTx(req *abci.RequestCreateOracleResultTx) (*abci.ResponseCreateOracleResultTx, error) {
+	if app.createOracleResultTx != nil && app.prepareProposalState != nil {
+		return app.createOracleResultTx(app.prepareProposalState.ctx, req)
 	}
-	return &abci.ResponseSignGossipVote{}, fmt.Errorf("signGossipVote hook or prepareProposalState is not set")
+	return &abci.ResponseCreateOracleResultTx{}, fmt.Errorf("createOracleResultTx hook or prepareProposalState is not set")
 }
 
-func (app *BaseApp) PrepareOracleVotes(req *abci.RequestPrepareOracleVotes) (*abci.ResponsePrepareOracleVotes, error) {
-	if app.prepareOracleVotes != nil && app.prepareProposalState != nil {
-		return app.prepareOracleVotes(app.prepareProposalState.ctx, req)
+func (app *BaseApp) FetchOracleVotes(req *abci.RequestFetchOracleVotes) (*abci.ResponseFetchOracleVotes, error) {
+	if app.fetchOracleVotes != nil && app.prepareProposalState != nil {
+		return app.fetchOracleVotes(app.prepareProposalState.ctx, req)
 	}
-	return &abci.ResponsePrepareOracleVotes{}, fmt.Errorf("prepareOracleVotes hook or prepareProposalState is not set")
+	return &abci.ResponseFetchOracleVotes{}, fmt.Errorf("fetchOracleVotes hook or prepareProposalState is not set")
 }
 
 func (app *BaseApp) ValidateOracleVotes(req *abci.RequestValidateOracleVotes) (*abci.ResponseValidateOracleVotes, error) {

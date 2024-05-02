@@ -51,7 +51,7 @@ func (pv PV) SignProposal(chainID string, proposal *cmtproto.Proposal) error {
 }
 
 // SignOracleVote implements PrivValidator interface
-func (pv PV) SignOracleVote(_ string, oracleVote *oracleproto.GossipVote) error {
+func (pv PV) SignOracleVote(_ string, oracleVote *oracleproto.GossipedVotes) error {
 	signBytes := cmttypes.OracleVoteSignBytes(oracleVote)
 	sig, err := pv.PrivKey.Sign(signBytes)
 	if err != nil {

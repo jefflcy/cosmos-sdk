@@ -244,20 +244,20 @@ func (app *BaseApp) SetAfterCommitter(afterCommitter sdk.AfterCommitter) {
 	app.afterCommitter = afterCommitter
 }
 
-func (app *BaseApp) SetSignGossipVote(signGossipVote sdk.SignGossipVoteHandler) {
+func (app *BaseApp) SetCreateOracleResultTx(createOracleResultTx sdk.CreateOracleResultTxHandler) {
 	if app.sealed {
-		panic("SetSignGossipVote() on sealed BaseApp")
+		panic("SetCreateOracleResultTx() on sealed BaseApp")
 	}
 
-	app.signGossipVote = signGossipVote
+	app.createOracleResultTx = createOracleResultTx
 }
 
-func (app *BaseApp) SetPrepareOracleVotes(prepareOracleVotes sdk.PrepareOracleVotesHandler) {
+func (app *BaseApp) SetFetchOracleVotes(fetchOracleVotes sdk.FetchOracleVotesHandler) {
 	if app.sealed {
-		panic("SetPrepareOracleVotes() on sealed BaseApp")
+		panic("SetFetchOracleVotes() on sealed BaseApp")
 	}
 
-	app.prepareOracleVotes = prepareOracleVotes
+	app.fetchOracleVotes = fetchOracleVotes
 }
 
 func (app *BaseApp) SetValidateOracleVotes(validateOracleVotes sdk.ValidateOracleVotesHandler) {
