@@ -28,8 +28,6 @@ type CreateOracleResultTxHandler func(Context, *abci.RequestCreateOracleResultTx
 
 type FetchOracleVotesHandler func(Context, *abci.RequestFetchOracleVotes) (*abci.ResponseFetchOracleVotes, error)
 
-type ValidateOracleVotesHandler func(Context, *abci.RequestValidateOracleVotes) (*abci.ResponseValidateOracleVotes, error)
-
 type MsgHandlerMiddleware func(ctx Context, msg Msg, handler Handler) (*Result, error)
 
 // PeerFilter responds to p2p filtering queries from Tendermint
