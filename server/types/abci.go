@@ -38,4 +38,5 @@ type ABCI interface {
 	// Hooks
 	CreateOracleResultTx(*abci.RequestCreateOracleResultTx) (*abci.ResponseCreateOracleResultTx, error)
 	FetchOracleVotes(*abci.RequestFetchOracleVotes) (*abci.ResponseFetchOracleVotes, error)
+	ValidateOracleVotes(*abci.RequestValidateOracleVotes) (*abci.ResponseValidateOracleVotes, error)
 }

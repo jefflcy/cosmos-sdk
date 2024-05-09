@@ -991,6 +991,13 @@ func (app *BaseApp) FetchOracleVotes(req *abci.RequestFetchOracleVotes) (*abci.R
 	return &abci.ResponseFetchOracleVotes{}, fmt.Errorf("fetchOracleVotes hook or prepareProposalState is not set")
 }
 
+func (app *BaseApp) ValidateOracleVotes(req *abci.RequestValidateOracleVotes) (*abci.ResponseValidateOracleVotes, error) {
+	if app.validateOracleVotes != nil && app.prepareProposalState != nil {
+		return app.validateOracleVotes(app.prepareProposalState.ctx, req)
+	}
+	return &abci.ResponseValidateOracleVotes{}, fmt.Errorf("validateOracleVotes hook or prepareProposalState is not set")
+}
+
 // workingHash gets the apphash that will be finalized in commit.
 // These writes will be persisted to the root multi-store (app.cms) and flushed to
 // disk in the Commit phase. This means when the ABCI client requests Commit(), the application

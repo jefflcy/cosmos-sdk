@@ -204,6 +204,7 @@ type customMiddlewares struct {
 	afterCommitter       sdk.AfterCommitter  // logic to run after committing state
 	createOracleResultTx sdk.CreateOracleResultTxHandler
 	fetchOracleVotes     sdk.FetchOracleVotesHandler
+	validateOracleVotes  sdk.ValidateOracleVotesHandler
 
 	msgHandlerMiddleware sdk.MsgHandlerMiddleware // middleware that wraps msg handlers
 }
