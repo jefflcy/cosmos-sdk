@@ -985,17 +985,17 @@ func (app *BaseApp) CreateOracleResultTx(req *abci.RequestCreateOracleResultTx) 
 }
 
 func (app *BaseApp) FetchOracleVotes(req *abci.RequestFetchOracleVotes) (*abci.ResponseFetchOracleVotes, error) {
-	if app.fetchOracleVotes != nil && app.prepareProposalState != nil {
-		return app.fetchOracleVotes(app.prepareProposalState.ctx, req)
+	if app.fetchOracleVotes != nil {
+		return app.fetchOracleVotes(context.Background(), req)
 	}
 	return &abci.ResponseFetchOracleVotes{}, fmt.Errorf("fetchOracleVotes hook or prepareProposalState is not set")
 }
 
 func (app *BaseApp) ValidateOracleVotes(req *abci.RequestValidateOracleVotes) (*abci.ResponseValidateOracleVotes, error) {
-	if app.validateOracleVotes != nil && app.prepareProposalState != nil {
-		return app.validateOracleVotes(app.prepareProposalState.ctx, req)
+	if app.validateOracleVotes != nil && app.processProposalState != nil {
+		return app.validateOracleVotes(app.processProposalState.ctx, req)
 	}
-	return &abci.ResponseValidateOracleVotes{}, fmt.Errorf("validateOracleVotes hook or prepareProposalState is not set")
+	return &abci.ResponseValidateOracleVotes{}, fmt.Errorf("validateOracleVotes hook or processProposalState is not set")
 }
 
 // workingHash gets the apphash that will be finalized in commit.

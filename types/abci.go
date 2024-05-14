@@ -1,6 +1,8 @@
 package types
 
 import (
+	"context"
+
 	abci "github.com/cometbft/cometbft/abci/types"
 )
 
@@ -26,7 +28,7 @@ type AfterCommitter func(ctx Context)
 
 type CreateOracleResultTxHandler func(Context, *abci.RequestCreateOracleResultTx) (*abci.ResponseCreateOracleResultTx, error)
 
-type FetchOracleVotesHandler func(Context, *abci.RequestFetchOracleVotes) (*abci.ResponseFetchOracleVotes, error)
+type FetchOracleVotesHandler func(context.Context, *abci.RequestFetchOracleVotes) (*abci.ResponseFetchOracleVotes, error)
 
 type ValidateOracleVotesHandler func(Context, *abci.RequestValidateOracleVotes) (*abci.ResponseValidateOracleVotes, error)
 
