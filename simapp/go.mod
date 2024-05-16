@@ -210,7 +210,7 @@ require (
 replace (
 	// use cosmos fork of keyring
 	github.com/99designs/keyring => github.com/cosmos/keyring v1.2.0
-	github.com/cometbft/cometbft => github.com/Switcheo/cometbft v0.0.0-20240511092044-7e1eb94b79f3
+	github.com/cometbft/cometbft => github.com/Switcheo/cometbft v0.0.0-20240516064322-49d88a5e6b8f
 	// Simapp always use the latest version of the cosmos-sdk
 	github.com/cosmos/cosmos-sdk => ../.
 	// Fix upstream GHSA-h395-qcrw-5vmq and GHSA-3vp4-m3rf-835h vulnerabilities.
