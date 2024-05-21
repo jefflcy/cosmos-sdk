@@ -992,10 +992,10 @@ func (app *BaseApp) FetchOracleVotes(req *abci.RequestFetchOracleVotes) (*abci.R
 }
 
 func (app *BaseApp) ValidateOracleVotes(req *abci.RequestValidateOracleVotes) (*abci.ResponseValidateOracleVotes, error) {
-	if app.validateOracleVotes != nil && app.processProposalState != nil {
-		return app.validateOracleVotes(app.processProposalState.ctx, req)
+	if app.validateOracleVotes != nil && app.prepareProposalState != nil {
+		return app.validateOracleVotes(app.prepareProposalState.ctx, req)
 	}
-	return &abci.ResponseValidateOracleVotes{}, fmt.Errorf("validateOracleVotes hook or processProposalState is not set")
+	return &abci.ResponseValidateOracleVotes{}, fmt.Errorf("validateOracleVotes hook or prepareProposalState is not set")
 }
 
 // workingHash gets the apphash that will be finalized in commit.
